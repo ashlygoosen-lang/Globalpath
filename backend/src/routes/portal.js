@@ -9,6 +9,7 @@ import { visaBySlug, checklistFor } from '../content.js';
 import { config } from '../config.js';
 import { notifyTeam } from '../mailer.js';
 import { validate, z } from '../validate.js';
+import { validateApplicant } from '../applicant.js';
 
 export const STAGES = ['Assessment', 'Document collection', 'Quality review', 'Submitted to VFS', 'Awaiting outcome', 'Outcome received'];
 /** Stage index from which every required document must be approved (or confirmed not required). */
@@ -90,7 +91,9 @@ export function summarise(app) {
     stageName: STAGES[app.stage],
     stages: STAGES,
     progress,
-    readyToSubmit: missing.length === 0,
+    applicantComplete: Boolean(app.applicantCompletedAt),
+    applicantLocked: isLocked(app),
+    readyToSubmit: missing.length === 0 && Boolean(app.applicantCompletedAt),
     submitted: Boolean(app.submittedAt) && attention === 0,
     needsResubmit: Boolean(app.submittedAt) && attention > 0,
     required: { total: required.length, complete, missing: missing.map(d => d.name) },
@@ -104,6 +107,14 @@ export function summarise(app) {
     },
   };
 }
+
+/** Applicant details can't change while the advisor is reviewing a submitted application. */
+export function isLocked(app) {
+  if (!app.submittedAt) return false;
+  return !db.find('documents', d => d.applicationId === app.id && d.status === 'rejected');
+}
+
+const DETAILS_FIRST = 'Complete your applicant details before uploading documents.';
 
 export function publicDoc(d) {
   const { storedName, ...rest } = d;
@@ -125,6 +136,32 @@ r.get('/dashboard', (req, res) => {
     .map(({ id, reference, service, date, time, mode, status }) => ({ id, reference, service, date, time, mode, status }));
   const visa = visaBySlug[app.visa];
   res.json({ application: summarise(app), visa: visa ? { title: visa.title, turnaround: visa.turnaround, dhaFee: visa.dhaFee, vfsFee: visa.vfsFee } : null, activity, consultations });
+});
+
+r.get('/applicant', (req, res) => {
+  const app = myApplication(req);
+  if (!app) return res.status(404).json({ error: 'You do not have an open application.' });
+  res.json({ visa: app.visa, data: app.applicant || {}, completedAt: app.applicantCompletedAt || null, locked: isLocked(app) });
+});
+
+/** Save progress (complete=false) or confirm the finished form (complete=true). */
+r.put('/applicant', validate(z.object({ data: z.record(z.any()), complete: z.boolean().optional() })), (req, res) => {
+  const app = myApplication(req);
+  if (!app) return res.status(404).json({ error: 'You do not have an open application.' });
+  if (isLocked(app)) return res.status(409).json({ error: 'Your application is with your advisor for review. Contact them to change your details.' });
+  const complete = Boolean(req.body.complete);
+  const { data, errors } = validateApplicant(req.body.data, app.visa, { complete });
+  if (Object.keys(errors).length) {
+    db.update('applications', app.id, { applicant: data, applicantCompletedAt: null });
+    return res.status(422).json({ error: `Some details need attention (${Object.keys(errors).length}).`, fields: errors });
+  }
+  const wasComplete = Boolean(app.applicantCompletedAt);
+  const patch = { applicant: data, applicantCompletedAt: complete ? new Date().toISOString() : null, applicantUpdatedAt: new Date().toISOString() };
+  if (complete && !app.submittedAt && /^Complete your applicant details/.test(app.nextStep || '')) patch.nextStep = 'Upload every required document on your checklist, then submit your application for review.';
+  db.update('applications', app.id, patch);
+  if (complete) logActivity(app.id, wasComplete ? 'Applicant details updated' : 'Applicant details completed', complete && !wasComplete ? 'You can now upload your documents.' : 'Your personal and passport details were updated.', 'client');
+  const fresh = db.get('applications', app.id);
+  res.json({ data: fresh.applicant, completedAt: fresh.applicantCompletedAt || null, locked: isLocked(fresh) });
 });
 
 r.get('/documents', (req, res) => {
@@ -159,6 +196,7 @@ r.post('/documents', handleUpload, (req, res) => {
   const app = myApplication(req);
   if (!req.file) return res.status(422).json({ error: 'Choose a file to upload.' });
   if (!app) { fs.unlink(req.file.path, () => {}); return res.status(404).json({ error: 'You do not have an open application.' }); }
+  if (!app.applicantCompletedAt) { fs.unlink(req.file.path, () => {}); return res.status(409).json({ error: DETAILS_FIRST, code: 'details_required' }); }
 
   const fileMeta = { originalName: req.file.originalname.slice(0, 200), storedName: req.file.filename, mime: req.file.mimetype, size: req.file.size, uploadedAt: new Date().toISOString() };
   let doc;
@@ -182,6 +220,7 @@ r.post('/documents/:id/not-applicable', validate(z.object({ reason: z.string().t
   const app = myApplication(req);
   const doc = db.get('documents', req.params.id);
   if (!app || !doc || doc.applicationId !== app.id) return res.status(404).json({ error: 'Document not found.' });
+  if (!app.applicantCompletedAt) return res.status(409).json({ error: DETAILS_FIRST, code: 'details_required' });
   if (!doc.conditional) return res.status(422).json({ error: 'This document is required for every applicant and must be uploaded.' });
   if (doc.status === 'approved') return res.status(409).json({ error: 'This document is already approved.' });
   if (doc.storedName) fs.unlink(path.join(uploadsDir, doc.storedName), () => {});
@@ -221,6 +260,7 @@ r.delete('/documents/:id', (req, res) => {
 r.post('/application/submit', (req, res) => {
   const app = myApplication(req);
   if (!app) return res.status(404).json({ error: 'You do not have an open application.' });
+  if (!app.applicantCompletedAt) return res.status(409).json({ error: 'Complete your applicant details before submitting.', code: 'details_required' });
   const missing = missingForSubmission(app.id);
   if (missing.length) {
     return res.status(409).json({

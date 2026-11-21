@@ -3,6 +3,7 @@ import { Icon, Kicker, Alert, formatDate, timeAgo, Button } from "../ui";
 import { api, ApiError, openProtectedFile } from "../lib/api";
 import { AuthPanel, useSession } from "./portal";
 import { href } from "../lib/router";
+import { ApplicantSummary, sectionsForVisa } from "./applicant";
 
 type Stats = { enquiries: { total: number; new: number; week: number }; consultations: { total: number; requested: number; upcoming: number }; clients: { total: number }; documents: { awaitingReview: number }; subscribers: number };
 
@@ -155,10 +156,16 @@ function ClientDetail({ id, back }: { id: string; back: () => void }) {
     <div className="portal-head"><div><Kicker>{app.reference} · {app.visaTitle}</Kicker><h1>{client.name}</h1><p className="muted">{client.email}{client.phone ? ` · ${client.phone}` : ""}</p></div><span className="pill">{app.progress}%</span></div>
     {error && <Alert>{error}{blocked.length > 0 && <ul>{blocked.map(m => <li key={m}>{m}</li>)}</ul>}</Alert>}
     <div className="admin-status">
+      <div><small>Applicant details</small><strong>{app.applicantComplete ? "Complete" : "Not completed"}</strong></div>
       <div><small>Client submission</small><strong>{app.needsResubmit ? "Waiting for replacements" : app.submitted ? `Submitted ${timeAgo(app.submittedAt).toLowerCase()}` : `${app.required.missing.length} required still missing`}</strong></div>
       <div><small>Uploaded by client</small><strong>{app.required.complete} of {app.required.total}</strong></div>
       <div><small>Approved or not required</small><strong>{confirmed} of {required.length}</strong></div>
     </div>
+    <details className="admin-panel ap-admin" open={!!app.applicantCompletedAt}>
+      <summary><h2>Applicant details</h2><span className={`status ${app.applicantCompletedAt ? "status-approved" : "status-outstanding"}`}>{app.applicantCompletedAt ? `Completed ${timeAgo(app.applicantCompletedAt).toLowerCase()}` : "Not completed yet"}</span></summary>
+      {app.applicant ? <ApplicantSummary sections={sectionsForVisa(app.visa).filter(sec => sec.id !== "declaration")} data={app.applicant}/> : <p className="muted">The client has not started this form.</p>}
+      {app.applicant?.declaration?.truthful && <p className="small-print">Client accepted the declaration and consent{app.applicantCompletedAt ? ` on ${new Date(app.applicantCompletedAt).toLocaleString("en-ZA", { timeZone: "Africa/Johannesburg" })}` : ""}.</p>}
+    </details>
     <section className="admin-panel">
       <h2>Application</h2>
       <div className="fields-3">

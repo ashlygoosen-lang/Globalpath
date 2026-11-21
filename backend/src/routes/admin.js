@@ -71,6 +71,7 @@ r.patch('/applications/:id', validate(z.object({
   const { note, ...patch } = req.body;
   const prevStage = app.stage;
   if (patch.stage !== undefined && patch.stage >= STAGE_REQUIRES_APPROVAL && patch.stage > prevStage) {
+    if (!app.applicantCompletedAt) return res.status(409).json({ error: 'The client has not completed their applicant details yet.', missing: ['Applicant details form'] });
     const pending = unapprovedForLodging(app.id);
     if (pending.length) {
       return res.status(409).json({

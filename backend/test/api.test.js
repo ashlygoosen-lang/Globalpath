@@ -32,6 +32,24 @@ const call = async (method, url, body, token) => {
   return { status: res.status, data: await res.json().catch(() => null) };
 };
 
+
+function futureDate(days) { return new Date(Date.now() + days * 864e5).toISOString().slice(0, 10); }
+function applicantFor(purpose) {
+  const base = {
+    personal: { surname: 'Okafor', givenNames: 'Daniel Chidi', sex: 'Male', dateOfBirth: '1990-04-12', placeOfBirth: 'Lagos', countryOfBirth: 'NG', nationality: 'NG', maritalStatus: 'Single', occupation: 'Engineer' },
+    passport: { number: 'a1234 5678', type: 'Ordinary', issuingCountry: 'NG', placeOfIssue: 'Abuja', issueDate: '2022-01-10', expiryDate: futureDate(3000) },
+    contact: { email: 'x@example.com', phone: '+234 801 234 5678', countryOfResidence: 'NG', homeAddress: '12 Allen Avenue, Ikeja, Lagos', emergencyName: 'Ada Okafor', emergencyRelationship: 'Sister', emergencyPhone: '+234 802 000 0000' },
+    history: { everEntered: 'Yes', firstEntryDate: '2019-06-01', firstEntryPort: 'OR Tambo International Airport', inSouthAfrica: 'No', refused: 'No', deported: 'No', convicted: 'No' },
+    trip: { purpose: 'To take up employment as a civil engineer in Cape Town.', arrivalDate: futureDate(60), departureDate: futureDate(900), applyFrom: 'South African mission or VFS centre abroad', mission: 'Lagos' },
+    family: { hasDependants: 'No' },
+    declaration: { truthful: true, notify: true, consent: true },
+  };
+  if (purpose === 'work') base.work = { employer: 'Table Bay Engineering', employerAddress: '1 Dock Road, Cape Town', jobTitle: 'Civil engineer', startDate: futureDate(70), monthlySalary: 65000 };
+  if (purpose === 'study') base.study = { institution: 'University of Cape Town', course: 'MSc Data Science', startDate: futureDate(70), endDate: futureDate(800), funding: 'Myself' };
+  return base;
+}
+const completeApplicant = (token, purpose) => call('PUT', '/portal/applicant', { data: applicantFor(purpose), complete: true }, token);
+
 function nextWeekday() {
   const d = new Date(Date.now() + 2 * 3600e3 + 3 * 864e5);
   while ([0, 6].includes(d.getUTCDay())) d.setUTCDate(d.getUTCDate() + 1);
@@ -73,7 +91,15 @@ test('portal: register, upload, admin review', async () => {
   const token = reg.data.token;
   assert.equal((await call('POST', '/auth/register', { name: 'Dup', email: 'daniel@example.com', password: 'Passw0rd!', visa: 'study-visa' })).status, 409);
 
+  // Uploads are refused until the applicant details are complete
+  const early = new FormData();
+  early.append('file', new Blob(['%PDF-1.4'], { type: 'application/pdf' }), 'early.pdf');
+  const earlyRes = await call('POST', '/portal/documents', early, token);
+  assert.equal(earlyRes.status, 409);
+  assert.equal((await completeApplicant(token, 'work')).status, 200);
+
   const dash = await call('GET', '/portal/dashboard', null, token);
+  assert.equal(dash.data.application.applicantComplete, true);
   assert.equal(dash.data.application.required.total, 20); // 14 DHA-1738 core + 6 critical skills
   assert.equal(dash.data.application.readyToSubmit, false);
   const docs = (await call('GET', '/portal/documents', null, token)).data;
@@ -114,6 +140,7 @@ test('assessment', async () => {
 test('submission is blocked until every required document is uploaded', async () => {
   const reg = await call('POST', '/auth/register', { name: 'Grace Mwale', email: 'grace@example.com', password: 'Passw0rd!', visa: 'study-visa' });
   const token = reg.data.token;
+  assert.equal((await completeApplicant(token, 'study')).status, 200);
   const docs = (await call('GET', '/portal/documents', null, token)).data;
   const required = docs.filter(d => d.required);
   const mandatory = required.filter(d => !d.conditional);
@@ -181,4 +208,38 @@ test('permanent residence uses the DHA-947 checklist', async () => {
   const keys = data.checklist.map(i => i.key);
   assert.ok(keys.includes('birth-certificate') && keys.includes('police-clearance'));
   assert.ok(data.checklist.some(i => i.name.startsWith('Proof of five years')));
+});
+
+test('applicant details: draft save, validation and locking', async () => {
+  const reg = await call('POST', '/auth/register', { name: 'Tendai Moyo', email: 'tendai@example.com', password: 'Passw0rd!', visa: 'spousal-life-partner-visa' });
+  const token = reg.data.token;
+  const pre = (await call('GET', '/portal/applicant', null, token)).data;
+  assert.equal(pre.data.personal.surname, 'Moyo');
+  assert.equal(pre.data.contact.email, 'tendai@example.com');
+
+  // Drafts save without validation; unknown fields are dropped
+  const draft = await call('PUT', '/portal/applicant', { data: { personal: { surname: 'Moyo', hack: 'x' }, junk: { a: 1 } } }, token);
+  assert.equal(draft.status, 200);
+  assert.equal(draft.data.data.junk, undefined);
+  assert.equal(draft.data.data.personal.hack, undefined);
+
+  // Completing with problems returns field-level errors
+  const bad = applicantFor('family');
+  bad.passport.expiryDate = futureDate(100);             // too close to departure (900 days)
+  bad.history = { ...bad.history, everEntered: 'Yes', firstEntryDate: '' };
+  bad.personal.maritalStatus = 'Married';                 // spouse fields now required
+  const res = await call('PUT', '/portal/applicant', { data: bad, complete: true }, token);
+  assert.equal(res.status, 422);
+  for (const k of ['passport.expiryDate', 'history.firstEntryDate', 'family.spouseName', 'sponsor.fullName']) assert.ok(res.data.fields[k], k);
+
+  const good = applicantFor('family');
+  good.sponsor = { fullName: 'Rudo Moyo', idNumber: '8001015009087', relationship: 'Spouse', status: 'South African citizen', relationshipSince: '2018-02-14', phone: '+27 82 111 2222' };
+  good.personal.maritalStatus = 'Married';
+  good.family = { spouseName: 'Rudo Moyo', spouseNationality: 'ZA', spouseDateOfBirth: '1980-01-01', spouseIncluded: 'No', hasDependants: 'Yes', dependants: [{ fullName: 'Tino Moyo', relationship: 'Son', dateOfBirth: '2015-05-05', nationality: 'ZW', passportNumber: 'fn123456' }] };
+  const ok = await call('PUT', '/portal/applicant', { data: good, complete: true }, token);
+  assert.equal(ok.status, 200, JSON.stringify(ok.data));
+  assert.equal(ok.data.data.passport.number, 'A12345678');               // normalised
+  assert.equal(ok.data.data.family.dependants[0].passportNumber, 'FN123456');
+  assert.ok(ok.data.completedAt);
+  assert.equal(ok.data.data.work, undefined);                             // sections not for this visa are dropped
 });

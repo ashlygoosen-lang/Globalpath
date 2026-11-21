@@ -35,7 +35,7 @@ In development with no `.env`, an admin account is created automatically:
 | Contact form | `#/contact` | `POST /api/enquiries` |
 | Consultation booking (live slots, no double-booking) | `#/book` | `GET /api/consultations/availability`, `POST /api/consultations` |
 | Newsletter signup (footer) | — | `POST /api/newsletter` |
-| Client portal: sign up, progress, document uploads, eligibility check | `#/portal` | `/api/auth/*`, `/api/portal/*`, `/api/assessment` |
+| Client portal: applicant details form (required first), official DHA document checklist uploads, locked submission until complete, eligibility check | `#/portal` | `/api/auth/*`, `/api/portal/applicant`, `/api/portal/*`, `/api/assessment` |
 | Staff admin: enquiries, consultations, clients, document review, stage updates | `#/admin` | `/api/admin/*` |
 
 Consultations run Mon–Fri, 09:00–15:00 SAST in 45-minute slots with at least 2 hours' notice, bookable up to 60 days ahead (configured in `backend/src/config.js`).

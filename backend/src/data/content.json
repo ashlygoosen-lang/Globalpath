@@ -1100,5 +1100,1299 @@
     "name": "Two recent passport-size colour photographs"
    }
   ]
+ },
+ "applicantForm": {
+  "version": 1,
+  "sections": [
+   {
+    "id": "personal",
+    "title": "Personal details",
+    "intro": "Exactly as shown in your passport.",
+    "fields": [
+     {
+      "key": "personal.surname",
+      "label": "Surname",
+      "type": "text",
+      "required": true,
+      "autocomplete": "family-name",
+      "max": 80
+     },
+     {
+      "key": "personal.givenNames",
+      "label": "Given names",
+      "type": "text",
+      "required": true,
+      "autocomplete": "given-name",
+      "hint": "All first and middle names",
+      "max": 120
+     },
+     {
+      "key": "personal.otherNames",
+      "label": "Other names used",
+      "type": "text",
+      "required": false,
+      "hint": "Maiden name or any previous names",
+      "max": 120
+     },
+     {
+      "key": "personal.sex",
+      "label": "Sex",
+      "type": "select",
+      "required": true,
+      "options": [
+       "Female",
+       "Male",
+       "Other"
+      ]
+     },
+     {
+      "key": "personal.dateOfBirth",
+      "label": "Date of birth",
+      "type": "date",
+      "required": true,
+      "rule": "past"
+     },
+     {
+      "key": "personal.placeOfBirth",
+      "label": "Town or city of birth",
+      "type": "text",
+      "required": true,
+      "max": 80
+     },
+     {
+      "key": "personal.countryOfBirth",
+      "label": "Country of birth",
+      "type": "country",
+      "required": true
+     },
+     {
+      "key": "personal.nationality",
+      "label": "Nationality (citizenship)",
+      "type": "country",
+      "required": true
+     },
+     {
+      "key": "personal.otherNationality",
+      "label": "Other citizenship",
+      "type": "country",
+      "required": false
+     },
+     {
+      "key": "personal.maritalStatus",
+      "label": "Marital status",
+      "type": "select",
+      "required": true,
+      "options": [
+       "Single",
+       "Married",
+       "Life partnership",
+       "Separated",
+       "Divorced",
+       "Widowed"
+      ]
+     },
+     {
+      "key": "personal.occupation",
+      "label": "Current occupation",
+      "type": "text",
+      "required": true,
+      "max": 80
+     }
+    ]
+   },
+   {
+    "id": "passport",
+    "title": "Passport",
+    "intro": "The passport you will use for this application. It must be valid for at least 30 days after you plan to leave South Africa.",
+    "fields": [
+     {
+      "key": "passport.number",
+      "label": "Passport number",
+      "type": "text",
+      "required": true,
+      "rule": "passport",
+      "hint": "Letters and numbers only",
+      "transform": "upper"
+     },
+     {
+      "key": "passport.type",
+      "label": "Passport type",
+      "type": "select",
+      "required": true,
+      "options": [
+       "Ordinary",
+       "Diplomatic",
+       "Official / service",
+       "Refugee travel document"
+      ]
+     },
+     {
+      "key": "passport.issuingCountry",
+      "label": "Issuing country",
+      "type": "country",
+      "required": true
+     },
+     {
+      "key": "passport.placeOfIssue",
+      "label": "Place of issue",
+      "type": "text",
+      "required": true,
+      "max": 80
+     },
+     {
+      "key": "passport.issueDate",
+      "label": "Date of issue",
+      "type": "date",
+      "required": true,
+      "rule": "past"
+     },
+     {
+      "key": "passport.expiryDate",
+      "label": "Expiry date",
+      "type": "date",
+      "required": true,
+      "rule": "passportExpiry"
+     }
+    ]
+   },
+   {
+    "id": "contact",
+    "title": "Contact and addresses",
+    "intro": "Where we and Home Affairs can reach you.",
+    "fields": [
+     {
+      "key": "contact.email",
+      "label": "Email address",
+      "type": "email",
+      "required": true,
+      "autocomplete": "email"
+     },
+     {
+      "key": "contact.phone",
+      "label": "Mobile number",
+      "type": "tel",
+      "required": true,
+      "autocomplete": "tel",
+      "hint": "Include the country code, e.g. +27 81 543 3728",
+      "rule": "phone"
+     },
+     {
+      "key": "contact.countryOfResidence",
+      "label": "Country you live in now",
+      "type": "country",
+      "required": true
+     },
+     {
+      "key": "contact.homeAddress",
+      "label": "Home address",
+      "type": "textarea",
+      "required": true,
+      "hint": "Street, town or city, and postal code",
+      "max": 300
+     },
+     {
+      "key": "contact.saAddress",
+      "label": "Address in South Africa",
+      "type": "textarea",
+      "required": {
+       "field": "history.inSouthAfrica",
+       "in": [
+        "Yes"
+       ]
+      },
+      "hint": "Where you live or will stay in South Africa",
+      "max": 300
+     },
+     {
+      "key": "contact.emergencyName",
+      "label": "Emergency contact: full name",
+      "type": "text",
+      "required": true,
+      "max": 120
+     },
+     {
+      "key": "contact.emergencyRelationship",
+      "label": "Emergency contact: relationship",
+      "type": "text",
+      "required": true,
+      "max": 60
+     },
+     {
+      "key": "contact.emergencyPhone",
+      "label": "Emergency contact: phone",
+      "type": "tel",
+      "required": true,
+      "rule": "phone"
+     }
+    ]
+   },
+   {
+    "id": "history",
+    "title": "South African travel and immigration history",
+    "intro": "Home Affairs checks this against its movement records, so please be accurate.",
+    "fields": [
+     {
+      "key": "history.everEntered",
+      "label": "Have you ever entered South Africa?",
+      "type": "yesno",
+      "required": true
+     },
+     {
+      "key": "history.firstEntryDate",
+      "label": "Date of first entry into South Africa",
+      "type": "date",
+      "required": {
+       "field": "history.everEntered",
+       "in": [
+        "Yes"
+       ]
+      },
+      "showWhen": {
+       "field": "history.everEntered",
+       "in": [
+        "Yes"
+       ]
+      },
+      "rule": "past"
+     },
+     {
+      "key": "history.firstEntryPort",
+      "label": "Port of first entry",
+      "type": "select",
+      "required": {
+       "field": "history.everEntered",
+       "in": [
+        "Yes"
+       ]
+      },
+      "options": [
+       "OR Tambo International Airport",
+       "Cape Town International Airport",
+       "King Shaka International Airport",
+       "Lanseria International Airport",
+       "Beitbridge border post",
+       "Lebombo border post",
+       "Maseru Bridge border post",
+       "Oshoek border post",
+       "Kopfontein border post",
+       "Groblersbrug border post",
+       "Ficksburg Bridge border post",
+       "Vioolsdrif border post",
+       "Durban harbour",
+       "Cape Town harbour",
+       "Other port of entry"
+      ],
+      "showWhen": {
+       "field": "history.everEntered",
+       "in": [
+        "Yes"
+       ]
+      }
+     },
+     {
+      "key": "history.inSouthAfrica",
+      "label": "Are you in South Africa now?",
+      "type": "yesno",
+      "required": true
+     },
+     {
+      "key": "history.lastEntryDate",
+      "label": "Date of most recent entry",
+      "type": "date",
+      "required": {
+       "field": "history.inSouthAfrica",
+       "in": [
+        "Yes"
+       ]
+      },
+      "showWhen": {
+       "field": "history.inSouthAfrica",
+       "in": [
+        "Yes"
+       ]
+      },
+      "rule": "past"
+     },
+     {
+      "key": "history.currentVisaType",
+      "label": "Current visa or permit",
+      "type": "select",
+      "required": {
+       "field": "history.inSouthAfrica",
+       "in": [
+        "Yes"
+       ]
+      },
+      "options": [
+       "Visa exemption (visitor)",
+       "Visitor's visa",
+       "Study visa",
+       "General work visa",
+       "Critical skills work visa",
+       "Intra-company transfer visa",
+       "Business visa",
+       "Spousal / life partner visa",
+       "Relative's visa",
+       "Retired person visa",
+       "Asylum seeker permit",
+       "Other"
+      ],
+      "showWhen": {
+       "field": "history.inSouthAfrica",
+       "in": [
+        "Yes"
+       ]
+      }
+     },
+     {
+      "key": "history.currentVisaNumber",
+      "label": "Visa or permit number",
+      "type": "text",
+      "required": false,
+      "showWhen": {
+       "field": "history.inSouthAfrica",
+       "in": [
+        "Yes"
+       ]
+      },
+      "max": 40,
+      "transform": "upper"
+     },
+     {
+      "key": "history.currentVisaExpiry",
+      "label": "Current visa expiry date",
+      "type": "date",
+      "required": {
+       "field": "history.inSouthAfrica",
+       "in": [
+        "Yes"
+       ]
+      },
+      "showWhen": {
+       "field": "history.inSouthAfrica",
+       "in": [
+        "Yes"
+       ]
+      }
+     },
+     {
+      "key": "history.refused",
+      "label": "Have you ever been refused a South African visa or permit?",
+      "type": "yesno",
+      "required": true
+     },
+     {
+      "key": "history.refusedDetails",
+      "label": "Give the date, visa type and reason for each refusal",
+      "type": "textarea",
+      "required": {
+       "field": "history.refused",
+       "in": [
+        "Yes"
+       ]
+      },
+      "showWhen": {
+       "field": "history.refused",
+       "in": [
+        "Yes"
+       ]
+      },
+      "max": 600
+     },
+     {
+      "key": "history.deported",
+      "label": "Have you ever been deported, or declared undesirable or a prohibited person, in any country?",
+      "type": "yesno",
+      "required": true
+     },
+     {
+      "key": "history.deportedDetails",
+      "label": "Give details",
+      "type": "textarea",
+      "required": {
+       "field": "history.deported",
+       "in": [
+        "Yes"
+       ]
+      },
+      "showWhen": {
+       "field": "history.deported",
+       "in": [
+        "Yes"
+       ]
+      },
+      "max": 600
+     },
+     {
+      "key": "history.convicted",
+      "label": "Have you ever been convicted of a crime in any country?",
+      "type": "yesno",
+      "required": true
+     },
+     {
+      "key": "history.convictedDetails",
+      "label": "Give the country, offence and date of each conviction",
+      "type": "textarea",
+      "required": {
+       "field": "history.convicted",
+       "in": [
+        "Yes"
+       ]
+      },
+      "showWhen": {
+       "field": "history.convicted",
+       "in": [
+        "Yes"
+       ]
+      },
+      "max": 600
+     }
+    ]
+   },
+   {
+    "id": "trip",
+    "title": "Your stay in South Africa",
+    "cores": [
+     "temporary",
+     "medical",
+     "waiver"
+    ],
+    "intro": "Plans for the period this visa should cover.",
+    "fields": [
+     {
+      "key": "trip.purpose",
+      "label": "Main purpose of your stay",
+      "type": "textarea",
+      "required": true,
+      "hint": "A few sentences in your own words",
+      "min": 20,
+      "max": 600
+     },
+     {
+      "key": "trip.arrivalDate",
+      "label": "Intended date of arrival",
+      "type": "date",
+      "required": {
+       "field": "history.inSouthAfrica",
+       "in": [
+        "No"
+       ]
+      },
+      "showWhen": {
+       "field": "history.inSouthAfrica",
+       "in": [
+        "No"
+       ]
+      },
+      "rule": "future"
+     },
+     {
+      "key": "trip.departureDate",
+      "label": "Intended date of departure",
+      "type": "date",
+      "required": true,
+      "rule": "future",
+      "hint": "Your best estimate if you are not sure yet"
+     },
+     {
+      "key": "trip.applyFrom",
+      "label": "Where will you submit the application?",
+      "type": "select",
+      "required": true,
+      "options": [
+       "VFS centre in South Africa",
+       "South African mission or VFS centre abroad"
+      ]
+     },
+     {
+      "key": "trip.mission",
+      "label": "Mission or VFS centre city",
+      "type": "text",
+      "required": {
+       "field": "trip.applyFrom",
+       "in": [
+        "South African mission or VFS centre abroad"
+       ]
+      },
+      "showWhen": {
+       "field": "trip.applyFrom",
+       "in": [
+        "South African mission or VFS centre abroad"
+       ]
+      },
+      "max": 80
+     }
+    ]
+   },
+   {
+    "id": "residence",
+    "title": "Your permanent residence application",
+    "cores": [
+     "permanent"
+    ],
+    "intro": "About your stay in South Africa so far.",
+    "fields": [
+     {
+      "key": "residence.yearsResident",
+      "label": "How many years have you lived in South Africa?",
+      "type": "number",
+      "required": true,
+      "min": 0,
+      "max": 80
+     },
+     {
+      "key": "residence.reason",
+      "label": "Why are you applying for permanent residence?",
+      "type": "textarea",
+      "required": true,
+      "min": 20,
+      "max": 600
+     }
+    ]
+   },
+   {
+    "id": "work",
+    "title": "Employment",
+    "purposes": [
+     "work"
+    ],
+    "intro": "Your South African employer or job offer.",
+    "fields": [
+     {
+      "key": "work.employer",
+      "label": "Employer name",
+      "type": "text",
+      "required": true,
+      "max": 120
+     },
+     {
+      "key": "work.employerRegistration",
+      "label": "Employer company registration (CIPC) number",
+      "type": "text",
+      "required": false,
+      "max": 40
+     },
+     {
+      "key": "work.employerAddress",
+      "label": "Employer address in South Africa",
+      "type": "textarea",
+      "required": true,
+      "max": 300
+     },
+     {
+      "key": "work.jobTitle",
+      "label": "Job title",
+      "type": "text",
+      "required": true,
+      "max": 80
+     },
+     {
+      "key": "work.startDate",
+      "label": "Start date (or expected start date)",
+      "type": "date",
+      "required": true
+     },
+     {
+      "key": "work.monthlySalary",
+      "label": "Gross monthly salary (ZAR)",
+      "type": "number",
+      "required": true,
+      "min": 0,
+      "max": 10000000
+     },
+     {
+      "key": "work.professionalBody",
+      "label": "Professional body you are registered with",
+      "type": "text",
+      "required": false,
+      "max": 120,
+      "hint": "For example ECSA, HPCSA or SACPCMP"
+     }
+    ]
+   },
+   {
+    "id": "business",
+    "title": "Your business",
+    "purposes": [
+     "business"
+    ],
+    "fields": [
+     {
+      "key": "business.companyName",
+      "label": "Company or proposed company name",
+      "type": "text",
+      "required": true,
+      "max": 120
+     },
+     {
+      "key": "business.registrationNumber",
+      "label": "Company registration (CIPC) number",
+      "type": "text",
+      "required": false,
+      "max": 40
+     },
+     {
+      "key": "business.sector",
+      "label": "Industry or sector",
+      "type": "text",
+      "required": true,
+      "max": 80
+     },
+     {
+      "key": "business.investmentAmount",
+      "label": "Amount you will invest (ZAR)",
+      "type": "number",
+      "required": true,
+      "min": 0,
+      "max": 1000000000
+     },
+     {
+      "key": "business.jobsCreated",
+      "label": "South African jobs the business will create",
+      "type": "number",
+      "required": true,
+      "min": 0,
+      "max": 100000
+     }
+    ]
+   },
+   {
+    "id": "study",
+    "title": "Studies",
+    "purposes": [
+     "study"
+    ],
+    "fields": [
+     {
+      "key": "study.institution",
+      "label": "Institution name",
+      "type": "text",
+      "required": true,
+      "max": 120
+     },
+     {
+      "key": "study.course",
+      "label": "Course or programme",
+      "type": "text",
+      "required": true,
+      "max": 120
+     },
+     {
+      "key": "study.studentNumber",
+      "label": "Student number",
+      "type": "text",
+      "required": false,
+      "max": 40
+     },
+     {
+      "key": "study.startDate",
+      "label": "Course start date",
+      "type": "date",
+      "required": true
+     },
+     {
+      "key": "study.endDate",
+      "label": "Course end date",
+      "type": "date",
+      "required": true
+     },
+     {
+      "key": "study.funding",
+      "label": "Who pays for your studies?",
+      "type": "select",
+      "required": true,
+      "options": [
+       "Myself",
+       "Parent or guardian",
+       "Bursary or scholarship",
+       "Employer",
+       "Government",
+       "Other"
+      ]
+     }
+    ]
+   },
+   {
+    "id": "sponsor",
+    "title": "Your South African spouse, partner or relative",
+    "purposes": [
+     "family"
+    ],
+    "intro": "The South African citizen or permanent resident supporting your application.",
+    "fields": [
+     {
+      "key": "sponsor.fullName",
+      "label": "Full name",
+      "type": "text",
+      "required": true,
+      "max": 120
+     },
+     {
+      "key": "sponsor.idNumber",
+      "label": "South African ID number or permanent residence permit number",
+      "type": "text",
+      "required": true,
+      "max": 20,
+      "rule": "saId"
+     },
+     {
+      "key": "sponsor.relationship",
+      "label": "Relationship to you",
+      "type": "select",
+      "required": true,
+      "options": [
+       "Spouse",
+       "Life partner",
+       "Parent",
+       "Child",
+       "Sibling",
+       "Grandparent",
+       "Grandchild",
+       "Other relative"
+      ]
+     },
+     {
+      "key": "sponsor.status",
+      "label": "Their status in South Africa",
+      "type": "select",
+      "required": true,
+      "options": [
+       "South African citizen",
+       "Permanent resident"
+      ]
+     },
+     {
+      "key": "sponsor.relationshipSince",
+      "label": "Married or in a relationship since",
+      "type": "date",
+      "required": {
+       "field": "sponsor.relationship",
+       "in": [
+        "Spouse",
+        "Life partner"
+       ]
+      },
+      "showWhen": {
+       "field": "sponsor.relationship",
+       "in": [
+        "Spouse",
+        "Life partner"
+       ]
+      },
+      "rule": "past"
+     },
+     {
+      "key": "sponsor.phone",
+      "label": "Their phone number",
+      "type": "tel",
+      "required": true,
+      "rule": "phone"
+     }
+    ]
+   },
+   {
+    "id": "retire",
+    "title": "Retirement income or treatment",
+    "purposes": [
+     "retire"
+    ],
+    "fields": [
+     {
+      "key": "retire.incomeSource",
+      "label": "Main source of funds",
+      "type": "select",
+      "required": true,
+      "options": [
+       "Pension",
+       "Retirement annuity",
+       "Investments or net worth",
+       "Medical scheme or employer (treatment)",
+       "Own funds (treatment)",
+       "Other"
+      ]
+     },
+     {
+      "key": "retire.monthlyIncome",
+      "label": "Monthly income or available funds (ZAR)",
+      "type": "number",
+      "required": true,
+      "min": 0,
+      "max": 100000000
+     },
+     {
+      "key": "retire.medicalScheme",
+      "label": "Medical scheme name",
+      "type": "text",
+      "required": false,
+      "max": 120
+     }
+    ]
+   },
+   {
+    "id": "visit",
+    "title": "Visit details",
+    "purposes": [
+     "visit"
+    ],
+    "fields": [
+     {
+      "key": "visit.hostName",
+      "label": "Name of host or accommodation",
+      "type": "text",
+      "required": true,
+      "max": 120
+     },
+     {
+      "key": "visit.hostPhone",
+      "label": "Host or accommodation phone",
+      "type": "tel",
+      "required": false,
+      "rule": "phone"
+     },
+     {
+      "key": "visit.funds",
+      "label": "How will you pay for your stay?",
+      "type": "select",
+      "required": true,
+      "options": [
+       "My own funds",
+       "Host is paying",
+       "Employer is paying",
+       "Other"
+      ]
+     }
+    ]
+   },
+   {
+    "id": "family",
+    "title": "Family and dependants",
+    "intro": "Your spouse or partner, and any children or dependants included in this application.",
+    "fields": [
+     {
+      "key": "family.spouseName",
+      "label": "Spouse or partner: full name",
+      "type": "text",
+      "required": {
+       "field": "personal.maritalStatus",
+       "in": [
+        "Married",
+        "Life partnership"
+       ]
+      },
+      "showWhen": {
+       "field": "personal.maritalStatus",
+       "in": [
+        "Married",
+        "Life partnership"
+       ]
+      },
+      "max": 120
+     },
+     {
+      "key": "family.spouseNationality",
+      "label": "Spouse or partner: nationality",
+      "type": "country",
+      "required": {
+       "field": "personal.maritalStatus",
+       "in": [
+        "Married",
+        "Life partnership"
+       ]
+      },
+      "showWhen": {
+       "field": "personal.maritalStatus",
+       "in": [
+        "Married",
+        "Life partnership"
+       ]
+      }
+     },
+     {
+      "key": "family.spouseDateOfBirth",
+      "label": "Spouse or partner: date of birth",
+      "type": "date",
+      "required": {
+       "field": "personal.maritalStatus",
+       "in": [
+        "Married",
+        "Life partnership"
+       ]
+      },
+      "showWhen": {
+       "field": "personal.maritalStatus",
+       "in": [
+        "Married",
+        "Life partnership"
+       ]
+      },
+      "rule": "past"
+     },
+     {
+      "key": "family.spouseIncluded",
+      "label": "Is your spouse or partner applying with you?",
+      "type": "yesno",
+      "required": {
+       "field": "personal.maritalStatus",
+       "in": [
+        "Married",
+        "Life partnership"
+       ]
+      },
+      "showWhen": {
+       "field": "personal.maritalStatus",
+       "in": [
+        "Married",
+        "Life partnership"
+       ]
+      }
+     },
+     {
+      "key": "family.hasDependants",
+      "label": "Are any children or other dependants included in this application?",
+      "type": "yesno",
+      "required": true
+     },
+     {
+      "key": "family.dependants",
+      "label": "Dependants",
+      "type": "list",
+      "required": {
+       "field": "family.hasDependants",
+       "in": [
+        "Yes"
+       ]
+      },
+      "showWhen": {
+       "field": "family.hasDependants",
+       "in": [
+        "Yes"
+       ]
+      },
+      "maxItems": 10,
+      "fields": [
+       {
+        "key": "fullName",
+        "label": "Full name",
+        "type": "text",
+        "required": true,
+        "max": 120
+       },
+       {
+        "key": "relationship",
+        "label": "Relationship",
+        "type": "select",
+        "required": true,
+        "options": [
+         "Son",
+         "Daughter",
+         "Stepchild",
+         "Adopted child",
+         "Parent",
+         "Other dependant"
+        ]
+       },
+       {
+        "key": "dateOfBirth",
+        "label": "Date of birth",
+        "type": "date",
+        "required": true,
+        "rule": "past"
+       },
+       {
+        "key": "nationality",
+        "label": "Nationality",
+        "type": "country",
+        "required": true
+       },
+       {
+        "key": "passportNumber",
+        "label": "Passport number",
+        "type": "text",
+        "required": true,
+        "rule": "passport",
+        "transform": "upper"
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "id": "declaration",
+    "title": "Declaration",
+    "intro": "Please read carefully before you confirm.",
+    "fields": [
+     {
+      "key": "declaration.truthful",
+      "label": "I declare that the information I have given is true and complete. I understand that false or misleading information can lead to refusal of my application and to prosecution under the Immigration Act.",
+      "type": "checkbox",
+      "required": true
+     },
+     {
+      "key": "declaration.notify",
+      "label": "I will tell GlobalPath immediately if any of this information changes before a decision is made.",
+      "type": "checkbox",
+      "required": true
+     },
+     {
+      "key": "declaration.consent",
+      "label": "I consent to GlobalPath processing my personal information and sharing it with the Department of Home Affairs and VFS Global for this application, in line with the privacy notice.",
+      "type": "checkbox",
+      "required": true
+     }
+    ]
+   }
+  ],
+  "countries": [
+   "AF",
+   "AX",
+   "AL",
+   "DZ",
+   "AS",
+   "AD",
+   "AO",
+   "AI",
+   "AQ",
+   "AG",
+   "AR",
+   "AM",
+   "AW",
+   "AU",
+   "AT",
+   "AZ",
+   "BS",
+   "BH",
+   "BD",
+   "BB",
+   "BY",
+   "BE",
+   "BZ",
+   "BJ",
+   "BM",
+   "BT",
+   "BO",
+   "BQ",
+   "BA",
+   "BW",
+   "BV",
+   "BR",
+   "IO",
+   "BN",
+   "BG",
+   "BF",
+   "BI",
+   "CV",
+   "KH",
+   "CM",
+   "CA",
+   "KY",
+   "CF",
+   "TD",
+   "CL",
+   "CN",
+   "CX",
+   "CC",
+   "CO",
+   "KM",
+   "CG",
+   "CD",
+   "CK",
+   "CR",
+   "CI",
+   "HR",
+   "CU",
+   "CW",
+   "CY",
+   "CZ",
+   "DK",
+   "DJ",
+   "DM",
+   "DO",
+   "EC",
+   "EG",
+   "SV",
+   "GQ",
+   "ER",
+   "EE",
+   "SZ",
+   "ET",
+   "FK",
+   "FO",
+   "FJ",
+   "FI",
+   "FR",
+   "GF",
+   "PF",
+   "TF",
+   "GA",
+   "GM",
+   "GE",
+   "DE",
+   "GH",
+   "GI",
+   "GR",
+   "GL",
+   "GD",
+   "GP",
+   "GU",
+   "GT",
+   "GG",
+   "GN",
+   "GW",
+   "GY",
+   "HT",
+   "HM",
+   "VA",
+   "HN",
+   "HK",
+   "HU",
+   "IS",
+   "IN",
+   "ID",
+   "IR",
+   "IQ",
+   "IE",
+   "IM",
+   "IL",
+   "IT",
+   "JM",
+   "JP",
+   "JE",
+   "JO",
+   "KZ",
+   "KE",
+   "KI",
+   "KP",
+   "KR",
+   "KW",
+   "KG",
+   "LA",
+   "LV",
+   "LB",
+   "LS",
+   "LR",
+   "LY",
+   "LI",
+   "LT",
+   "LU",
+   "MO",
+   "MG",
+   "MW",
+   "MY",
+   "MV",
+   "ML",
+   "MT",
+   "MH",
+   "MQ",
+   "MR",
+   "MU",
+   "YT",
+   "MX",
+   "FM",
+   "MD",
+   "MC",
+   "MN",
+   "ME",
+   "MS",
+   "MA",
+   "MZ",
+   "MM",
+   "NA",
+   "NR",
+   "NP",
+   "NL",
+   "NC",
+   "NZ",
+   "NI",
+   "NE",
+   "NG",
+   "NU",
+   "NF",
+   "MK",
+   "MP",
+   "NO",
+   "OM",
+   "PK",
+   "PW",
+   "PS",
+   "PA",
+   "PG",
+   "PY",
+   "PE",
+   "PH",
+   "PN",
+   "PL",
+   "PT",
+   "PR",
+   "QA",
+   "RE",
+   "RO",
+   "RU",
+   "RW",
+   "BL",
+   "SH",
+   "KN",
+   "LC",
+   "MF",
+   "PM",
+   "VC",
+   "WS",
+   "SM",
+   "ST",
+   "SA",
+   "SN",
+   "RS",
+   "SC",
+   "SL",
+   "SG",
+   "SX",
+   "SK",
+   "SI",
+   "SB",
+   "SO",
+   "ZA",
+   "GS",
+   "SS",
+   "ES",
+   "LK",
+   "SD",
+   "SR",
+   "SJ",
+   "SE",
+   "CH",
+   "SY",
+   "TW",
+   "TJ",
+   "TZ",
+   "TH",
+   "TL",
+   "TG",
+   "TK",
+   "TO",
+   "TT",
+   "TN",
+   "TR",
+   "TM",
+   "TC",
+   "TV",
+   "UG",
+   "UA",
+   "AE",
+   "GB",
+   "US",
+   "UM",
+   "UY",
+   "UZ",
+   "VU",
+   "VE",
+   "VN",
+   "VG",
+   "VI",
+   "WF",
+   "EH",
+   "YE",
+   "ZM",
+   "ZW",
+   "XK"
+  ]
  }
 }

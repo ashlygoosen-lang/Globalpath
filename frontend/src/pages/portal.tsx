@@ -3,6 +3,7 @@ import { Icon, Button, Kicker, Input, Select, Alert, formatDate, timeAgo } from 
 import { visas, purposes } from "../lib/content";
 import { api, ApiError, session, openProtectedFile } from "../lib/api";
 import { href, navigate } from "../lib/router";
+import { ApplicantForm } from "./applicant";
 
 export type User = { id: string; name: string; email: string; role: "client" | "admin"; phone?: string };
 
@@ -74,7 +75,7 @@ export function AuthPanel({ onAuth, adminOnly = false }: { onAuth: (t: string, u
 
 type AppSummary = {
   id: string; reference: string; visaTitle: string; stage: number; stageName: string; stages: string[]; progress: number; advisor: string; nextStep: string;
-  readyToSubmit: boolean; submitted: boolean; needsResubmit: boolean; submittedAt?: string;
+  applicantComplete: boolean; applicantLocked: boolean; readyToSubmit: boolean; submitted: boolean; needsResubmit: boolean; submittedAt?: string;
   required: { total: number; complete: number; missing: string[] };
   documents: { total: number; received: number; approved: number; awaitingReview: number; outstanding: number; attention: number };
 };
@@ -88,7 +89,7 @@ type Doc = { id: string; name: string; note?: string; kind: string; required?: b
 
 export function Portal({ sessionApi }: { sessionApi: ReturnType<typeof useSession> }) {
   const { user, ready, signIn, signOut } = sessionApi;
-  const [tab, setTab] = useState<"overview" | "documents" | "assessment">("overview");
+  const [tab, setTab] = useState<"overview" | "details" | "documents" | "assessment">("overview");
   const [dash, setDash] = useState<Dashboard | null>(null);
   const [error, setError] = useState("");
 
@@ -110,9 +111,9 @@ export function Portal({ sessionApi }: { sessionApi: ReturnType<typeof useSessio
     <div className="wrap portal">
       <aside className="portal-nav">
         <div className="portal-user"><span>{user.name.split(" ").map(p => p[0]).slice(0, 2).join("")}</span><p><strong>{user.name}</strong><small>{app?.visaTitle || "Client"}</small></p></div>
-        <nav>{([["overview", "Overview", "home"], ["documents", "Documents", "file"], ["assessment", "Eligibility check", "check"]] as const).map(([id, label, icon]) =>
+        <nav>{([["overview", "Overview", "home"], ["details", "Applicant details", "user"], ["documents", "Documents", "file"], ["assessment", "Eligibility check", "check"]] as const).map(([id, label, icon]) =>
           <button key={id} className={tab === id ? "is-on" : ""} aria-current={tab === id ? "page" : undefined} onClick={() => setTab(id)}><Icon name={icon} size={18}/>{label}
-            {id === "documents" && app && app.required.missing.length > 0 && <b>{app.required.missing.length}</b>}
+            {id === "details" && app && !app.applicantComplete && <b>!</b>}{id === "documents" && app && app.applicantComplete && app.required.missing.length > 0 && <b>{app.required.missing.length}</b>}
           </button>)}</nav>
         <button className="portal-out" onClick={signOut}><Icon name="logout" size={18}/>Sign out</button>
       </aside>
@@ -125,14 +126,17 @@ export function Portal({ sessionApi }: { sessionApi: ReturnType<typeof useSessio
             {app && <span className="pill">{app.stageName}</span>}
           </div>
           {app ? <>
-            {!app.submitted && <div className={`submit-banner ${app.readyToSubmit ? "is-ready" : ""}`}>
-              <Icon name={app.readyToSubmit ? "check" : "alert"} size={22}/>
-              <div>
-                <strong>{app.needsResubmit ? "Some documents need replacing" : app.readyToSubmit ? "Your documents are complete" : "Upload all required documents to submit your application"}</strong>
-                <p>{app.needsResubmit ? "Your advisor asked for new copies of some documents. Replace them, then resubmit." : app.readyToSubmit ? "Submit your application so your advisor can start the final review." : `${app.required.complete} of ${app.required.total} required documents done. Home Affairs only accepts complete applications.`}</p>
-              </div>
-              <Button variant={app.readyToSubmit ? "primary" : "dark"} onClick={() => setTab("documents")}>{app.readyToSubmit ? "Review and submit" : "Upload documents"}</Button>
-            </div>}
+            {!app.submitted && <ol className="journey-steps">
+              {[
+                { n: 1, title: "Applicant details", text: app.applicantComplete ? "Complete" : "Personal, passport and travel history", done: app.applicantComplete, current: !app.applicantComplete, go: "details" as const, cta: "Complete details" },
+                { n: 2, title: "Upload documents", text: app.applicantComplete ? `${app.required.complete} of ${app.required.total} required` : "Unlocks after step 1", done: app.applicantComplete && app.required.missing.length === 0 && !app.needsResubmit, current: app.applicantComplete && (app.required.missing.length > 0 || app.needsResubmit), go: "documents" as const, cta: app.needsResubmit ? "Replace documents" : "Upload documents" },
+                { n: 3, title: "Submit for review", text: app.readyToSubmit ? "Ready to submit" : "Unlocks when all documents are in", done: false, current: app.readyToSubmit, go: "documents" as const, cta: "Submit application" },
+              ].map(st => <li key={st.n} className={`${st.done ? "is-done" : ""} ${st.current ? "is-current" : ""}`}>
+                <span className="js-num">{st.done ? <Icon name="tick" size={16}/> : st.n}</span>
+                <div><strong>{st.title}</strong><small>{st.text}</small></div>
+                {st.current && <Button onClick={() => setTab(st.go)}>{st.cta}</Button>}
+              </li>)}
+            </ol>}
             <div className="progress-card">
               <div className="progress-top"><span>Application progress</span><strong>{app.progress}%</strong></div>
               <div className="progress" role="progressbar" aria-valuenow={app.progress} aria-valuemin={0} aria-valuemax={100}><i style={{ width: `${app.progress}%` }}/></div>
@@ -154,7 +158,13 @@ export function Portal({ sessionApi }: { sessionApi: ReturnType<typeof useSessio
             </div>
           </> : <div className="empty"><h2>No open application</h2><p>Book a consultation and your advisor will open an application for you.</p><Button to="/book">Book a consultation</Button></div>}
         </>}
-        {tab === "documents" && <Documents app={app || null} onChange={load}/>}
+        {tab === "details" && app && <ApplicantForm onComplete={() => { load(); setTab("documents"); }}/>}
+        {tab === "documents" && app && !app.applicantComplete && <div className="locked-step">
+          <Icon name="lock" size={30}/>
+          <div><h2>Complete your applicant details first</h2><p>Before uploading documents, tell us your personal details, passport information and South African travel history, including your date of first entry. It takes about 10 minutes and saves as you go.</p></div>
+          <Button onClick={() => setTab("details")}>Complete applicant details</Button>
+        </div>}
+        {tab === "documents" && app?.applicantComplete && <Documents app={app || null} onChange={load}/>}
         {tab === "assessment" && <Assessment/>}
       </main>
     </div>

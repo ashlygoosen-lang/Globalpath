@@ -5,6 +5,7 @@ import { hashPassword, checkPassword, signToken, publicUser, requireAuth } from 
 import { validate, z, text, email, phone } from '../validate.js';
 import { visaBySlug } from '../content.js';
 import { logActivity, syncChecklist } from './portal.js';
+import { initialApplicant } from '../applicant.js';
 import { notifyTeam } from '../mailer.js';
 
 const r = Router();
@@ -28,7 +29,8 @@ r.post('/register', authLimiter, validate(registerSchema), async (req, res) => {
   }
   const user = db.insert('users', { role: 'client', name, email: em, phone: ph || '', passwordHash: await hashPassword(pw) });
   const app = db.insert('applications', {
-    userId: user.id, reference: reference('A'), visa, stage: 0, status: 'active', advisor: 'Unassigned', nextStep: 'Upload every required document on your checklist, then submit your application for review.',
+    userId: user.id, reference: reference('A'), visa, stage: 0, status: 'active', advisor: 'Unassigned', nextStep: 'Complete your applicant details, upload every required document, then submit your application for review.',
+    applicant: initialApplicant({ name, email: em, phone: ph }),
   });
   syncChecklist(app);
   logActivity(app.id, 'Application created', `${visaBySlug[visa].title} preparation started`);
