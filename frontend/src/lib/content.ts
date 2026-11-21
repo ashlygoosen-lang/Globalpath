@@ -1,8 +1,10 @@
 import raw from "../content.json";
 
+export type Requirement = { key: string; name: string; note?: string; conditional?: boolean };
 export type Visa = {
   slug: string; title: string; section: string; group: string; turnaround: string;
-  dhaFee: string; vfsFee: string; intro: string; qualifies: string; documents: string[]; purposes: string[];
+  dhaFee: string; vfsFee: string; intro: string; qualifies: string; purposes: string[];
+  core: "temporary" | "medical" | "permanent" | "waiver"; requirements: Requirement[];
 };
 export type Service = { slug: string; icon: string; title: string; blurb: string; visa: string | null; href?: string };
 export type Fees = { currency: string; application: number; appeal: number; vfs: number; applicationIncludes: string[]; appealIncludes: string[] };
@@ -10,11 +12,18 @@ export type Purpose = { id: string; label: string; question: string };
 export type Article = { slug: string; tag: string; title: string; summary: string; minutes: number; featured?: boolean; body: { h: string; p: string }[] };
 
 export const content = raw as {
-  purposes: Purpose[]; services: Service[]; visas: Visa[]; commonDocuments: string[];
+  purposes: Purpose[]; services: Service[]; visas: Visa[]; documentSets: Record<string, Requirement[]>;
   faqs: { q: string; a: string }[]; articles: Article[]; fees: Fees;
 };
 
-export const { purposes, services, visas, commonDocuments, faqs, articles, fees } = content;
+export const { purposes, services, visas, documentSets, faqs, articles, fees } = content;
+
+export const CORE_LABEL: Record<Visa["core"], string> = {
+  temporary: "Required for every temporary residence application (DHA-1738)",
+  medical: "Required for every medical treatment application (DHA-1738)",
+  permanent: "Required for every permanent residence application (DHA-947)",
+  waiver: "Required for every waiver application",
+};
 export const visaBySlug = (slug?: string) => visas.find(v => v.slug === slug);
 export const serviceHref = (s: Service) => s.href || (s.visa ? `/visa/${s.visa}` : "/corporate");
 

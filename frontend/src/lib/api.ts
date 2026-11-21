@@ -14,10 +14,12 @@ export const session = {
 export class ApiError extends Error {
   status: number;
   fields: Record<string, string>;
-  constructor(message: string, status: number, fields: Record<string, string> = {}) {
+  missing: string[];
+  constructor(message: string, status: number, fields: Record<string, string> = {}, missing: string[] = []) {
     super(message);
     this.status = status;
     this.fields = fields;
+    this.missing = missing;
   }
 }
 
@@ -39,7 +41,7 @@ export async function api<T = any>(path: string, options: { method?: string; bod
   const data = await res.json().catch(() => ({}));
   if (!res.ok) {
     if (res.status === 401) session.clear();
-    throw new ApiError(data.error || "Something went wrong. Please try again.", res.status, data.fields || {});
+    throw new ApiError(data.error || "Something went wrong. Please try again.", res.status, data.fields || {}, data.missing || []);
   }
   return data as T;
 }

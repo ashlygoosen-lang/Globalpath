@@ -2,7 +2,7 @@ import { Router } from 'express';
 import { db } from '../db.js';
 import { requireAdmin, publicUser } from '../auth.js';
 import { validate, z } from '../validate.js';
-import { STAGES, summarise, logActivity } from './portal.js';
+import { STAGES, STAGE_REQUIRES_APPROVAL, summarise, logActivity, unapprovedForLodging, publicDoc } from './portal.js';
 import { sendMail } from '../mailer.js';
 
 const r = Router();
@@ -17,7 +17,7 @@ r.get('/stats', (_req, res) => {
     enquiries: { total: db.all('enquiries').length, new: db.filter('enquiries', e => e.status === 'new').length, week: db.filter('enquiries', e => e.createdAt > week).length },
     consultations: { total: db.all('consultations').length, requested: db.filter('consultations', c => c.status === 'requested').length, upcoming: db.filter('consultations', c => c.date >= today && c.status !== 'cancelled').length },
     clients: { total: db.filter('users', u => u.role === 'client').length },
-    documents: { awaitingReview: db.filter('documents', d => d.status === 'uploaded').length },
+    documents: { awaitingReview: db.filter('documents', d => d.status === 'uploaded' || d.status === 'not_applicable').length },
     subscribers: db.all('subscribers').length,
   });
 });
@@ -54,7 +54,8 @@ r.get('/applications/:id', (req, res) => {
   res.json({
     application: summarise(app),
     client: publicUser(db.get('users', app.userId)),
-    documents: db.filter('documents', d => d.applicationId === app.id).map(({ storedName, ...d }) => d),
+    documents: db.filter('documents', d => d.applicationId === app.id)
+      .sort((a, b) => (a.required === b.required ? (a.order ?? 999) - (b.order ?? 999) : a.required ? -1 : 1)).map(publicDoc),
     activity: db.filter('activity', a => a.applicationId === app.id).sort(newest),
   });
 });
@@ -69,15 +70,28 @@ r.patch('/applications/:id', validate(z.object({
   if (!app) return res.status(404).json({ error: 'Application not found.' });
   const { note, ...patch } = req.body;
   const prevStage = app.stage;
+  if (patch.stage !== undefined && patch.stage >= STAGE_REQUIRES_APPROVAL && patch.stage > prevStage) {
+    const pending = unapprovedForLodging(app.id);
+    if (pending.length) {
+      return res.status(409).json({
+        error: `Every required document must be approved or confirmed as not required before moving to ${STAGES[patch.stage]}. ${pending.length} still pending.`,
+        missing: pending.map(d => d.name),
+      });
+    }
+  }
   db.update('applications', app.id, patch);
   if (patch.stage !== undefined && patch.stage !== prevStage) logActivity(app.id, 'Stage updated', `Your application moved to ${STAGES[patch.stage]}`, 'advisor');
   if (note) logActivity(app.id, 'Advisor update', note, 'advisor');
   res.json(summarise(db.get('applications', app.id)));
 });
 
-r.patch('/documents/:id', validate(z.object({ status: z.enum(['approved', 'rejected', 'uploaded']), reviewNote: z.string().trim().max(300).optional() })), (req, res) => {
+r.patch('/documents/:id', validate(z.object({ status: z.enum(['approved', 'rejected', 'uploaded', 'waived']), reviewNote: z.string().trim().max(300).optional() })), (req, res) => {
+  const existing = db.get('documents', req.params.id);
+  if (!existing) return res.status(404).json({ error: 'Document not found.' });
+  if (req.body.status === 'approved' && !existing.storedName) return res.status(422).json({ error: 'There is no file to approve. Mark it as not required instead, or wait for the client to upload it.' });
+  if (req.body.status === 'rejected' && !req.body.reviewNote) return res.status(422).json({ error: 'Tell the client what needs to change.', fields: { reviewNote: 'Required.' } });
   const doc = db.update('documents', req.params.id, { ...req.body, reviewedAt: new Date().toISOString() });
-  if (!doc) return res.status(404).json({ error: 'Document not found.' });
+  if (req.body.status === 'waived') logActivity(doc.applicationId, 'Confirmed not required', `${doc.name}${req.body.reviewNote ? `: ${req.body.reviewNote}` : ''}`, 'advisor');
   if (req.body.status === 'approved') logActivity(doc.applicationId, 'Document approved', `${doc.name} passed advisor review`, 'advisor');
   if (req.body.status === 'rejected') logActivity(doc.applicationId, 'Action needed', `${doc.name}: ${req.body.reviewNote || 'please upload a new copy'}`, 'advisor');
   const { storedName, ...rest } = doc;

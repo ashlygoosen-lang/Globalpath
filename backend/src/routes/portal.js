@@ -5,32 +5,109 @@ import fs from 'node:fs';
 import crypto from 'node:crypto';
 import { db, uploadsDir } from '../db.js';
 import { requireAuth } from '../auth.js';
-import { visaBySlug } from '../content.js';
+import { visaBySlug, checklistFor } from '../content.js';
 import { config } from '../config.js';
 import { notifyTeam } from '../mailer.js';
+import { validate, z } from '../validate.js';
 
 export const STAGES = ['Assessment', 'Document collection', 'Quality review', 'Submitted to VFS', 'Awaiting outcome', 'Outcome received'];
+/** Stage index from which every required document must be approved (or confirmed not required). */
+export const STAGE_REQUIRES_APPROVAL = 3;
+
+/**
+ * Document statuses:
+ *  outstanding     nothing uploaded yet
+ *  uploaded        file received, awaiting advisor review
+ *  approved        advisor approved the file
+ *  rejected        advisor asked for a new copy (reviewNote says why)
+ *  not_applicable  client says a "where applicable" item does not apply (naReason), awaiting advisor confirmation
+ *  waived          advisor confirmed the item is not required for this client
+ */
+const CLIENT_COMPLETE = new Set(['uploaded', 'approved', 'waived']);
+const ADVISOR_COMPLETE = new Set(['approved', 'waived']);
 
 export function logActivity(applicationId, title, detail, actor = 'system') {
   return db.insert('activity', { applicationId, title, detail, actor });
 }
 
-/** Progress blends stage (60%) with document completeness (40%). */
+/** Makes sure an application's documents match the current official checklist for its visa. */
+export function syncChecklist(app) {
+  const items = checklistFor(app.visa);
+  const docs = db.filter('documents', d => d.applicationId === app.id);
+  const byKey = new Map(docs.filter(d => d.key).map(d => [d.key, d]));
+  items.forEach((item, order) => {
+    const existing = byKey.get(item.key) || docs.find(d => !d.key && d.kind !== 'supporting' && d.name === item.name);
+    if (existing) {
+      db.update('documents', existing.id, { key: item.key, name: item.name, note: item.note, conditional: item.conditional, kind: item.kind, order, required: true });
+    } else {
+      db.insert('documents', { applicationId: app.id, userId: app.userId, key: item.key, name: item.name, note: item.note, conditional: item.conditional, kind: item.kind, order, required: true, status: 'outstanding' });
+    }
+  });
+  const validKeys = new Set(items.map(i => i.key));
+  for (const d of db.filter('documents', d => d.applicationId === app.id && d.kind !== 'supporting')) {
+    if (d.key && validKeys.has(d.key)) continue;
+    // A checklist item that no longer exists: keep any uploaded file as a supporting document.
+    if (d.storedName) db.update('documents', d.id, { kind: 'supporting', required: false, key: null });
+    else db.remove('documents', d.id);
+  }
+}
+
+export function syncAllChecklists() {
+  for (const app of db.all('applications')) syncChecklist(app);
+}
+
+export function requiredDocs(appId) {
+  return db.filter('documents', d => d.applicationId === appId && d.required).sort((a, b) => (a.order ?? 0) - (b.order ?? 0));
+}
+
+/** What is still missing before the client can submit. */
+export function missingForSubmission(appId) {
+  return requiredDocs(appId).filter(d => {
+    if (CLIENT_COMPLETE.has(d.status)) return false;
+    if (d.status === 'not_applicable' && d.conditional) return false;
+    return true;
+  });
+}
+
+/** What is still unconfirmed before the advisor can lodge the application. */
+export function unapprovedForLodging(appId) {
+  return requiredDocs(appId).filter(d => !ADVISOR_COMPLETE.has(d.status));
+}
+
+/** Progress blends stage (60%) with required-document completeness (40%). */
 export function summarise(app) {
   const docs = db.filter('documents', d => d.applicationId === app.id);
-  const done = docs.filter(d => d.status === 'approved' || d.status === 'uploaded').length;
-  const approved = docs.filter(d => d.status === 'approved').length;
+  const required = docs.filter(d => d.required);
+  const missing = missingForSubmission(app.id);
+  const complete = required.length - missing.length;
+  const docPct = required.length ? complete / required.length : 0;
   const stagePct = app.stage / (STAGES.length - 1);
-  const docPct = docs.length ? done / docs.length : 0;
   const progress = app.stage === STAGES.length - 1 ? 100 : Math.round((stagePct * 0.6 + docPct * 0.4) * 100);
+  const attention = docs.filter(d => d.status === 'rejected').length;
   return {
     ...app,
     visaTitle: visaBySlug[app.visa]?.title || app.visa,
     stageName: STAGES[app.stage],
     stages: STAGES,
     progress,
-    documents: { total: docs.length, received: done, approved, outstanding: docs.filter(d => d.status === 'outstanding').length, attention: docs.filter(d => d.status === 'rejected').length },
+    readyToSubmit: missing.length === 0,
+    submitted: Boolean(app.submittedAt) && attention === 0,
+    needsResubmit: Boolean(app.submittedAt) && attention > 0,
+    required: { total: required.length, complete, missing: missing.map(d => d.name) },
+    documents: {
+      total: docs.length,
+      received: docs.filter(d => d.status === 'uploaded' || d.status === 'approved').length,
+      approved: docs.filter(d => d.status === 'approved').length,
+      awaitingReview: docs.filter(d => d.status === 'uploaded' || d.status === 'not_applicable').length,
+      outstanding: missing.length,
+      attention,
+    },
   };
+}
+
+export function publicDoc(d) {
+  const { storedName, ...rest } = d;
+  return rest;
 }
 
 const r = Router();
@@ -53,13 +130,10 @@ r.get('/dashboard', (req, res) => {
 r.get('/documents', (req, res) => {
   const app = myApplication(req);
   if (!app) return res.json([]);
-  res.json(db.filter('documents', d => d.applicationId === app.id).map(publicDoc));
+  const docs = db.filter('documents', d => d.applicationId === app.id)
+    .sort((a, b) => (a.required === b.required ? (a.order ?? 999) - (b.order ?? 999) : a.required ? -1 : 1));
+  res.json(docs.map(publicDoc));
 });
-
-function publicDoc(d) {
-  const { storedName, ...rest } = d;
-  return rest;
-}
 
 const ALLOWED = { 'application/pdf': '.pdf', 'image/jpeg': '.jpg', 'image/png': '.png', 'image/webp': '.webp' };
 const upload = multer({
@@ -80,7 +154,7 @@ function handleUpload(req, res, next) {
   });
 }
 
-/** Upload a file against an existing checklist item (id) or as a new supporting document. */
+/** Upload a file against an existing checklist item (documentId) or as a new supporting document. */
 r.post('/documents', handleUpload, (req, res) => {
   const app = myApplication(req);
   if (!req.file) return res.status(422).json({ error: 'Choose a file to upload.' });
@@ -91,16 +165,38 @@ r.post('/documents', handleUpload, (req, res) => {
   if (req.body.documentId) {
     doc = db.get('documents', req.body.documentId);
     if (!doc || doc.applicationId !== app.id) { fs.unlink(req.file.path, () => {}); return res.status(404).json({ error: 'That checklist item was not found.' }); }
+    if (doc.status === 'approved') { fs.unlink(req.file.path, () => {}); return res.status(409).json({ error: 'This document is already approved. Ask your advisor if it needs replacing.' }); }
     if (doc.storedName) fs.unlink(path.join(uploadsDir, doc.storedName), () => {});
-    doc = db.update('documents', doc.id, { ...fileMeta, status: 'uploaded', reviewNote: '' });
+    doc = db.update('documents', doc.id, { ...fileMeta, status: 'uploaded', reviewNote: '', naReason: '' });
   } else {
     const name = String(req.body.name || req.file.originalname).trim().slice(0, 120) || 'Supporting document';
-    doc = db.insert('documents', { applicationId: app.id, userId: req.user.id, name, kind: 'supporting', ...fileMeta, status: 'uploaded' });
+    doc = db.insert('documents', { applicationId: app.id, userId: req.user.id, name, kind: 'supporting', required: false, ...fileMeta, status: 'uploaded' });
   }
   logActivity(app.id, 'Document received', `${doc.name} added to your file`, 'client');
   if (app.stage === 0) db.update('applications', app.id, { stage: 1 });
-  notifyTeam(`Document uploaded: ${doc.name}`, [['Client', req.user.name], ['Application', app.reference]]);
   res.status(201).json(publicDoc(doc));
+});
+
+/** Client marks a "where applicable" item as not applying to them. */
+r.post('/documents/:id/not-applicable', validate(z.object({ reason: z.string().trim().min(5, 'Tell your advisor briefly why this does not apply.').max(300) })), (req, res) => {
+  const app = myApplication(req);
+  const doc = db.get('documents', req.params.id);
+  if (!app || !doc || doc.applicationId !== app.id) return res.status(404).json({ error: 'Document not found.' });
+  if (!doc.conditional) return res.status(422).json({ error: 'This document is required for every applicant and must be uploaded.' });
+  if (doc.status === 'approved') return res.status(409).json({ error: 'This document is already approved.' });
+  if (doc.storedName) fs.unlink(path.join(uploadsDir, doc.storedName), () => {});
+  const updated = db.update('documents', doc.id, { status: 'not_applicable', naReason: req.body.reason, storedName: null, originalName: null, mime: null, size: null, uploadedAt: null, reviewNote: '' });
+  logActivity(app.id, 'Marked as not applicable', `${doc.name}: ${req.body.reason}`, 'client');
+  res.json(publicDoc(updated));
+});
+
+/** Undo a not-applicable mark. */
+r.post('/documents/:id/applicable', (req, res) => {
+  const app = myApplication(req);
+  const doc = db.get('documents', req.params.id);
+  if (!app || !doc || doc.applicationId !== app.id) return res.status(404).json({ error: 'Document not found.' });
+  if (doc.status !== 'not_applicable') return res.status(409).json({ error: 'This document is not marked as not applicable.' });
+  res.json(publicDoc(db.update('documents', doc.id, { status: 'outstanding', naReason: '' })));
 });
 
 r.get('/documents/:id/file', (req, res) => {
@@ -119,6 +215,28 @@ r.delete('/documents/:id', (req, res) => {
   if (doc.kind === 'supporting') db.remove('documents', doc.id);
   else db.update('documents', doc.id, { status: 'outstanding', storedName: null, originalName: null, mime: null, size: null, uploadedAt: null });
   res.json({ ok: true });
+});
+
+/** Submit the application for advisor review. Only possible once every required document is in. */
+r.post('/application/submit', (req, res) => {
+  const app = myApplication(req);
+  if (!app) return res.status(404).json({ error: 'You do not have an open application.' });
+  const missing = missingForSubmission(app.id);
+  if (missing.length) {
+    return res.status(409).json({
+      error: `Upload all required documents before submitting. ${missing.length} still outstanding.`,
+      missing: missing.map(d => d.name),
+    });
+  }
+  const resubmission = Boolean(app.submittedAt);
+  db.update('applications', app.id, {
+    submittedAt: new Date().toISOString(),
+    stage: Math.max(app.stage, 2),
+    nextStep: 'Your advisor is reviewing every document. We will let you know if anything needs to change.',
+  });
+  logActivity(app.id, resubmission ? 'Application resubmitted' : 'Application submitted', 'All required documents received. Advisor review has started.', 'client');
+  notifyTeam(`${resubmission ? 'Resubmitted' : 'Submitted'} for review: ${app.reference}`, [['Client', req.user.name], ['Email', req.user.email], ['Visa', visaBySlug[app.visa]?.title || app.visa]]);
+  res.json(summarise(db.get('applications', app.id)));
 });
 
 r.get('/assessments', (req, res) => {

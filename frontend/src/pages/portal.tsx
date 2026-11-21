@@ -72,13 +72,19 @@ export function AuthPanel({ onAuth, adminOnly = false }: { onAuth: (t: string, u
   </div>;
 }
 
+type AppSummary = {
+  id: string; reference: string; visaTitle: string; stage: number; stageName: string; stages: string[]; progress: number; advisor: string; nextStep: string;
+  readyToSubmit: boolean; submitted: boolean; needsResubmit: boolean; submittedAt?: string;
+  required: { total: number; complete: number; missing: string[] };
+  documents: { total: number; received: number; approved: number; awaitingReview: number; outstanding: number; attention: number };
+};
 type Dashboard = {
-  application: null | { id: string; reference: string; visaTitle: string; stage: number; stageName: string; stages: string[]; progress: number; advisor: string; nextStep: string; documents: { total: number; received: number; approved: number; outstanding: number; attention: number } };
+  application: null | AppSummary;
   visa: null | { turnaround: string; dhaFee: string; vfsFee: string };
   activity: { id: string; title: string; detail: string; createdAt: string; actor: string }[];
   consultations: { id: string; reference: string; service: string; date: string; time: string; mode: string; status: string }[];
 };
-type Doc = { id: string; name: string; kind: string; status: "outstanding" | "uploaded" | "approved" | "rejected"; originalName?: string; size?: number; uploadedAt?: string; reviewNote?: string };
+type Doc = { id: string; name: string; note?: string; kind: string; required?: boolean; conditional?: boolean; status: "outstanding" | "uploaded" | "approved" | "rejected" | "not_applicable" | "waived"; originalName?: string; size?: number; uploadedAt?: string; reviewNote?: string; naReason?: string };
 
 export function Portal({ sessionApi }: { sessionApi: ReturnType<typeof useSession> }) {
   const { user, ready, signIn, signOut } = sessionApi;
@@ -106,7 +112,7 @@ export function Portal({ sessionApi }: { sessionApi: ReturnType<typeof useSessio
         <div className="portal-user"><span>{user.name.split(" ").map(p => p[0]).slice(0, 2).join("")}</span><p><strong>{user.name}</strong><small>{app?.visaTitle || "Client"}</small></p></div>
         <nav>{([["overview", "Overview", "home"], ["documents", "Documents", "file"], ["assessment", "Eligibility check", "check"]] as const).map(([id, label, icon]) =>
           <button key={id} className={tab === id ? "is-on" : ""} aria-current={tab === id ? "page" : undefined} onClick={() => setTab(id)}><Icon name={icon} size={18}/>{label}
-            {id === "documents" && app && app.documents.outstanding + app.documents.attention > 0 && <b>{app.documents.outstanding + app.documents.attention}</b>}
+            {id === "documents" && app && app.required.missing.length > 0 && <b>{app.required.missing.length}</b>}
           </button>)}</nav>
         <button className="portal-out" onClick={signOut}><Icon name="logout" size={18}/>Sign out</button>
       </aside>
@@ -119,13 +125,21 @@ export function Portal({ sessionApi }: { sessionApi: ReturnType<typeof useSessio
             {app && <span className="pill">{app.stageName}</span>}
           </div>
           {app ? <>
+            {!app.submitted && <div className={`submit-banner ${app.readyToSubmit ? "is-ready" : ""}`}>
+              <Icon name={app.readyToSubmit ? "check" : "alert"} size={22}/>
+              <div>
+                <strong>{app.needsResubmit ? "Some documents need replacing" : app.readyToSubmit ? "Your documents are complete" : "Upload all required documents to submit your application"}</strong>
+                <p>{app.needsResubmit ? "Your advisor asked for new copies of some documents. Replace them, then resubmit." : app.readyToSubmit ? "Submit your application so your advisor can start the final review." : `${app.required.complete} of ${app.required.total} required documents done. Home Affairs only accepts complete applications.`}</p>
+              </div>
+              <Button variant={app.readyToSubmit ? "primary" : "dark"} onClick={() => setTab("documents")}>{app.readyToSubmit ? "Review and submit" : "Upload documents"}</Button>
+            </div>}
             <div className="progress-card">
               <div className="progress-top"><span>Application progress</span><strong>{app.progress}%</strong></div>
               <div className="progress" role="progressbar" aria-valuenow={app.progress} aria-valuemin={0} aria-valuemax={100}><i style={{ width: `${app.progress}%` }}/></div>
               <ol className="stage-track">{app.stages.map((s, i) => <li key={s} className={i < app.stage ? "is-done" : i === app.stage ? "is-current" : ""}><span/>{s}</li>)}</ol>
             </div>
             <div className="portal-cards">
-              <div className="p-card"><Icon name="file"/><h3>Documents</h3><strong>{app.documents.received} of {app.documents.total}</strong><p>{app.documents.attention ? `${app.documents.attention} need your attention` : app.documents.outstanding ? `${app.documents.outstanding} still to upload` : "All documents received"}</p><button className="link" onClick={() => setTab("documents")}>Manage documents<Icon name="arrow" size={15}/></button></div>
+              <div className="p-card"><Icon name="file"/><h3>Required documents</h3><strong>{app.required.complete} of {app.required.total}</strong><p>{app.needsResubmit ? `${app.documents.attention} need replacing` : app.submitted ? "Submitted for advisor review" : app.readyToSubmit ? "Ready to submit" : `${app.required.missing.length} still to upload`}</p><button className="link" onClick={() => setTab("documents")}>{app.readyToSubmit && !app.submitted ? "Submit application" : "Manage documents"}<Icon name="arrow" size={15}/></button></div>
               <div className="p-card"><Icon name="clock"/><h3>Next step</h3><strong className="p-small">{app.nextStep}</strong><p>Advisor: {app.advisor}</p></div>
               {dash.visa && <div className="p-card"><Icon name="briefcase"/><h3>{app.visaTitle}</h3><strong>{dash.visa.turnaround}</strong><p>Official target · DHA {dash.visa.dhaFee}</p></div>}
             </div>
@@ -140,24 +154,37 @@ export function Portal({ sessionApi }: { sessionApi: ReturnType<typeof useSessio
             </div>
           </> : <div className="empty"><h2>No open application</h2><p>Book a consultation and your advisor will open an application for you.</p><Button to="/book">Book a consultation</Button></div>}
         </>}
-        {tab === "documents" && <Documents onChange={load}/>}
+        {tab === "documents" && <Documents app={app || null} onChange={load}/>}
         {tab === "assessment" && <Assessment/>}
       </main>
     </div>
   </div>;
 }
 
-const STATUS_LABEL: Record<Doc["status"], string> = { outstanding: "To upload", uploaded: "In review", approved: "Approved", rejected: "Needs attention" };
+const STATUS_LABEL: Record<Doc["status"], string> = { outstanding: "To upload", uploaded: "In review", approved: "Approved", rejected: "Needs a new copy", not_applicable: "Doesn't apply", waived: "Not required" };
 
-function Documents({ onChange }: { onChange: () => void }) {
+function docDetail(d: Doc) {
+  if (d.status === "rejected") return d.reviewNote ? `Advisor: ${d.reviewNote}` : "Your advisor asked for a new copy.";
+  if (d.status === "not_applicable") return `Your reason: ${d.naReason}`;
+  if (d.status === "waived") return d.reviewNote ? `Advisor: ${d.reviewNote}` : "Your advisor confirmed this is not needed.";
+  if (d.originalName) return `${d.originalName}${d.size ? ` · ${Math.ceil(d.size / 1024)} KB` : ""}${d.uploadedAt ? ` · ${timeAgo(d.uploadedAt)}` : ""}`;
+  return d.note || "Not uploaded yet";
+}
+
+function Documents({ app, onChange }: { app: AppSummary | null; onChange: () => void }) {
   const [docs, setDocs] = useState<Doc[] | null>(null);
   const [error, setError] = useState("");
   const [busyId, setBusyId] = useState<string | null>(null);
+  const [naFor, setNaFor] = useState<string | null>(null);
+  const [naReason, setNaReason] = useState("");
+  const [submitting, setSubmitting] = useState(false);
+  const [missing, setMissing] = useState<string[]>([]);
   const fileRef = useRef<HTMLInputElement>(null);
   const target = useRef<string | null>(null);
 
   const load = () => api<Doc[]>("/portal/documents").then(setDocs).catch((e: ApiError) => setError(e.message));
   useEffect(() => { load(); }, []);
+  const refresh = async () => { await load(); onChange(); };
 
   const pick = (docId: string | null) => { target.current = docId; fileRef.current?.click(); };
   const onFile = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -169,39 +196,99 @@ function Documents({ onChange }: { onChange: () => void }) {
     if (target.current) fd.append("documentId", target.current);
     else fd.append("name", file.name.replace(/\.[^.]+$/, ""));
     setBusyId(target.current || "new"); setError("");
-    try { await api("/portal/documents", { body: fd }); await load(); onChange(); }
+    try { await api("/portal/documents", { body: fd }); await refresh(); }
     catch (err) { setError((err as ApiError).message); }
     finally { setBusyId(null); }
   };
   const remove = async (d: Doc) => {
     if (!confirm(`Remove ${d.originalName || d.name}?`)) return;
-    try { await api(`/portal/documents/${d.id}`, { method: "DELETE" }); await load(); onChange(); } catch (err) { setError((err as ApiError).message); }
+    try { await api(`/portal/documents/${d.id}`, { method: "DELETE" }); await refresh(); } catch (err) { setError((err as ApiError).message); }
+  };
+  const markNa = async (e: FormEvent, d: Doc) => {
+    e.preventDefault(); setBusyId(d.id); setError("");
+    try { await api(`/portal/documents/${d.id}/not-applicable`, { body: { reason: naReason } }); setNaFor(null); setNaReason(""); await refresh(); }
+    catch (err) { setError((err as ApiError).message); }
+    finally { setBusyId(null); }
+  };
+  const undoNa = async (d: Doc) => {
+    try { await api(`/portal/documents/${d.id}/applicable`, { method: "POST", body: {} }); await refresh(); } catch (err) { setError((err as ApiError).message); }
+  };
+  const submit = async () => {
+    setSubmitting(true); setError(""); setMissing([]);
+    try { await api("/portal/application/submit", { body: {} }); await refresh(); }
+    catch (err) { const ae = err as ApiError; setError(ae.message); setMissing(ae.missing); }
+    finally { setSubmitting(false); }
   };
 
-  const groups: [string, Doc[]][] = docs ? [["Needs attention", docs.filter(d => d.status === "rejected")], ["Core documents", docs.filter(d => d.kind === "core" && d.status !== "rejected")], ["Visa-specific documents", docs.filter(d => d.kind === "category" && d.status !== "rejected")], ["Supporting documents", docs.filter(d => d.kind === "supporting" && d.status !== "rejected")]] : [];
+  const required = docs?.filter(d => d.required) || [];
+  const isDone = (d: Doc) => ["uploaded", "approved", "waived"].includes(d.status) || (d.status === "not_applicable" && !!d.conditional);
+  const doneCount = required.filter(isDone).length;
+  const todo = required.filter(d => !isDone(d));
+  const groups: [string, string, Doc[]][] = docs ? [
+    ["Needs a new copy", "Your advisor reviewed these and needs a replacement.", docs.filter(d => d.status === "rejected")],
+    ["Required for every applicant", "Home Affairs requires these for this application type.", required.filter(d => d.kind === "core" && d.status !== "rejected")],
+    [`Required for the ${app?.visaTitle?.toLowerCase() || "visa"}`, "Documents specific to your visa category.", required.filter(d => d.kind === "category" && d.status !== "rejected")],
+    ["Other supporting documents", "Optional extra evidence you want your advisor to see.", docs.filter(d => d.kind === "supporting" && d.status !== "rejected")],
+  ] : [];
+  const pct = required.length ? Math.round((doneCount / required.length) * 100) : 0;
 
   return <>
     <div className="portal-head">
       <div><Kicker>Application file</Kicker><h1>Documents</h1></div>
-      <Button variant="dark" onClick={() => pick(null)} busy={busyId === "new"}><Icon name="upload" size={17}/>Add supporting document</Button>
+      <Button variant="quiet" onClick={() => pick(null)} busy={busyId === "new"}><Icon name="upload" size={17}/>Add supporting document</Button>
     </div>
-    <p className="muted">PDF, JPG, PNG or WebP, up to 10 MB each. Your advisor reviews each upload and will flag anything that needs replacing.</p>
+
+    {docs && <div className="req-progress">
+      <div className="progress-top"><span>Required documents</span><strong>{doneCount} of {required.length}</strong></div>
+      <div className="progress" role="progressbar" aria-valuenow={pct} aria-valuemin={0} aria-valuemax={100}><i style={{ width: `${pct}%` }}/></div>
+      <p className="muted small">Upload every required document as a PDF, JPG, PNG or WebP file of up to 10 MB. Items marked <span className="req-tag">Where applicable</span> can be marked as not applying to you.</p>
+    </div>}
+
     <input ref={fileRef} type="file" accept=".pdf,.jpg,.jpeg,.png,.webp,application/pdf,image/*" hidden onChange={onFile}/>
-    {error && <Alert>{error}</Alert>}
+    {error && <Alert>{error}{missing.length > 0 && <ul>{missing.map(m => <li key={m}>{m}</li>)}</ul>}</Alert>}
     {!docs && !error && <p className="muted">Loading documents…</p>}
-    {groups.filter(([, list]) => list.length).map(([title, list]) => <section key={title} className="doc-group">
-      <h2>{title}</h2>
+
+    {groups.filter(([, , list]) => list.length).map(([title, sub, list]) => <section key={title} className="doc-group">
+      <h2>{title}</h2><p className="muted small">{sub}</p>
       <ul className="doc-list">{list.map(d => <li key={d.id} className={`doc doc-${d.status}`}>
-        <Icon name="file"/>
-        <span className="doc-name"><strong>{d.name}</strong><small>{d.status === "rejected" && d.reviewNote ? d.reviewNote : d.originalName ? `${d.originalName} · ${d.size ? Math.ceil(d.size / 1024) + " KB" : ""} · ${d.uploadedAt ? timeAgo(d.uploadedAt) : ""}` : "Not uploaded yet"}</small></span>
+        <Icon name={isDone(d) ? "check" : "file"}/>
+        <span className="doc-name">
+          <strong>{d.name}{d.conditional && <span className="req-tag">Where applicable</span>}</strong>
+          <small>{docDetail(d)}</small>
+          {naFor === d.id && <form className="na-form" onSubmit={e => markNa(e, d)}>
+            <label htmlFor={`na-${d.id}`}>Why doesn't this apply to you?</label>
+            <div><input id={`na-${d.id}`} autoFocus value={naReason} onChange={e => setNaReason(e.target.value)} placeholder="For example: I have never been married" maxLength={300}/>
+              <button type="submit" className="doc-upload" disabled={busyId === d.id || naReason.trim().length < 5}>Confirm</button>
+              <button type="button" onClick={() => { setNaFor(null); setNaReason(""); }}>Cancel</button></div>
+          </form>}
+        </span>
         <span className={`status status-${d.status}`}>{STATUS_LABEL[d.status]}</span>
         <span className="doc-actions">
           {d.originalName && <button onClick={() => openProtectedFile(`/portal/documents/${d.id}/file`).catch(e => setError(e.message))} aria-label={`View ${d.name}`}><Icon name="eye" size={17}/></button>}
-          {d.status !== "approved" && <button className="doc-upload" onClick={() => pick(d.id)} disabled={busyId === d.id}>{busyId === d.id ? "Uploading…" : d.originalName ? "Replace" : "Upload"}</button>}
-          {d.originalName && d.status !== "approved" && <button onClick={() => remove(d)} aria-label={`Remove ${d.name}`}><Icon name="trash" size={17}/></button>}
+          {!["approved", "waived", "not_applicable"].includes(d.status) && <button className="doc-upload" onClick={() => pick(d.id)} disabled={busyId === d.id}>{busyId === d.id ? "Uploading…" : d.originalName ? "Replace" : "Upload"}</button>}
+          {d.conditional && d.status === "outstanding" && naFor !== d.id && <button className="doc-na" onClick={() => { setNaFor(d.id); setNaReason(""); }}>Doesn't apply</button>}
+          {d.status === "not_applicable" && <button className="doc-na" onClick={() => undoNa(d)}>Undo</button>}
+          {d.originalName && !["approved"].includes(d.status) && <button onClick={() => remove(d)} aria-label={`Remove ${d.name}`}><Icon name="trash" size={17}/></button>}
         </span>
       </li>)}</ul>
     </section>)}
+
+    {docs && app && <section className={`submit-panel ${todo.length === 0 ? "is-ready" : ""} ${app.submitted ? "is-submitted" : ""}`}>
+      {app.submitted ? <>
+        <Icon name="check" size={26}/>
+        <div><h2>Application submitted</h2><p>Submitted {app.submittedAt ? formatDate(app.submittedAt, { day: "numeric", month: "long", year: "numeric" }) : ""}. Your advisor is reviewing every document and will contact you if anything needs to change.</p></div>
+      </> : <>
+        <Icon name={todo.length ? "lock" : "check"} size={26}/>
+        <div>
+          <h2>{app.needsResubmit ? "Resubmit your application" : "Submit your application"}</h2>
+          {todo.length ? <>
+            <p>You can submit once every required document is uploaded. {todo.length} still to go:</p>
+            <ul className="todo-list">{todo.slice(0, 6).map(d => <li key={d.id}>{d.name}</li>)}{todo.length > 6 && <li>and {todo.length - 6} more</li>}</ul>
+          </> : <p>All {required.length} required documents are in. Submit now so your advisor can start the final review before lodging with VFS.</p>}
+        </div>
+        <Button onClick={submit} busy={submitting} disabled={todo.length > 0}>{todo.length ? <><Icon name="lock" size={16}/>Submit application</> : app.needsResubmit ? "Resubmit application" : "Submit application"}</Button>
+      </>}
+    </section>}
   </>;
 }
 

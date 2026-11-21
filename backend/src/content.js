@@ -6,10 +6,15 @@ export const serviceTitles = content.services.map(s => s.title);
 export const visaBySlug = Object.fromEntries(content.visas.map(v => [v.slug, v]));
 export const visaByTitle = Object.fromEntries(content.visas.map(v => [v.title, v]));
 
-/** Default document checklist for an application of a given visa type. */
+/**
+ * Official document checklist for a visa type: the core list for its category
+ * (DHA-1738 temporary residence, DHA-947 permanent residence) plus its own documents.
+ * conditional = "where applicable" on the official form.
+ */
 export function checklistFor(visaSlug) {
   const visa = visaBySlug[visaSlug];
-  const core = content.commonDocuments.map(name => ({ name, kind: 'core' }));
-  const specific = (visa?.documents || []).map(name => ({ name, kind: 'category' }));
-  return [...core, ...specific];
+  if (!visa) return [];
+  const core = (content.documentSets[visa.core] || []).map(i => ({ ...i, kind: 'core' }));
+  const specific = (visa.requirements || []).map(i => ({ ...i, kind: 'category' }));
+  return [...core, ...specific].map(i => ({ key: i.key, name: i.name, note: i.note || '', conditional: Boolean(i.conditional), kind: i.kind }));
 }

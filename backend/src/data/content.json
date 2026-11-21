@@ -125,14 +125,46 @@
    "vfsFee": "R1,790",
    "intro": "For foreign nationals with a qualifying offer of employment where the prescribed labour-market and employer requirements are met.",
    "qualifies": "Applicants with a compliant South African job offer and employer support who satisfy the general work visa requirements.",
-   "documents": [
-    "Signed employment contract and employer undertaking",
-    "Department of Employment and Labour certification, where required",
-    "SAQA evaluation of foreign qualifications",
-    "Proof of relevant experience and professional registration"
-   ],
    "purposes": [
     "work"
+   ],
+   "core": "temporary",
+   "requirements": [
+    {
+     "key": "signed-employment-contract",
+     "name": "Signed employment contract",
+     "note": "Compliant with South African labour law and conditional on the visa being approved"
+    },
+    {
+     "key": "department-of-employment-and-labour-certificate",
+     "name": "Department of Employment and Labour certificate",
+     "note": "Confirms the labour market search, that your qualifications match the job, and that salary and benefits meet local standards"
+    },
+    {
+     "key": "saqa-evaluation-of-your-foreign-qualifications",
+     "name": "SAQA evaluation of your foreign qualifications",
+     "note": "With a sworn English translation if not in English"
+    },
+    {
+     "key": "employer-undertaking-to-pay-deportation-costs",
+     "name": "Employer undertaking to pay deportation costs",
+     "note": "For you and any dependants, if needed"
+    },
+    {
+     "key": "employer-undertaking-to-keep-your-passport-valid",
+     "name": "Employer undertaking to keep your passport valid",
+     "note": "For the full period of employment"
+    },
+    {
+     "key": "employer-undertaking-to-report-non-compliance-or",
+     "name": "Employer undertaking to report non-compliance or changes",
+     "note": "If you breach visa conditions, leave the job or change roles"
+    },
+    {
+     "key": "employer-s-cipc-company-registration-documents",
+     "name": "Employer's CIPC company registration documents",
+     "conditional": true
+    }
    ]
   },
   {
@@ -145,14 +177,42 @@
    "vfsFee": "R1,790",
    "intro": "For professionals whose occupation and credentials align with South Africa’s published critical skills framework.",
    "qualifies": "Applicants able to demonstrate a listed critical skill, relevant qualifications and any required professional-body registration.",
-   "documents": [
-    "Proof that the occupation appears on the critical skills list",
-    "SAQA evaluation and qualification certificates",
-    "Professional body registration or confirmation",
-    "Employment evidence or proof of active job search, as applicable"
-   ],
    "purposes": [
     "work"
+   ],
+   "core": "temporary",
+   "requirements": [
+    {
+     "key": "offer-of-employment-or-employment-contract",
+     "name": "Offer of employment or employment contract",
+     "note": "In an occupation on the critical skills list"
+    },
+    {
+     "key": "confirmation-of-skills-from-a-saqa-recognised-pr",
+     "name": "Confirmation of skills from a SAQA-recognised professional body",
+     "note": "Or the relevant government department: your skills, qualifications and post-qualification experience"
+    },
+    {
+     "key": "proof-of-application-for-professional-registrati",
+     "name": "Proof of application for professional registration",
+     "note": "Where registration is required by law",
+     "conditional": true
+    },
+    {
+     "key": "saqa-evaluation-of-your-foreign-qualifications",
+     "name": "SAQA evaluation of your foreign qualifications",
+     "note": "With a sworn English translation if not in English"
+    },
+    {
+     "key": "employer-undertaking-to-pay-deportation-costs",
+     "name": "Employer undertaking to pay deportation costs",
+     "note": "For you and any dependants, if needed"
+    },
+    {
+     "key": "employer-undertaking-to-keep-your-passport-valid",
+     "name": "Employer undertaking to keep your passport valid",
+     "note": "For the full period of employment"
+    }
    ]
   },
   {
@@ -165,14 +225,45 @@
    "vfsFee": "R1,790",
    "intro": "For qualifying foreign entrepreneurs establishing, investing in or operating a business in South Africa.",
    "qualifies": "Applicants meeting the prescribed investment, business viability and employment criteria, subject to any approved reduction or waiver.",
-   "documents": [
-    "Department of Trade, Industry and Competition recommendation",
-    "Proof of prescribed available investment funds",
-    "Business plan and company registration records",
-    "Undertaking regarding South African citizen or permanent-resident employees"
-   ],
    "purposes": [
     "business"
+   ],
+   "core": "temporary",
+   "requirements": [
+    {
+     "key": "accountant-s-certificate-of-the-investment-amoun",
+     "name": "Accountant's certificate of the investment amount",
+     "note": "From a SAICA chartered or SAIPA professional accountant, confirming the gazetted minimum investment"
+    },
+    {
+     "key": "undertaking-that-60-of-staff-will-be-south-afric",
+     "name": "Undertaking that 60% of staff will be South African",
+     "note": "Citizens or permanent residents in permanent positions; proof due within 12 months"
+    },
+    {
+     "key": "undertaking-to-register-with-sars-uif-the-compen",
+     "name": "Undertaking to register with SARS, UIF, the Compensation Fund and CIPC"
+    },
+    {
+     "key": "letter-from-the-department-of-trade-industry-and",
+     "name": "Letter from the Department of Trade, Industry and Competition",
+     "note": "On the feasibility of the business and its contribution to the national interest"
+    },
+    {
+     "key": "business-plan",
+     "name": "Business plan"
+    },
+    {
+     "key": "previous-year-s-financial-statements-and-proof-o",
+     "name": "Previous year's financial statements and proof of investment",
+     "note": "Only if investing in an existing business",
+     "conditional": true
+    },
+    {
+     "key": "proof-of-registration-with-a-saqa-recognised-pro",
+     "name": "Proof of registration with a SAQA-recognised professional body",
+     "conditional": true
+    }
    ]
   },
   {
@@ -185,14 +276,28 @@
    "vfsFee": "R1,790",
    "intro": "For a temporary visit to South Africa for an approved purpose within the conditions of visitor status.",
    "qualifies": "Visitors who can show a genuine temporary purpose, sufficient funds, accommodation and an intention to depart.",
-   "documents": [
-    "Proof of purpose and proposed itinerary",
-    "Proof of accommodation or host invitation",
-    "Recent bank statements or financial support",
-    "Return or onward travel arrangements"
-   ],
    "purposes": [
     "visit"
+   ],
+   "core": "temporary",
+   "requirements": [
+    {
+     "key": "return-or-onward-air-ticket-or-travel-itinerary",
+     "name": "Return or onward air ticket, or travel itinerary"
+    },
+    {
+     "key": "proof-of-sufficient-funds",
+     "name": "Proof of sufficient funds",
+     "note": "Recent bank statements covering the last 3 months"
+    },
+    {
+     "key": "proof-of-accommodation-or-an-invitation-letter-f",
+     "name": "Proof of accommodation or an invitation letter from your host"
+    },
+    {
+     "key": "letter-explaining-the-purpose-of-your-visit",
+     "name": "Letter explaining the purpose of your visit"
+    }
    ]
   },
   {
@@ -205,14 +310,28 @@
    "vfsFee": "R1,790",
    "intro": "For eligible visitors seeking authority to remain beyond the period initially granted.",
    "qualifies": "Current visitor-visa holders who apply before expiry and can demonstrate a lawful, credible reason for the requested extension.",
-   "documents": [
-    "Current visa and entry stamp",
-    "Written motivation for the extension",
-    "Proof of continued accommodation and funds",
-    "Travel booking or revised departure plan"
-   ],
    "purposes": [
     "visit"
+   ],
+   "core": "temporary",
+   "requirements": [
+    {
+     "key": "copy-of-your-current-visa-and-entry-stamp",
+     "name": "Copy of your current visa and entry stamp"
+    },
+    {
+     "key": "motivation-letter-for-the-extension",
+     "name": "Motivation letter for the extension"
+    },
+    {
+     "key": "proof-of-sufficient-funds",
+     "name": "Proof of sufficient funds",
+     "note": "Recent bank statements covering the last 3 months"
+    },
+    {
+     "key": "return-ticket-or-revised-travel-plan",
+     "name": "Return ticket or revised travel plan"
+    }
    ]
   },
   {
@@ -225,14 +344,31 @@
    "vfsFee": "R1,790",
    "intro": "For participants in qualifying cultural, economic or social exchange programmes.",
    "qualifies": "Applicants accepted into a recognised exchange programme and supported by the relevant programme or institution.",
-   "documents": [
-    "Official exchange programme acceptance",
-    "Undertakings from the host or sponsoring institution",
-    "Proof of accommodation and financial support",
-    "Medical and radiological reports, where prescribed"
-   ],
    "purposes": [
     "study"
+   ],
+   "core": "temporary",
+   "requirements": [
+    {
+     "key": "return-air-ticket-or-undertaking-to-pay-return-o",
+     "name": "Return air ticket, or undertaking to pay return or deportation costs",
+     "note": "From the organ of state, institution or employer"
+    },
+    {
+     "key": "medical-cover-for-the-exchange-period",
+     "name": "Medical cover for the exchange period",
+     "note": "With a scheme registered under the Medical Schemes Act"
+    },
+    {
+     "key": "letter-from-the-south-african-host-accepting-res",
+     "name": "Letter from the South African host accepting responsibility for the programme",
+     "note": "Department of Basic Education, Higher Education and Training, or the learning institution"
+    },
+    {
+     "key": "letter-from-the-foreign-institution-confirming-y",
+     "name": "Letter from the foreign institution confirming your enrolment",
+     "note": "With programme details and start date"
+    }
    ]
   },
   {
@@ -245,14 +381,46 @@
    "vfsFee": "R1,790",
    "intro": "For international students accepted by a registered South African learning institution.",
    "qualifies": "Learners accepted for full-time study who can show funding, suitable accommodation and compliant medical cover.",
-   "documents": [
-    "Acceptance letter from a registered institution",
-    "Proof of funds for tuition and living costs",
-    "South African medical cover or prescribed proof",
-    "Accommodation details and guardian consent for minors"
-   ],
    "purposes": [
     "study"
+   ],
+   "core": "temporary",
+   "requirements": [
+    {
+     "key": "official-acceptance-letter-from-the-south-africa",
+     "name": "Official acceptance letter from the South African institution",
+     "note": "Showing the duration of the course"
+    },
+    {
+     "key": "registrar-s-undertaking-to-report-on-your-regist",
+     "name": "Registrar's undertaking to report on your registration and studies"
+    },
+    {
+     "key": "south-african-medical-cover-renewed-annually",
+     "name": "South African medical cover, renewed annually",
+     "note": "With a scheme registered under the Medical Schemes Act"
+    },
+    {
+     "key": "proof-of-sufficient-funds-for-tuition-and-living",
+     "name": "Proof of sufficient funds for tuition and living costs"
+    },
+    {
+     "key": "learners-under-18-guardian-s-details-confirmatio",
+     "name": "Learners under 18: guardian's details, confirmation letter and parental consent",
+     "note": "Includes unabridged birth certificate and the guardian's proof of address",
+     "conditional": true
+    },
+    {
+     "key": "parent-or-guardian-undertaking-on-medical-cover-",
+     "name": "Parent or guardian undertaking on medical cover for the full study period",
+     "conditional": true
+    },
+    {
+     "key": "foreign-state-s-undertaking-to-pay-departure-cos",
+     "name": "Foreign state's undertaking to pay departure costs",
+     "note": "Only under a bilateral agreement",
+     "conditional": true
+    }
    ]
   },
   {
@@ -265,14 +433,36 @@
    "vfsFee": "R1,790",
    "intro": "For foreign nationals receiving planned medical treatment in South Africa.",
    "qualifies": "Patients with a confirmed treatment plan from a South African medical practitioner or institution and sufficient funding.",
-   "documents": [
-    "Letter from the treating medical practitioner or institution",
-    "Treatment plan and estimated duration",
-    "Proof of funds for treatment and living costs",
-    "Details of an accompanying person, where relevant"
-   ],
    "purposes": [
     "retire"
+   ],
+   "core": "medical",
+   "requirements": [
+    {
+     "key": "letter-from-the-south-african-practitioner-or-me",
+     "name": "Letter from the South African practitioner or medical institution",
+     "note": "Confirming space, estimated costs, treatment schedule and treatment period"
+    },
+    {
+     "key": "confirmation-from-whoever-pays-the-medical-costs",
+     "name": "Confirmation from whoever pays the medical costs",
+     "note": "Or proof of your own funds if the medical scheme or employer is not paying"
+    },
+    {
+     "key": "proof-of-funds-for-costs-beyond-treatment",
+     "name": "Proof of funds for costs beyond treatment",
+     "note": "Or arrangements for accommodation and living costs"
+    },
+    {
+     "key": "details-of-anyone-accompanying-you",
+     "name": "Details of anyone accompanying you",
+     "conditional": true
+    },
+    {
+     "key": "return-air-ticket",
+     "name": "Return air ticket",
+     "conditional": true
+    }
    ]
   },
   {
@@ -285,15 +475,29 @@
    "vfsFee": "R1,790",
    "intro": "For eligible members of transport crews entering or remaining in South Africa for their duties.",
    "qualifies": "Crew members supported by a qualifying operator and able to demonstrate their role, route and intended period in South Africa.",
-   "documents": [
-    "Employer or operator confirmation",
-    "Crew identification and employment records",
-    "Travel route and vessel or aircraft details",
-    "Proof of accommodation where required"
-   ],
    "purposes": [
     "visit",
     "work"
+   ],
+   "core": "temporary",
+   "requirements": [
+    {
+     "key": "letter-from-the-operator-or-employer-confirming-",
+     "name": "Letter from the operator or employer confirming your crew role"
+    },
+    {
+     "key": "crew-identification-or-seafarer-s-book",
+     "name": "Crew identification or seafarer's book"
+    },
+    {
+     "key": "vessel-or-aircraft-details-and-route",
+     "name": "Vessel or aircraft details and route"
+    },
+    {
+     "key": "proof-of-accommodation",
+     "name": "Proof of accommodation",
+     "conditional": true
+    }
    ]
   },
   {
@@ -306,14 +510,30 @@
    "vfsFee": "R1,790",
    "intro": "For the spouse or qualifying life partner of a South African citizen or permanent resident.",
    "qualifies": "Spouses and qualifying life partners able to prove a genuine relationship and the South African partner’s status.",
-   "documents": [
-    "Marriage certificate or evidence of a permanent life partnership",
-    "South African ID or permanent residence proof of partner",
-    "Notarial agreement and relationship evidence, where applicable",
-    "Proof of shared residence and financial support"
-   ],
    "purposes": [
     "family"
+   ],
+   "core": "temporary",
+   "requirements": [
+    {
+     "key": "spouse-relationship-proof",
+     "name": "Marriage certificate, or proof of a permanent life partnership"
+    },
+    {
+     "key": "affidavit-on-the-relationship",
+     "name": "Affidavit on the relationship",
+     "note": "With proof of living together, how you share finances, and details of any children"
+    },
+    {
+     "key": "south-african-id-or-permanent-residence-permit-o",
+     "name": "South African ID or permanent residence permit of your spouse or partner"
+    },
+    {
+     "key": "notarial-agreement",
+     "name": "Notarial agreement",
+     "note": "For a life partnership, where applicable",
+     "conditional": true
+    }
    ]
   },
   {
@@ -326,14 +546,25 @@
    "vfsFee": "R1,790",
    "intro": "For qualifying immediate family members of South African citizens or permanent residents.",
    "qualifies": "Applicants within the prescribed degree of kinship who have eligible South African family support.",
-   "documents": [
-    "Unabridged birth or marriage certificates proving relationship",
-    "South African ID or permanent residence proof of relative",
-    "Financial assurance from the sponsoring relative",
-    "Police clearances where prescribed"
-   ],
    "purposes": [
     "family"
+   ],
+   "core": "temporary",
+   "requirements": [
+    {
+     "key": "unabridged-birth-certificates-proving-the-relati",
+     "name": "Unabridged birth certificates proving the relationship",
+     "note": "Paternity test results where necessary"
+    },
+    {
+     "key": "financial-assurance-from-your-south-african-rela",
+     "name": "Financial assurance from your South African relative",
+     "note": "Current salary advice or certified bank statement, not older than 3 months"
+    },
+    {
+     "key": "south-african-id-or-permanent-residence-permit-o",
+     "name": "South African ID or permanent residence permit of your relative"
+    }
    ]
   },
   {
@@ -346,14 +577,20 @@
    "vfsFee": "R1,790",
    "intro": "For applicants who meet the prescribed lifetime income or net-worth threshold for retirement in South Africa.",
    "qualifies": "Applicants able to demonstrate the required pension, retirement income or qualifying financial resources.",
-   "documents": [
-    "Proof of pension or irrevocable annuity",
-    "Bank statements and evidence of qualifying net worth",
-    "Medical and radiological reports",
-    "Police clearance certificates from relevant countries"
-   ],
    "purposes": [
     "retire"
+   ],
+   "core": "temporary",
+   "requirements": [
+    {
+     "key": "proof-of-the-gazetted-minimum-monthly-income-or-",
+     "name": "Proof of the gazetted minimum monthly income or net worth",
+     "note": "From a pension fund, irrevocable retirement annuity, net worth, or a combination"
+    },
+    {
+     "key": "recent-bank-statements-covering-the-last-3-month",
+     "name": "Recent bank statements covering the last 3 months"
+    }
    ]
   },
   {
@@ -366,14 +603,21 @@
    "vfsFee": "R1,790",
    "intro": "For activities conducted in South Africa under an applicable international agreement.",
    "qualifies": "Applicants whose intended activities fall within a recognised treaty or international agreement involving South Africa.",
-   "documents": [
-    "Confirmation of the applicable treaty or agreement",
-    "Official nomination or assignment letter",
-    "Details of intended activities and duration",
-    "Proof of accommodation and financial support"
-   ],
    "purposes": [
     "work"
+   ],
+   "core": "temporary",
+   "requirements": [
+    {
+     "key": "letter-from-the-state-organ-party-to-the-treaty",
+     "name": "Letter from the state organ party to the treaty",
+     "note": "Describing the programme, your participation, activities, duration and accommodation"
+    },
+    {
+     "key": "state-organ-s-undertaking-to-pay-deportation-cos",
+     "name": "State organ's undertaking to pay deportation costs",
+     "note": "For you and any dependants, if needed"
+    }
    ]
   },
   {
@@ -386,15 +630,26 @@
    "vfsFee": "R1,790",
    "intro": "For qualifying workers seeking permanent residence through an eligible employment-based pathway.",
    "qualifies": "Applicants who meet the statutory work, residence and employment conditions for direct permanent residence.",
-   "documents": [
-    "Current work visa and complete passport history",
-    "Long-term employment contract and employer letter",
-    "Proof of qualifying period of lawful employment",
-    "SAQA evaluation, qualifications and professional registration"
-   ],
    "purposes": [
     "work",
     "settle"
+   ],
+   "core": "permanent",
+   "requirements": [
+    {
+     "key": "proof-of-five-years-continuous-work-visa-status",
+     "name": "Proof of five years' continuous work visa status"
+    },
+    {
+     "key": "offer-of-permanent-employment",
+     "name": "Offer of permanent employment"
+    },
+    {
+     "key": "proof-of-registration-with-a-professional-body-b",
+     "name": "Proof of registration with a professional body, board or council",
+     "note": "Where required for your occupation",
+     "conditional": true
+    }
    ]
   },
   {
@@ -407,15 +662,33 @@
    "vfsFee": "R1,790",
    "intro": "For qualifying spouses and dependants seeking permanent residence through a South African citizen or permanent resident.",
    "qualifies": "Applicants who meet the prescribed relationship, duration and dependency requirements.",
-   "documents": [
-    "Civil-status certificates proving the relationship",
-    "South African ID or permanent residence proof of sponsor",
-    "Evidence of qualifying relationship duration",
-    "Financial support and dependency evidence, where applicable"
-   ],
    "purposes": [
     "family",
     "settle"
+   ],
+   "core": "permanent",
+   "requirements": [
+    {
+     "key": "south-african-id-or-permanent-residence-permit-o",
+     "name": "South African ID or permanent residence permit of your sponsor",
+     "note": "Your spouse or parent"
+    },
+    {
+     "key": "sponsor-s-declaration-of-financial-support",
+     "name": "Sponsor's declaration of financial support"
+    },
+    {
+     "key": "proof-of-five-years-marriage-or-partnership-with",
+     "name": "Proof of five years' marriage or partnership with your sponsor",
+     "note": "Spouse applications, section 26(b)",
+     "conditional": true
+    },
+    {
+     "key": "consent-of-both-parents-or-guardians-with-an-und",
+     "name": "Consent of both parents or guardians with an undertaking of financial support",
+     "note": "Dependant applications, section 26(c) and (d)",
+     "conditional": true
+    }
    ]
   },
   {
@@ -428,14 +701,28 @@
    "vfsFee": "R1,790",
    "intro": "For applicants seeking relief from a prescribed visa requirement where a properly motivated case can be made.",
    "qualifies": "Applicants with exceptional circumstances and a well-supported legal and factual basis for the requested waiver or exemption.",
-   "documents": [
-    "Detailed legal and factual motivation",
-    "Evidence supporting exceptional circumstances",
-    "Copy of current or proposed visa application",
-    "Relevant employer, family or institutional supporting records"
-   ],
    "purposes": [
     "special"
+   ],
+   "core": "waiver",
+   "requirements": [
+    {
+     "key": "detailed-motivation-for-the-waiver-or-exemption",
+     "name": "Detailed motivation for the waiver or exemption"
+    },
+    {
+     "key": "evidence-of-exceptional-circumstances",
+     "name": "Evidence of exceptional circumstances"
+    },
+    {
+     "key": "copy-of-the-related-visa-application-or-current-",
+     "name": "Copy of the related visa application or current visa"
+    },
+    {
+     "key": "supporting-letters-from-your-employer-family-or-",
+     "name": "Supporting letters from your employer, family or institution",
+     "conditional": true
+    }
    ]
   },
   {
@@ -448,24 +735,31 @@
    "vfsFee": "R1,790",
    "intro": "For permanent residence matters requiring formal relief from a prescribed requirement.",
    "qualifies": "Applicants able to establish a lawful basis and compelling circumstances for permanent-residence relief.",
-   "documents": [
-    "Comprehensive waiver or exemption motivation",
-    "Permanent residence application context and status records",
-    "Evidence of hardship or exceptional circumstances",
-    "Supporting affidavits and relevant official correspondence"
-   ],
    "purposes": [
     "special",
     "settle"
+   ],
+   "core": "waiver",
+   "requirements": [
+    {
+     "key": "detailed-motivation-for-the-waiver-or-exemption",
+     "name": "Detailed motivation for the waiver or exemption"
+    },
+    {
+     "key": "evidence-of-hardship-or-exceptional-circumstance",
+     "name": "Evidence of hardship or exceptional circumstances"
+    },
+    {
+     "key": "permanent-residence-application-and-current-stat",
+     "name": "Permanent residence application and current status records"
+    },
+    {
+     "key": "supporting-affidavits-and-official-correspondenc",
+     "name": "Supporting affidavits and official correspondence",
+     "conditional": true
+    }
    ]
   }
- ],
- "commonDocuments": [
-  "Valid passport with sufficient blank pages",
-  "Completed prescribed application form",
-  "Recent compliant photographs",
-  "Proof of current lawful status and residential address",
-  "Police clearances, medical and radiological reports where prescribed"
  ],
  "faqs": [
   {
@@ -479,6 +773,10 @@
   {
    "q": "What happens during an initial consultation?",
    "a": "We discuss your goals, history and circumstances, identify possible routes and outline practical next steps. You receive a written summary afterwards."
+  },
+  {
+   "q": "Do I need every document before you submit my application?",
+   "a": "Yes. Home Affairs only accepts complete applications, so the client portal asks you to upload every required document on your visa's checklist before your application can be submitted. Items marked 'where applicable' can be marked as not applying to you, with a short reason for your advisor."
   },
   {
    "q": "Do you work with clients outside South Africa?",
@@ -622,6 +920,185 @@
    "Drafting of the written appeal or review submission",
    "Lodging within the prescribed time limit",
    "Follow-up until the appeal outcome"
+  ]
+ },
+ "documentSets": {
+  "temporary": [
+   {
+    "key": "application-form",
+    "name": "Completed and signed application form",
+    "note": "DHA-1738 (Form 8), or DHA-1740 (Form 9) for an extension or change of conditions"
+   },
+   {
+    "key": "passport",
+    "name": "Valid passport",
+    "note": "Must expire at least 30 days after your intended departure, with at least two blank pages"
+   },
+   {
+    "key": "photographs",
+    "name": "Two recent passport-size colour photographs"
+   },
+   {
+    "key": "medical-report",
+    "name": "Medical report",
+    "note": "Issued no more than 6 months before submission"
+   },
+   {
+    "key": "radiological-report",
+    "name": "Radiological report",
+    "note": "Applicants 12 years and older; not required for pregnant women",
+    "conditional": true
+   },
+   {
+    "key": "police-clearance",
+    "name": "Police clearance certificates",
+    "note": "Applicants 18 and older: every country you have lived in for one year or longer since turning 18"
+   },
+   {
+    "key": "yellow-fever",
+    "name": "Yellow fever vaccination certificate",
+    "note": "If you travelled through or come from a yellow fever area",
+    "conditional": true
+   },
+   {
+    "key": "marriage-certificate",
+    "name": "Marriage certificate or proof of a recognised spousal relationship",
+    "conditional": true
+   },
+   {
+    "key": "divorce-decree",
+    "name": "Divorce decree",
+    "conditional": true
+   },
+   {
+    "key": "legal-separation",
+    "name": "Legal separation order",
+    "conditional": true
+   },
+   {
+    "key": "death-certificate",
+    "name": "Death certificate of a late spouse",
+    "conditional": true
+   },
+   {
+    "key": "parental-rights-order",
+    "name": "Court order granting parental responsibilities and rights",
+    "conditional": true
+   },
+   {
+    "key": "parental-consent",
+    "name": "Written consent of both parents for a minor child",
+    "note": "Or of the parent with full parental responsibilities",
+    "conditional": true
+   },
+   {
+    "key": "adoption",
+    "name": "Proof of adoption",
+    "conditional": true
+   }
+  ],
+  "medical": [
+   {
+    "key": "application-form",
+    "name": "Completed and signed application form",
+    "note": "DHA-1738 (Form 8)"
+   },
+   {
+    "key": "passport",
+    "name": "Valid passport",
+    "note": "Must expire at least 30 days after your intended departure, with at least two blank pages"
+   },
+   {
+    "key": "photographs",
+    "name": "Two recent passport-size colour photographs"
+   },
+   {
+    "key": "yellow-fever",
+    "name": "Yellow fever vaccination certificate",
+    "note": "If you travelled through or come from a yellow fever area",
+    "conditional": true
+   }
+  ],
+  "permanent": [
+   {
+    "key": "application-form",
+    "name": "Completed and signed application form",
+    "note": "DHA-947 (Form 18)"
+   },
+   {
+    "key": "photographs",
+    "name": "Passport-size photograph",
+    "note": "One for each person included in the application"
+   },
+   {
+    "key": "passport",
+    "name": "Valid passport"
+   },
+   {
+    "key": "birth-certificate",
+    "name": "Unabridged birth certificate",
+    "note": "Original or authenticated copy"
+   },
+   {
+    "key": "current-visa",
+    "name": "Current temporary residence visa",
+    "note": "If you are applying from inside South Africa",
+    "conditional": true
+   },
+   {
+    "key": "name-change",
+    "name": "Proof of change of name or gender",
+    "note": "Statutory declaration, deed poll or adoption certificate",
+    "conditional": true
+   },
+   {
+    "key": "medical-report",
+    "name": "Medical report",
+    "note": "Issued no more than 6 months before submission"
+   },
+   {
+    "key": "radiological-report",
+    "name": "Radiological report",
+    "note": "Applicants 12 years and older; not required for pregnant women. Issued within 6 months",
+    "conditional": true
+   },
+   {
+    "key": "police-clearance",
+    "name": "Police clearance certificates",
+    "note": "Applicants 18 and older: every country lived in for one year or longer since 18, including South Africa. Issued within 6 months"
+   },
+   {
+    "key": "marriage-certificate",
+    "name": "Proof of marriage or spousal relationship",
+    "note": "Marriage certificate, registered customary marriage, or spousal affidavit with proof of cohabitation and shared finances",
+    "conditional": true
+   },
+   {
+    "key": "divorce-decree",
+    "name": "Divorce decree or legal separation, with custody and maintenance orders",
+    "conditional": true
+   },
+   {
+    "key": "parental-consent",
+    "name": "Written consent of both parents for minor children",
+    "note": "Where only one parent is applying",
+    "conditional": true
+   },
+   {
+    "key": "death-certificate",
+    "name": "Death certificate of a late spouse",
+    "conditional": true
+   }
+  ],
+  "waiver": [
+   {
+    "key": "passport",
+    "name": "Valid passport"
+   },
+   {
+    "key": "photographs",
+    "name": "Two recent passport-size colour photographs"
+   }
   ]
  }
 }

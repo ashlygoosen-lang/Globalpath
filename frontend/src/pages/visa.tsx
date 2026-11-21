@@ -1,7 +1,7 @@
 import { useMemo, useState } from "react";
 import { Icon, Button, Kicker } from "../ui";
 import { PageHero, CTA } from "../layout";
-import { purposes, visas, visaBySlug, commonDocuments, Visa, fees, rand } from "../lib/content";
+import { purposes, visas, visaBySlug, documentSets, CORE_LABEL, Visa, Requirement, fees, rand } from "../lib/content";
 import { CostBreakdown } from "./fees";
 import { href, navigate } from "../lib/router";
 
@@ -53,6 +53,13 @@ export function VisaDirectory() {
   </div>;
 }
 
+function ChecklistItems({ items }: { items: Requirement[] }) {
+  return <ul className="req-list">{items.map(d => <li key={d.key}>
+    <Icon name={d.conditional ? "check" : "tick"} size={16}/>
+    <span><strong>{d.name}{d.conditional && <span className="req-tag">Where applicable</span>}</strong>{d.note && <small>{d.note}</small>}</span>
+  </li>)}</ul>;
+}
+
 export function VisaPage({ slug }: { slug?: string }) {
   const visa: Visa = visaBySlug(slug) || visas[0];
   const related = visas.filter(v => v.slug !== visa.slug && v.purposes.some(p => visa.purposes.includes(p))).slice(0, 4);
@@ -88,13 +95,15 @@ export function VisaPage({ slug }: { slug?: string }) {
         </aside>
 
         <h2 id="documents">Document checklist</h2>
+        <p>Based on the Department of Home Affairs supporting-document list for this category. Our clients upload every required document in the secure portal before we submit.</p>
         <div className="checklist">
-          <h3>Core documents</h3>
-          <ul>{commonDocuments.map(d => <li key={d}><Icon name="tick" size={16}/>{d}</li>)}</ul>
-          <h3>Specific to the {visa.title.toLowerCase()}</h3>
-          <ul>{visa.documents.map(d => <li key={d}><Icon name="tick" size={16}/>{d}</li>)}</ul>
+          <h3>{CORE_LABEL[visa.core]}</h3>
+          <ChecklistItems items={documentSets[visa.core]}/>
+          <h3>Additional documents for the {visa.title.toLowerCase()}</h3>
+          <ChecklistItems items={visa.requirements}/>
+          <p className="checklist-key"><span className="req-tag">Where applicable</span> Only needed if it applies to you, for example if you are married or applying with a child.</p>
         </div>
-        <p className="small-print">This is a planning checklist, not an exhaustive legal list. Requirements can differ by nationality, submission location and personal circumstances; certified translations, additional records or updated forms may be requested.</p>
+        <p className="small-print">Home Affairs or VFS may ask for certified copies, sworn translations of documents not in English, or extra records depending on your nationality and where you apply. We confirm the final list for your case at assessment.</p>
 
         <h2 id="process">How we handle your application</h2>
         <ol className="steps">{steps.map((s, i) => <li key={s}><span>{i + 1}</span>{s}</li>)}</ol>

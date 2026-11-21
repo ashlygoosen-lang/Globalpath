@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import { db, reference } from '../db.js';
-import { content, serviceTitles, visaBySlug } from '../content.js';
+import { content, serviceTitles, visaBySlug, checklistFor } from '../content.js';
 import { config } from '../config.js';
 import { validate, z, text, email, phone } from '../validate.js';
 import { notifyTeam, sendMail } from '../mailer.js';
@@ -18,7 +18,7 @@ r.get('/content/visas', (req, res) => {
 r.get('/content/visas/:slug', (req, res) => {
   const visa = visaBySlug[req.params.slug];
   if (!visa) return res.status(404).json({ error: 'We could not find that visa type.' });
-  res.json({ ...visa, commonDocuments: content.commonDocuments });
+  res.json({ ...visa, checklist: checklistFor(visa.slug) });
 });
 r.get('/content/articles', (_req, res) => res.json(content.articles.map(({ body, ...a }) => a)));
 r.get('/content/articles/:slug', (req, res) => {

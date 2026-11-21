@@ -110,17 +110,19 @@ function Clients() {
     {error && <Alert>{error}</Alert>}
     {data && !data.length && <div className="empty"><p>No portal clients yet. Clients create accounts from the <a className="inline" href={href("/portal")}>client portal</a>.</p></div>}
     {data && data.length > 0 && <div className="table-wrap"><table className="admin-table">
-      <thead><tr><th>Client</th><th>Visa</th><th>Stage</th><th>Progress</th><th>Docs to review</th></tr></thead>
+      <thead><tr><th>Client</th><th>Visa</th><th>Stage</th><th>Progress</th><th>To review</th></tr></thead>
       <tbody>{data.map(c => <tr key={c.id} onClick={() => c.application && setSelected(c.application.id)} className="clickable">
         <td><strong>{c.name}</strong><small>{c.email}</small></td>
         <td>{c.application?.visaTitle || "—"}<small>{c.application?.reference}</small></td>
         <td>{c.application?.stageName || "—"}</td>
         <td>{c.application ? <div className="mini-progress"><i style={{ width: `${c.application.progress}%` }}/><span>{c.application.progress}%</span></div> : "—"}</td>
-        <td>{c.application ? c.application.documents.received - c.application.documents.approved : 0}</td>
+        <td>{c.application ? c.application.documents.awaitingReview : 0}{c.application?.submitted && <small>Submitted</small>}</td>
       </tr>)}</tbody>
     </table></div>}
   </>;
 }
+
+const DOC_LABEL: Record<string, string> = { outstanding: "Outstanding", uploaded: "To review", approved: "Approved", rejected: "New copy requested", not_applicable: "Client: doesn't apply", waived: "Not required" };
 
 function ClientDetail({ id, back }: { id: string; back: () => void }) {
   const { data, error, reload, setError } = useLoad<any>(`/admin/applications/${id}`);
@@ -128,28 +130,39 @@ function ClientDetail({ id, back }: { id: string; back: () => void }) {
   const [nextStep, setNextStep] = useState("");
   const [advisor, setAdvisor] = useState("");
   const [busy, setBusy] = useState(false);
+  const [blocked, setBlocked] = useState<string[]>([]);
   useEffect(() => { if (data) { setNextStep(data.application.nextStep || ""); setAdvisor(data.application.advisor || ""); } }, [data]);
 
   const patchApp = async (body: any) => {
-    setBusy(true);
-    try { await api(`/admin/applications/${id}`, { method: "PATCH", body }); setNote(""); await reload(); } catch (e) { setError((e as ApiError).message); } finally { setBusy(false); }
+    setBusy(true); setBlocked([]); setError("");
+    try { await api(`/admin/applications/${id}`, { method: "PATCH", body }); setNote(""); await reload(); }
+    catch (e) { const ae = e as ApiError; setError(ae.message); setBlocked(ae.missing); await reload(); }
+    finally { setBusy(false); }
   };
   const review = async (docId: string, status: string) => {
-    const reviewNote = status === "rejected" ? prompt("What should the client fix?") || "" : "";
-    if (status === "rejected" && !reviewNote) return;
-    try { await api(`/admin/documents/${docId}`, { method: "PATCH", body: { status, reviewNote } }); await reload(); } catch (e) { setError((e as ApiError).message); }
+    let reviewNote = "";
+    if (status === "rejected") { reviewNote = prompt("What should the client fix or upload?") || ""; if (!reviewNote) return; }
+    if (status === "waived") { reviewNote = prompt("Optional note for the client (why this isn't required):") || ""; }
+    try { await api(`/admin/documents/${docId}`, { method: "PATCH", body: { status, reviewNote } }); setError(""); await reload(); } catch (e) { setError((e as ApiError).message); }
   };
   if (!data) return <>{error ? <Alert>{error}</Alert> : <p className="muted">Loading…</p>}</>;
   const { application: app, client, documents, activity } = data;
+  const required = documents.filter((d: any) => d.required);
+  const confirmed = required.filter((d: any) => d.status === "approved" || d.status === "waived").length;
 
   return <>
     <button className="back" onClick={back}>Back to clients</button>
     <div className="portal-head"><div><Kicker>{app.reference} · {app.visaTitle}</Kicker><h1>{client.name}</h1><p className="muted">{client.email}{client.phone ? ` · ${client.phone}` : ""}</p></div><span className="pill">{app.progress}%</span></div>
-    {error && <Alert>{error}</Alert>}
+    {error && <Alert>{error}{blocked.length > 0 && <ul>{blocked.map(m => <li key={m}>{m}</li>)}</ul>}</Alert>}
+    <div className="admin-status">
+      <div><small>Client submission</small><strong>{app.needsResubmit ? "Waiting for replacements" : app.submitted ? `Submitted ${timeAgo(app.submittedAt).toLowerCase()}` : `${app.required.missing.length} required still missing`}</strong></div>
+      <div><small>Uploaded by client</small><strong>{app.required.complete} of {app.required.total}</strong></div>
+      <div><small>Approved or not required</small><strong>{confirmed} of {required.length}</strong></div>
+    </div>
     <section className="admin-panel">
       <h2>Application</h2>
       <div className="fields-3">
-        <div className="field"><label htmlFor="stage">Stage</label><div className="select-wrap"><select id="stage" value={app.stage} onChange={e => patchApp({ stage: Number(e.target.value) })}>{app.stages.map((s: string, i: number) => <option key={s} value={i}>{s}</option>)}</select><Icon name="down" size={16}/></div></div>
+        <div className="field"><label htmlFor="stage">Stage</label><div className="select-wrap"><select id="stage" value={app.stage} disabled={busy} onChange={e => patchApp({ stage: Number(e.target.value) })}>{app.stages.map((s: string, i: number) => <option key={s} value={i}>{s}{i >= 3 && confirmed < required.length ? " (needs all documents approved)" : ""}</option>)}</select><Icon name="down" size={16}/></div></div>
         <div className="field"><label htmlFor="advisor">Advisor</label><input id="advisor" value={advisor} onChange={e => setAdvisor(e.target.value)} onBlur={() => advisor !== app.advisor && patchApp({ advisor })}/></div>
         <div className="field"><label htmlFor="ns">Next step shown to client</label><input id="ns" value={nextStep} onChange={e => setNextStep(e.target.value)} onBlur={() => nextStep !== app.nextStep && patchApp({ nextStep })}/></div>
       </div>
@@ -159,12 +172,15 @@ function ClientDetail({ id, back }: { id: string; back: () => void }) {
       <h2>Documents</h2>
       <ul className="doc-list">{documents.map((d: any) => <li key={d.id} className={`doc doc-${d.status}`}>
         <Icon name="file"/>
-        <span className="doc-name"><strong>{d.name}</strong><small>{d.originalName || "Not uploaded"}{d.reviewNote ? ` · ${d.reviewNote}` : ""}</small></span>
-        <span className={`status status-${d.status}`}>{d.status}</span>
+        <span className="doc-name"><strong>{d.name}{d.conditional && <span className="req-tag">Where applicable</span>}{!d.required && <span className="req-tag">Supporting</span>}</strong>
+          <small>{d.status === "not_applicable" ? `Client's reason: ${d.naReason}` : d.originalName || "Not uploaded"}{d.reviewNote ? ` · ${d.reviewNote}` : ""}</small></span>
+        <span className={`status status-${d.status}`}>{DOC_LABEL[d.status] || d.status}</span>
         <span className="doc-actions">
           {d.originalName && <button onClick={() => openProtectedFile(`/portal/documents/${d.id}/file`).catch(e => setError(e.message))} aria-label="View file"><Icon name="eye" size={17}/></button>}
           {d.originalName && d.status !== "approved" && <button className="doc-upload" onClick={() => review(d.id, "approved")}>Approve</button>}
-          {d.originalName && d.status !== "rejected" && <button className="doc-reject" onClick={() => review(d.id, "rejected")}>Request new copy</button>}
+          {d.status === "not_applicable" && <button className="doc-upload" onClick={() => review(d.id, "waived")}>Confirm not required</button>}
+          {(d.originalName || d.status === "not_applicable") && d.status !== "rejected" && <button className="doc-reject" onClick={() => review(d.id, "rejected")}>{d.status === "not_applicable" ? "Upload required" : "Request new copy"}</button>}
+          {d.required && d.status === "outstanding" && <button className="doc-na" onClick={() => review(d.id, "waived")}>Mark not required</button>}
         </span>
       </li>)}</ul>
     </section>

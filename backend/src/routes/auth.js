@@ -3,8 +3,8 @@ import rateLimit from 'express-rate-limit';
 import { db, reference } from '../db.js';
 import { hashPassword, checkPassword, signToken, publicUser, requireAuth } from '../auth.js';
 import { validate, z, text, email, phone } from '../validate.js';
-import { checklistFor, visaBySlug } from '../content.js';
-import { logActivity } from './portal.js';
+import { visaBySlug } from '../content.js';
+import { logActivity, syncChecklist } from './portal.js';
 import { notifyTeam } from '../mailer.js';
 
 const r = Router();
@@ -28,11 +28,9 @@ r.post('/register', authLimiter, validate(registerSchema), async (req, res) => {
   }
   const user = db.insert('users', { role: 'client', name, email: em, phone: ph || '', passwordHash: await hashPassword(pw) });
   const app = db.insert('applications', {
-    userId: user.id, reference: reference('A'), visa, stage: 0, status: 'active', advisor: 'Unassigned', nextStep: 'Upload your core documents so an advisor can begin the review.',
+    userId: user.id, reference: reference('A'), visa, stage: 0, status: 'active', advisor: 'Unassigned', nextStep: 'Upload every required document on your checklist, then submit your application for review.',
   });
-  for (const item of checklistFor(visa)) {
-    db.insert('documents', { applicationId: app.id, userId: user.id, name: item.name, kind: item.kind, status: 'outstanding' });
-  }
+  syncChecklist(app);
   logActivity(app.id, 'Application created', `${visaBySlug[visa].title} preparation started`);
   notifyTeam(`New portal client: ${name}`, [['Email', em], ['Visa', visaBySlug[visa].title], ['Reference', app.reference]]);
   res.status(201).json({ token: signToken(user), user: publicUser(user) });

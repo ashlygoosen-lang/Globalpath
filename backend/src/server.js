@@ -9,6 +9,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { config } from './config.js';
 import { ensureAdmin } from './auth.js';
+import { syncAllChecklists } from './routes/portal.js';
 import publicRoutes from './routes/public.js';
 import authRoutes from './routes/auth.js';
 import portalRoutes from './routes/portal.js';
@@ -68,5 +69,6 @@ export function createApp() {
 
 if (process.argv[1] && import.meta.url.endsWith(process.argv[1].split('/').pop())) {
   await ensureAdmin();
+  syncAllChecklists();
   createApp().listen(config.port, '0.0.0.0', () => console.log(`GlobalPath API listening on :${config.port}`));
 }

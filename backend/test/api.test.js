@@ -74,7 +74,8 @@ test('portal: register, upload, admin review', async () => {
   assert.equal((await call('POST', '/auth/register', { name: 'Dup', email: 'daniel@example.com', password: 'Passw0rd!', visa: 'study-visa' })).status, 409);
 
   const dash = await call('GET', '/portal/dashboard', null, token);
-  assert.equal(dash.data.application.documents.total, 9);
+  assert.equal(dash.data.application.required.total, 20); // 14 DHA-1738 core + 6 critical skills
+  assert.equal(dash.data.application.readyToSubmit, false);
   const docs = (await call('GET', '/portal/documents', null, token)).data;
 
   const fd = new FormData();
@@ -108,4 +109,76 @@ test('assessment', async () => {
   const res = await call('POST', '/assessment', { purpose: 'work', answers: { offer: 'yes', qualification: 'yes', experience: 'no' } });
   assert.equal(res.data.outcome, 'possible');
   assert.ok(res.data.suggested.length > 0);
+});
+
+test('submission is blocked until every required document is uploaded', async () => {
+  const reg = await call('POST', '/auth/register', { name: 'Grace Mwale', email: 'grace@example.com', password: 'Passw0rd!', visa: 'study-visa' });
+  const token = reg.data.token;
+  const docs = (await call('GET', '/portal/documents', null, token)).data;
+  const required = docs.filter(d => d.required);
+  const mandatory = required.filter(d => !d.conditional);
+  const conditional = required.filter(d => d.conditional);
+  assert.ok(mandatory.length >= 8 && conditional.length >= 8);
+
+  // Nothing uploaded: submit refused with the full missing list
+  let sub = await call('POST', '/portal/application/submit', {}, token);
+  assert.equal(sub.status, 409);
+  assert.equal(sub.data.missing.length, required.length);
+
+  // A mandatory document cannot be marked as not applicable
+  assert.equal((await call('POST', `/portal/documents/${mandatory[0].id}/not-applicable`, { reason: 'I do not have one' }, token)).status, 422);
+
+  const upload = async id => {
+    const fd = new FormData();
+    fd.append('documentId', id);
+    fd.append('file', new Blob(['%PDF-1.4'], { type: 'application/pdf' }), 'doc.pdf');
+    return call('POST', '/portal/documents', fd, token);
+  };
+  for (const d of mandatory) assert.equal((await upload(d.id)).status, 201);
+
+  // Conditional items still outstanding: still blocked
+  sub = await call('POST', '/portal/application/submit', {}, token);
+  assert.equal(sub.status, 409);
+  assert.equal(sub.data.missing.length, conditional.length);
+
+  // Mark all but one conditional item as not applicable, upload the last one
+  for (const d of conditional.slice(1)) assert.equal((await call('POST', `/portal/documents/${d.id}/not-applicable`, { reason: 'Not married and no children' }, token)).status, 200);
+  assert.equal((await upload(conditional[0].id)).status, 201);
+
+  sub = await call('POST', '/portal/application/submit', {}, token);
+  assert.equal(sub.status, 200);
+  assert.equal(sub.data.submitted, true);
+  assert.equal(sub.data.stageName, 'Quality review');
+
+  // Advisor cannot lodge until everything is approved or confirmed not required
+  const admin = (await call('POST', '/auth/login', { email: 'admin@test.local', password: 'AdminPass123' })).data.token;
+  const appId = sub.data.id;
+  let move = await call('PATCH', `/admin/applications/${appId}`, { stage: 3 }, admin);
+  assert.equal(move.status, 409);
+  assert.ok(move.data.missing.length > 0);
+
+  // Rejecting a document sends the client back to resubmit
+  assert.equal((await call('PATCH', `/admin/documents/${mandatory[0].id}`, { status: 'rejected' }, admin)).status, 422);
+  assert.equal((await call('PATCH', `/admin/documents/${mandatory[0].id}`, { status: 'rejected', reviewNote: 'Passport page is blurred' }, admin)).status, 200);
+  const dash = (await call('GET', '/portal/dashboard', null, token)).data.application;
+  assert.equal(dash.needsResubmit, true);
+  assert.equal(dash.readyToSubmit, false);
+  assert.equal((await upload(mandatory[0].id)).status, 201);
+  assert.equal((await call('POST', '/portal/application/submit', {}, token)).status, 200);
+
+  const detail = (await call('GET', `/admin/applications/${appId}`, null, admin)).data;
+  for (const d of detail.documents.filter(x => x.required)) {
+    const status = d.status === 'not_applicable' ? 'waived' : 'approved';
+    assert.equal((await call('PATCH', `/admin/documents/${d.id}`, { status }, admin)).status, 200, d.name);
+  }
+  move = await call('PATCH', `/admin/applications/${appId}`, { stage: 3 }, admin);
+  assert.equal(move.status, 200);
+  assert.equal(move.data.stageName, 'Submitted to VFS');
+});
+
+test('permanent residence uses the DHA-947 checklist', async () => {
+  const { data } = await call('GET', '/content/visas/permanent-residence-worker');
+  const keys = data.checklist.map(i => i.key);
+  assert.ok(keys.includes('birth-certificate') && keys.includes('police-clearance'));
+  assert.ok(data.checklist.some(i => i.name.startsWith('Proof of five years')));
 });
