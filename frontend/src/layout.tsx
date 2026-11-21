@@ -135,7 +135,7 @@ export function Footer() {
       </div>
     </div>
     <div className="wrap footer-bottom">
-      <p>© {new Date().getFullYear()} GlobalPath Immigration. All rights reserved.</p>
+      <p>© {new Date().getFullYear()} GlobalPath Immigration. All rights reserved.<span className="legal-entity">GlobalPath is a division of VINK Group (Pty) Ltd, registration number 2018/079316/07.</span></p>
       <nav aria-label="Legal"><a href={href("/legal/privacy")}>Privacy & POPIA</a><a href={href("/legal/terms")}>Terms</a><a href={href("/legal/disclaimer")}>Legal disclaimer</a></nav>
     </div>
     <p className="wrap disclaimer">Information on this website is general in nature and does not constitute legal advice or guarantee an immigration outcome. Decisions remain with the relevant government authorities.</p>

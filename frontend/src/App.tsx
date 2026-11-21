@@ -53,6 +53,6 @@ export default function App() {
     <Header path={route.path}/>
     <main id="main" ref={mainRef} tabIndex={-1}>{page}</main>
     {!appShell && <Footer/>}
-    {appShell && <p className="portal-foot wrap">© {new Date().getFullYear()} GlobalPath Immigration · Your information is protected under POPIA.</p>}
+    {appShell && <p className="portal-foot wrap">© {new Date().getFullYear()} GlobalPath Immigration, a division of VINK Group (Pty) Ltd (Reg. 2018/079316/07). Your information is protected under POPIA.</p>}
   </>;
 }
