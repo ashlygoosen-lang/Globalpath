@@ -60,11 +60,7 @@ export function Kicker({ children }: { children: ReactNode }) { return <p classN
 
 export function Logo({ light = false }: { light?: boolean }) {
   return <a className={`logo ${light ? "logo-light" : ""}`} href={href("/")} aria-label="GlobalPath Immigration, home">
-    <svg className="logo-mark" viewBox="0 0 40 40" aria-hidden="true">
-      <circle cx="20" cy="20" r="18.5" fill="none" stroke="currentColor" strokeWidth="1.2"/>
-      <path d="M6 24c6-1 10-5 14-11 3 6 8 10 14 11" fill="none" stroke="var(--brass)" strokeWidth="1.6" strokeLinecap="round"/>
-      <circle cx="20" cy="13" r="2.2" fill="var(--brass)"/>
-    </svg>
+    <img className="logo-mark" src="/logo.png" alt="" width="48" height="48" decoding="async"/>
     <span className="logo-word"><strong>GlobalPath</strong><small>Immigration</small></span>
   </a>;
 }

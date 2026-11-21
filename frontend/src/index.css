@@ -80,11 +80,12 @@
 
 /* Logo */
 .logo { display: inline-flex; align-items: center; gap: 12px; color: var(--ink); flex: none; }
-.logo-mark { width: 40px; height: 40px; }
+.logo-mark { width: 48px; height: 48px; display: block; }
 .logo-word { display: flex; flex-direction: column; line-height: 1; }
 .logo-word strong { font-family: var(--serif); font-size: 22px; font-weight: 600; letter-spacing: -.01em; }
 .logo-word small { font-size: 11px; letter-spacing: .24em; color: var(--muted); margin-top: 4px; font-weight: 500; }
 .logo-light { color: #fff; }
+.logo-light .logo-mark { box-shadow: 0 0 0 1px rgba(255,255,255,.14); border-radius: 50%; }
 .logo-light .logo-word small { color: #a9b8c5; }
 
 /* Utility bar & header */
@@ -1014,7 +1015,7 @@ details > p { padding: 0 40px 22px 0; color: var(--muted); font-size: 16px; }
   .header-inner { height: 70px; }
   .main-nav { height: calc(100svh - 70px); }
   .facts-band { top: 70px; }
-  .logo-mark { width: 34px; height: 34px; }
+  .logo-mark { width: 40px; height: 40px; }
   .logo-word strong { font-size: 19px; }
   .hero { min-height: 640px; }
   .hero-image { object-position: 76% center; }

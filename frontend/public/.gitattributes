@@ -3,3 +3,4 @@ favicon.png -filter -diff -merge -text
 apple-touch-icon.png -filter -diff -merge -text
 icon-512.png -filter -diff -merge -text
 favicon.ico -filter -diff -merge -text
+logo.png -filter -diff -merge -text
