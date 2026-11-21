@@ -118,7 +118,7 @@ r.post('/consultations', optionalAuth, validate(bookingSchema), async (req, res)
 
   const row = db.insert('consultations', { ...data, reference: reference('C'), status: 'requested', userId: req.user?.id || null });
   const when = `${data.date} at ${data.time} (South Africa time)`;
-  const modeLabel = { video: 'Video call', 'in-person': 'In person, Sandton', phone: 'Phone call' }[data.mode];
+  const modeLabel = { video: 'Video call', 'in-person': 'In person, Cape Town', phone: 'Phone call' }[data.mode];
   notifyTeam(`Consultation request ${row.reference}`, [
     ['Name', data.name], ['Email', data.email], ['Phone', data.phone || '—'], ['Country', data.country || '—'],
     ['Service', data.service], ['When', when], ['Format', modeLabel], ['Notes', data.notes || '—'],

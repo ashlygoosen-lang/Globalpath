@@ -37,6 +37,6 @@ export const CONTACT = {
   email: "hello@globalpath.co.za",
   phone: "+27 (0) 10 555 0142",
   phoneHref: "+27105550142",
-  address: "Sandton, Johannesburg, South Africa",
+  address: "Cape Town, South Africa",
   hours: "Mon–Fri, 08:30–17:00 SAST",
 };

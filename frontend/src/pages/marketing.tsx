@@ -25,11 +25,11 @@ const strengths = [
 export function Home() {
   return <>
     <section className="hero">
-      <Img src={heroImage} alt="A GlobalPath advisor overlooking the Johannesburg skyline at sunset" className="hero-image"/>
+      <Img src={heroImage} alt="A GlobalPath advisor overlooking a city skyline at sunset" className="hero-image"/>
       <div className="hero-shade"/>
       <div className="wrap hero-inner">
         <div className="hero-copy">
-          <p className="hero-kicker">Immigration consultancy in Sandton, Johannesburg</p>
+          <p className="hero-kicker">Immigration consultancy in Cape Town</p>
           <h1>Your global future starts with the right guidance.</h1>
           <p className="hero-sub">Professional immigration support for individuals, families, entrepreneurs and employers building a future in South Africa.</p>
           <div className="hero-actions">
@@ -48,7 +48,7 @@ export function Home() {
       <div><strong>{visas.length}</strong><span>visa and permit categories we advise on</span></div>
       <div><strong>45 min</strong><span>first consultation, with a written summary</span></div>
       <div><strong>One advisor</strong><span>your single point of contact throughout</span></div>
-      <div><strong>Worldwide</strong><span>consultations by video or in person in Sandton</span></div>
+      <div><strong>Worldwide</strong><span>consultations by video or in person in Cape Town</span></div>
     </section>
 
     <section className="section wrap intro">
@@ -109,7 +109,7 @@ export function Home() {
         <ul className="ticks"><li><Icon name="tick" size={16}/>Corporate visa and work authorisation strategy</li><li><Icon name="tick" size={16}/>International employee onboarding and dependants</li><li><Icon name="tick" size={16}/>Ongoing compliance reviews and expiry tracking</li></ul>
         <Button to="/corporate" variant="dark">Corporate services</Button>
       </div>
-      <Img src={corporateImage} alt="Corporate immigration advisors in a Johannesburg boardroom" className="photo corp-photo"/>
+      <Img src={corporateImage} alt="Corporate immigration advisors in a boardroom" className="photo corp-photo"/>
     </section>
 
     <section className="section tint">
@@ -161,7 +161,7 @@ export function About() {
     </section>
     <section className="section wrap values">
       <div><h3>Who we work with</h3><p>Skilled professionals and their families, international students, retirees, founders and investors, and employers relocating talent to South Africa.</p></div>
-      <div><h3>Where we work</h3><p>From our Sandton office and by video with clients worldwide. Applications are lodged through VFS Global centres in South Africa or the relevant mission abroad.</p></div>
+      <div><h3>Where we work</h3><p>From our Cape Town office and by video with clients worldwide. Applications are lodged through VFS Global centres in South Africa or the relevant mission abroad.</p></div>
       <div><h3>How we charge</h3><p>A fixed {rand(fees.application)} per application and {rand(fees.appeal)} per appeal, kept separate from government and VFS charges so you always know what you are paying for. <a className="inline" href={href("/fees")}>See all fees</a>.</p></div>
     </section>
     <CTA/>

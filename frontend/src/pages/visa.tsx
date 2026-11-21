@@ -110,7 +110,7 @@ export function VisaPage({ slug }: { slug?: string }) {
         <div className="side-card">
           <Kicker>Start with an assessment</Kicker>
           <h3>Speak to an advisor about the {visa.title.toLowerCase()}</h3>
-          <p>A 45-minute consultation, in person in Sandton or by video, with a written summary of your next steps.</p>
+          <p>A 45-minute consultation, in person in Cape Town or by video, with a written summary of your next steps.</p>
           <Button to={`/book?visa=${visa.slug}`}>Book a consultation</Button>
           <a className="link" href={href("/portal")}>Already a client? Open your portal<Icon name="arrow" size={15}/></a>
         </div>

@@ -80,7 +80,7 @@ export function Success({ title, text, reference, children }: { title: string; t
 type Slot = { time: string; available: boolean };
 const MODES = [
   { id: "video", icon: "video", label: "Video call", note: "Anywhere in the world" },
-  { id: "in-person", icon: "pin", label: "In person", note: "Our Sandton office" },
+  { id: "in-person", icon: "pin", label: "In person", note: "Our Cape Town office" },
   { id: "phone", icon: "phone", label: "Phone call", note: "We’ll call you" },
 ];
 
