@@ -16,9 +16,9 @@ npm run dev                   # http://localhost:4000   (npm test runs the API t
 
 # 2. Website
 cd ../frontend
-pnpm install                  # or npm install
+npm install
 echo "VITE_API_URL=http://localhost:4000" > .env.local
-pnpm dev                      # http://localhost:8443
+npm run dev                   # http://localhost:8443
 ```
 
 In development with no `.env`, an admin account is created automatically:
@@ -41,15 +41,17 @@ In development with no `.env`, an admin account is created automatically:
 Consultations run Mon–Fri, 09:00–15:00 SAST in 45-minute slots with at least 2 hours' notice, bookable up to 60 days ahead (configured in `backend/src/config.js`).
 Uploads accept PDF, JPG, PNG and WebP files up to 10 MB, stored under `DATA_DIR/uploads`, and can only be viewed by the client who uploaded them or by staff.
 
-## Deploy on Railway (two services, same repo)
+## Deploy on Railway (one service)
 
-**Backend service:** set the root directory to `backend`. The start command is `npm start`.
-- Add a **volume** mounted at `/data`, and set `DATA_DIR=/data`. Without a volume, data and uploads are lost on every redeploy.
-- Set `JWT_SECRET`, `ADMIN_EMAIL`, `ADMIN_PASSWORD`, `CORS_ORIGINS` (your frontend URL), and optionally the SMTP variables.
+The Express API also serves the built website, so a single Railway service runs everything.
+The site and API share one domain, so no CORS or `VITE_API_URL` setup is needed.
 
-**Frontend service:** set the root directory to `frontend`.
-- Build: `pnpm install && pnpm build`. Start: `pnpm start` (serves `dist/` on `$PORT`).
-- Set `VITE_API_URL` to the backend's public URL **before** the build.
+- Root directory: `/` (repo root). Build: `npm run build`. Start: `npm start`. Healthcheck: `/api/health`.
+- Volume mounted at `/data`, with `DATA_DIR=/data`, so data and uploads survive redeploys.
+- Variables: `NODE_ENV=production`, `JWT_SECRET`, `ADMIN_EMAIL`, `ADMIN_PASSWORD`, optional SMTP settings.
+
+To host the frontend separately later, deploy `frontend/` as a static site with `VITE_API_URL` set to the API URL,
+and add that site's URL to the API's `CORS_ORIGINS`.
 
 ## Before launch
 - Replace the placeholder phone number, email, address and social links (in `frontend/src/lib/content.ts` and `layout.tsx`).

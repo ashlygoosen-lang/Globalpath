@@ -1,4 +1,7 @@
-export const API_URL = (import.meta.env.VITE_API_URL as string | undefined)?.replace(/\/$/, "") || "http://localhost:4000";
+// In production the API serves this site, so calls go to the same origin by default.
+// Set VITE_API_URL only when the API is hosted separately.
+const configured = (import.meta.env.VITE_API_URL as string | undefined)?.replace(/\/$/, "");
+export const API_URL = configured ?? (import.meta.env.DEV ? "http://localhost:4000" : "");
 
 const TOKEN_KEY = "globalpath-token";
 

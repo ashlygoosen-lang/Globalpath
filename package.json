@@ -1,0 +1,11 @@
+{
+  "name": "globalpath",
+  "private": true,
+  "description": "GlobalPath Immigration — single-service deploy: Express API serves the built React site",
+  "engines": { "node": ">=20" },
+  "scripts": {
+    "build": "npm --prefix backend ci --omit=dev && npm --prefix frontend ci --include=dev --no-audit --no-fund && npm --prefix frontend run build",
+    "start": "node backend/src/server.js",
+    "test": "npm --prefix backend test"
+  }
+}
