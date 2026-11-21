@@ -45,11 +45,11 @@ export function Contact() {
       <form className="form-card" onSubmit={submit} noValidate>
         <h2 className="form-title">Send an enquiry</h2>
         {error && <Alert>{error}</Alert>}
-        <div className="row-2">
+        <div className="fields-2">
           <Input label="First name" name="firstName" autoComplete="given-name" required value={form.firstName} onChange={set("firstName")} error={errors.firstName}/>
           <Input label="Last name" name="lastName" autoComplete="family-name" required value={form.lastName} onChange={set("lastName")} error={errors.lastName}/>
         </div>
-        <div className="row-2">
+        <div className="fields-2">
           <Input label="Email address" name="email" type="email" autoComplete="email" required value={form.email} onChange={set("email")} error={errors.email}/>
           <Input label="Phone (optional)" name="phone" type="tel" autoComplete="tel" value={form.phone} onChange={set("phone")} error={errors.phone}/>
         </div>
@@ -213,7 +213,7 @@ export function Booking({ query }: { query: URLSearchParams }) {
         {step === 3 && <div className="step-pane">
           <h2 className="form-title">Tell us about yourself</h2>
           <Input label="Full name" name="name" autoComplete="name" value={form.name} onChange={e => set("name", e.target.value)} error={errors.name}/>
-          <div className="row-2">
+          <div className="fields-2">
             <Input label="Email address" name="email" type="email" autoComplete="email" value={form.email} onChange={e => set("email", e.target.value)} error={errors.email}/>
             <Input label="Phone (optional)" name="phone" type="tel" autoComplete="tel" value={form.phone} onChange={e => set("phone", e.target.value)} error={errors.phone}/>
           </div>

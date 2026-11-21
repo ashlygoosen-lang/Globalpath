@@ -364,10 +364,10 @@ details > p { padding: 0 40px 22px 0; color: var(--muted); font-size: 16px; }
 .contact-lines small { color: var(--muted); font-size: 13px; }
 .contact-lines a:hover { text-decoration: underline; }
 .contact-book { margin-top: 30px; padding: 26px; background: var(--mist); border-radius: var(--r-md); display: flex; flex-direction: column; gap: 14px; align-items: flex-start; }
-.form-card { background: #fff; padding: 44px; border-radius: var(--r-lg); box-shadow: var(--shadow), 0 0 0 1px var(--line); display: grid; gap: 20px; }
+.form-card { background: #fff; padding: 44px; border-radius: var(--r-lg); box-shadow: var(--shadow), 0 0 0 1px var(--line); display: grid; grid-template-columns: minmax(0, 1fr); gap: 20px; }
 .form-title { font-size: 26px; margin-bottom: 2px; }
-.row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
-.row-3 { display: grid; grid-template-columns: 1fr 1fr 1.4fr; gap: 18px; }
+.fields-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+.fields-3 { display: grid; grid-template-columns: 1fr 1fr 1.4fr; gap: 18px; }
 .field { display: flex; flex-direction: column; gap: 7px; }
 .field label, .choice-group legend { font-size: 14px; font-weight: 600; color: #2c3e50; }
 .field input, .field select, .field textarea, .note-row input { width: 100%; min-height: 50px; padding: 12px 14px; border: 1px solid #c9d1d8; border-radius: var(--r-sm); background: #fff; font-size: 16px; color: var(--text); transition: border-color .15s, box-shadow .15s; }
@@ -773,7 +773,7 @@ details > p { padding: 0 40px 22px 0; color: var(--muted); font-size: 16px; }
   .portal-out { margin: 0 0 0 auto; }
   .portal-split { grid-template-columns: 1fr; }
   .footer-top { grid-template-columns: 1fr; gap: 48px; }
-  .row-3 { grid-template-columns: 1fr; }
+  .fields-3 { grid-template-columns: 1fr; }
 }
 
 @media (max-width: 640px) {
@@ -826,7 +826,7 @@ details > p { padding: 0 40px 22px 0; color: var(--muted); font-size: 16px; }
   .directory tbody th { display: block; font-size: 16px; margin-bottom: 4px; }
   .directory td + td::before { content: " / "; color: #b5bec6; }
   .form-card { padding: 26px 20px; }
-  .row-2 { grid-template-columns: 1fr; }
+  .fields-2 { grid-template-columns: 1fr; }
   .choices { grid-template-columns: 1fr; }
   .days { grid-template-columns: repeat(5, 1fr); gap: 6px; }
   .slots { grid-template-columns: repeat(3, 1fr); }

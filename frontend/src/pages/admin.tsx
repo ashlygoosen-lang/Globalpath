@@ -148,7 +148,7 @@ function ClientDetail({ id, back }: { id: string; back: () => void }) {
     {error && <Alert>{error}</Alert>}
     <section className="admin-panel">
       <h2>Application</h2>
-      <div className="row-3">
+      <div className="fields-3">
         <div className="field"><label htmlFor="stage">Stage</label><div className="select-wrap"><select id="stage" value={app.stage} onChange={e => patchApp({ stage: Number(e.target.value) })}>{app.stages.map((s: string, i: number) => <option key={s} value={i}>{s}</option>)}</select><Icon name="down" size={16}/></div></div>
         <div className="field"><label htmlFor="advisor">Advisor</label><input id="advisor" value={advisor} onChange={e => setAdvisor(e.target.value)} onBlur={() => advisor !== app.advisor && patchApp({ advisor })}/></div>
         <div className="field"><label htmlFor="ns">Next step shown to client</label><input id="ns" value={nextStep} onChange={e => setNextStep(e.target.value)} onBlur={() => nextStep !== app.nextStep && patchApp({ nextStep })}/></div>
