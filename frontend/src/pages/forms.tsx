@@ -36,7 +36,7 @@ export function Contact() {
         <ul className="contact-lines">
           <li><Icon name="mail"/><span><small>Email</small><a href={`mailto:${CONTACT.email}`}>{CONTACT.email}</a></span></li>
           <li><Icon name="phone"/><span><small>Phone</small><a href={`tel:${CONTACT.phoneHref}`}>{CONTACT.phone}</a></span></li>
-          <li><Icon name="pin"/><span><small>Office</small>{CONTACT.address}</span></li>
+          <li><Icon name="pin"/><span><small>Office</small><strong className="office-name">{CONTACT.office}</strong>{CONTACT.street}<br/>{CONTACT.city}<a className="inline office-map" href={CONTACT.mapUrl} target="_blank" rel="noopener">Get directions</a></span></li>
           <li><Icon name="clock"/><span><small>Hours</small>{CONTACT.hours}</span></li>
         </ul>
         <div className="contact-book"><p>Prefer to speak face to face, or by video?</p><Button to="/book" variant="dark">Book a consultation</Button></div>

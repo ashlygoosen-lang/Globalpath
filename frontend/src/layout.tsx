@@ -36,7 +36,7 @@ export function Header({ path }: { path: string }) {
   return <>
     <div className="utility-bar">
       <div className="wrap utility-inner">
-        <span><Icon name="pin" size={14}/>{CONTACT.address.replace(", South Africa", "")}</span>
+        <a href={CONTACT.mapUrl} target="_blank" rel="noopener"><Icon name="pin" size={14}/>{CONTACT.area}</a>
         <span className="hide-sm"><Icon name="clock" size={14}/>{CONTACT.hours}</span>
         <span className="utility-push"/>
         <a href={`tel:${CONTACT.phoneHref}`}><Icon name="phone" size={14}/>{CONTACT.phone}</a>
@@ -130,7 +130,7 @@ export function Footer() {
         <div><h3>Company</h3><a href={href("/about")}>About us</a><a href={href("/corporate")}>Corporate immigration</a><a href={href("/fees")}>Fees</a><a href={href("/contact")}>Contact</a><a href={href("/book")}>Book a consultation</a></div>
         <div><h3>Services</h3>{services.slice(0, 6).map(s => <a key={s.slug} href={href(serviceHref(s))}>{s.title}</a>)}</div>
         <div><h3>Resources</h3><a href={href("/resources")}>Insights</a><a href={href("/resources#faq")}>FAQs</a><a href={href("/services#directory")}>Visa directory</a><a href={href("/portal")}>Client portal</a></div>
-        <div><h3>Visit or call</h3><p>{CONTACT.address}</p><p><a href={`tel:${CONTACT.phoneHref}`}>{CONTACT.phone}</a></p><p><a href={`mailto:${CONTACT.email}`}>{CONTACT.email}</a></p><p>{CONTACT.hours}</p>
+        <div><h3>Visit or call</h3><address className="footer-address"><strong>{CONTACT.office}</strong><br/>{CONTACT.street}<br/>{CONTACT.city}</address><p><a href={CONTACT.mapUrl} target="_blank" rel="noopener">Get directions</a></p><p><a href={`tel:${CONTACT.phoneHref}`}>{CONTACT.phone}</a></p><p><a href={`mailto:${CONTACT.email}`}>{CONTACT.email}</a></p><p>{CONTACT.hours}</p>
           <div className="socials"><a href="#" aria-label="GlobalPath on LinkedIn"><Icon name="linkedin" size={18}/></a><a href="#" aria-label="GlobalPath on Instagram"><Icon name="instagram" size={18}/></a><a href="#" aria-label="GlobalPath on Facebook"><Icon name="facebook" size={18}/></a></div>
         </div>
       </div>

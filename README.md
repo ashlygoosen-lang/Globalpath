@@ -54,7 +54,7 @@ To host the frontend separately later, deploy `frontend/` as a static site with 
 and add that site's URL to the API's `CORS_ORIGINS`.
 
 ## Before launch
-- Replace the placeholder phone number, email, address and social links (in `frontend/src/lib/content.ts` and `layout.tsx`).
+- Replace the placeholder email and social links (in `frontend/src/lib/content.ts` and `layout.tsx`).
 - Have the legal pages (`#/legal/privacy`, `/terms`, `/disclaimer`) reviewed by your attorney.
 - Re-check DHA fees and turnaround targets each April. They live in `content.json`, and the same file must be copied to both `frontend/src/` and `backend/src/data/`.
 - The JSON datastore suits a single-office volume (thousands of records). For larger scale, swap `backend/src/db.js` for Postgres. The rest of the code only talks to the `db` interface.

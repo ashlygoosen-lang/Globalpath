@@ -35,8 +35,13 @@ export function costFor(v: Visa) {
 
 export const CONTACT = {
   email: "hello@globalpath.co.za",
-  phone: "+27 (0) 10 555 0142",
-  phoneHref: "+27105550142",
-  address: "Cape Town, South Africa",
+  phone: "081 543 3728",
+  phoneHref: "+27815433728",
+  office: "Cape Town Hub",
+  street: "39 Somerset Road, Green Point",
+  city: "Cape Town, 8005, South Africa",
+  address: "Cape Town Hub, 39 Somerset Road, Green Point, Cape Town, 8005, South Africa",
+  area: "Green Point, Cape Town",
+  mapUrl: "https://www.google.com/maps/search/?api=1&query=39+Somerset+Road%2C+Green+Point%2C+Cape+Town+8005",
   hours: "Mon–Fri, 08:30–17:00 SAST",
 };
