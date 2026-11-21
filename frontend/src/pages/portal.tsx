@@ -67,6 +67,7 @@ export function AuthPanel({ onAuth, adminOnly = false }: { onAuth: (t: string, u
         </Select>
         <Input label="Phone (optional)" name="phone" type="tel" autoComplete="tel" value={form.phone} onChange={set("phone")} error={errors.phone}/>
       </>}
+      {mode === "register" && <p className="muted small">By creating an account you agree to our <a className="inline" href={href("/legal/terms")}>terms of service</a> and confirm you have read our <a className="inline" href={href("/legal/privacy")}>privacy policy</a>.</p>}
       <Button type="submit" busy={busy}>{mode === "login" ? "Sign in" : "Create account"}</Button>
       {!adminOnly && <p className="muted small">Not sure which visa applies? <a className="inline" href={href("/book")}>Book a consultation</a> first.</p>}
     </form>

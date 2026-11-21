@@ -59,7 +59,7 @@ export function Contact() {
         </Select>
         <Textarea label="How can we help?" name="message" rows={5} required value={form.message} onChange={set("message")} error={errors.message} placeholder="Tell us about your situation and timeline."/>
         <input className="hp" tabIndex={-1} autoComplete="off" aria-hidden="true" name="website" value={form.website} onChange={set("website")}/>
-        <label className={`consent ${errors.consent ? "has-error" : ""}`}><input type="checkbox" checked={form.consent} onChange={set("consent")}/> <span>I agree to GlobalPath processing my information in line with the <a className="inline" href={href("/legal/privacy")}>privacy notice</a>.</span></label>
+        <label className={`consent ${errors.consent ? "has-error" : ""}`}><input type="checkbox" checked={form.consent} onChange={set("consent")}/> <span>I agree to GlobalPath processing my information in line with the <a className="inline" href={href("/legal/privacy")}>privacy policy</a>.</span></label>
         {errors.consent && <small className="error-text">{errors.consent}</small>}
         <Button type="submit" busy={busy}>Send enquiry</Button>
       </form>}
@@ -234,6 +234,7 @@ export function Booking({ query }: { query: URLSearchParams }) {
             <div><dt>Email</dt><dd>{form.email}</dd></div>
             {form.phone && <div><dt>Phone</dt><dd>{form.phone}</dd></div>}
           </dl>
+          <p className="small-print">By requesting a consultation you agree to our <a className="inline" href={href("/legal/terms")}>terms of service</a> and <a className="inline" href={href("/legal/refunds")}>refund policy</a>. You can reschedule free of charge up to 24 hours before your appointment.</p>
         </div>}
 
         <div className="form-nav">

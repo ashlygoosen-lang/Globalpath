@@ -1,7 +1,9 @@
 import { ReactNode, useEffect, useRef } from "react";
 import { useRoute } from "./lib/router";
 import { Header, Footer } from "./layout";
-import { Home, About, ServicesPage, Corporate, Resources, ArticlePage, Legal, NotFound } from "./pages/marketing";
+import { Legal } from "./pages/legal";
+import { legalDoc } from "./legal";
+import { Home, About, ServicesPage, Corporate, Resources, ArticlePage, NotFound } from "./pages/marketing";
 import { VisaPage } from "./pages/visa";
 import { FeesPage } from "./pages/fees";
 import { AsylumPage } from "./pages/asylum";
@@ -30,7 +32,7 @@ export default function App() {
     if (anchor) setTimeout(() => document.getElementById(anchor)?.scrollIntoView({ behavior: "smooth" }), 60);
     else window.scrollTo({ top: 0 });
     mainRef.current?.focus({ preventScroll: true });
-    const sub = section === "visa" ? visaBySlug(param)?.title : section === "resources" && param ? articles.find(a => a.slug === param)?.title : undefined;
+    const sub = section === "visa" ? visaBySlug(param)?.title : section === "resources" && param ? articles.find(a => a.slug === param)?.title : section === "legal" ? (legalDoc(param) || legalDoc("privacy"))?.title : undefined;
     document.title = `${sub || TITLES[section || ""] || "GlobalPath"} | GlobalPath Immigration`;
   }, [route.path]);
 

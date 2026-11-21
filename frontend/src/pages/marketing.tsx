@@ -253,32 +253,6 @@ export function ArticlePage({ slug }: { slug?: string }) {
   </>;
 }
 
-const LEGAL: Record<string, { title: string; body: [string, string][] }> = {
-  privacy: { title: "Privacy & POPIA notice", body: [
-    ["What we collect", "Contact details, immigration history, identity and supporting documents you choose to share with us, and records of our communications."],
-    ["Why we collect it", "To assess your options, prepare and lodge applications on your instruction, and meet our legal and professional obligations."],
-    ["How we protect it", "Documents are stored in access-controlled systems and shared through the client portal rather than email wherever possible. Only staff working on your matter can view them."],
-    ["Your rights", "Under the Protection of Personal Information Act you may request access to, correction of, or deletion of your personal information. Contact hello@globalpath.co.za."],
-  ] },
-  terms: { title: "Terms of use", body: [
-    ["Use of this website", "This website provides general information about South African immigration. Using it does not create a client relationship."],
-    ["Engagement", "Professional services begin only once a written engagement letter and fee confirmation have been accepted."],
-    ["Accuracy", "We update content regularly, but government requirements, tariffs and timeframes can change without notice."],
-  ] },
-  disclaimer: { title: "Legal disclaimer", body: [
-    ["General information", "Content on this website does not constitute legal advice and should not be relied on for any specific matter."],
-    ["No guaranteed outcomes", "Immigration decisions are made by the Department of Home Affairs and other authorities. No consultant can guarantee an outcome or a processing time."],
-  ] },
-};
-
-export function Legal({ slug }: { slug?: string }) {
-  const doc = LEGAL[slug || ""] || LEGAL.privacy;
-  return <>
-    <PageHero kicker="Legal" title={doc.title} text="Last reviewed November 2026."/>
-    <section className="section wrap reader"><article className="prose">{doc.body.map(([h, p]) => <div key={h}><h2>{h}</h2><p>{p}</p></div>)}</article></section>
-  </>;
-}
-
 export function NotFound() {
   return <section className="section wrap notfound">
     <Kicker>Page not found</Kicker>
