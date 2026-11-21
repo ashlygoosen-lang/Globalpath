@@ -30,7 +30,7 @@ r.patch('/enquiries/:id', validate(z.object({ status: z.enum(['new', 'contacted'
 });
 
 r.get('/consultations', (_req, res) => res.json([...db.all('consultations')].sort((a, b) => `${a.date}${a.time}`.localeCompare(`${b.date}${b.time}`))));
-r.patch('/consultations/:id', validate(z.object({ status: z.enum(['requested', 'confirmed', 'completed', 'cancelled']) })), (req, res) => {
+r.patch('/consultations/:id', validate(z.object({ status: z.enum(['requested', 'confirmed', 'completed', 'cancelled']).optional(), paid: z.boolean().optional() })), (req, res) => {
   const row = db.update('consultations', req.params.id, req.body);
   if (!row) return res.status(404).json({ error: 'Consultation not found.' });
   if (req.body.status === 'confirmed') {

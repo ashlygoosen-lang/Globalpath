@@ -79,7 +79,9 @@ test('consultation availability and double-booking protection', async () => {
   const slot = av.data.slots.find(s => s.available);
   assert.ok(slot);
   const booking = { service: 'Permanent Residence', mode: 'video', date, time: slot.time, name: 'Lerato Dube', email: 'lerato@example.com' };
-  assert.equal((await call('POST', '/consultations', booking)).status, 201);
+  const booked = await call('POST', '/consultations', booking);
+  assert.equal(booked.status, 201);
+  assert.equal(booked.data.fee, 500);
   assert.equal((await call('POST', '/consultations', booking)).status, 409);
   const after = await call('GET', `/consultations/availability?date=${date}`);
   assert.equal(after.data.slots.find(s => s.time === slot.time).available, false);

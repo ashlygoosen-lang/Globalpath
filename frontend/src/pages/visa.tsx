@@ -9,16 +9,23 @@ import { href, navigate } from "../lib/router";
 export function PathwayFinder({ compact = false }: { compact?: boolean }) {
   const [purpose, setPurpose] = useState("work");
   const matches = useMemo(() => visas.filter(v => v.purposes.includes(purpose)), [purpose]);
-  const current = purposes.find(p => p.id === purpose)!;
+  const current = purposes.find(p => p.id === purpose) || purposes[0];
   const shown = compact ? matches.slice(0, 3) : matches;
   return <div className={`finder ${compact ? "finder-compact" : ""}`}>
     <div className="finder-head">
       <h2 id="finder-title">What brings you to South Africa?</h2>
       <div className="finder-chips" role="radiogroup" aria-labelledby="finder-title">
         {purposes.map(p => <button key={p.id} role="radio" aria-checked={p.id === purpose} className={p.id === purpose ? "is-on" : ""} onClick={() => setPurpose(p.id)}>{p.label}</button>)}
+        <button role="radio" aria-checked={purpose === "asylum"} className={purpose === "asylum" ? "is-on" : ""} onClick={() => setPurpose("asylum")}>Seek protection</button>
       </div>
     </div>
-    <div className="finder-body" aria-live="polite">
+    {purpose === "asylum" ? <div className="finder-body" aria-live="polite">
+      <div className="finder-asylum">
+        <Icon name="refuge" size={28}/>
+        <div><strong>I fear persecution or have fled war</strong><p>Asylum is protection for people in danger, not a route to work or study. Take our free two-minute check before you apply, so you don't spend time and money on a claim that can't succeed.</p></div>
+        <Button to="/asylum">Check if you qualify</Button>
+      </div>
+    </div> : <div className="finder-body" aria-live="polite">
       <p className="finder-question">{current.question}. These routes may apply:</p>
       <ul key={purpose} className="finder-list">
         {shown.map(v => <li key={v.slug}>
@@ -34,7 +41,7 @@ export function PathwayFinder({ compact = false }: { compact?: boolean }) {
         {compact && matches.length > 3 ? <a className="link" href={href("/services#finder")}>See all {matches.length} routes<Icon name="arrow" size={15}/></a> : <span className="finder-note">Targets from DHA Immigration Circular No. 08 of 2026, in-country submissions.</span>}
         <a className="link" href={href(`/book?purpose=${purpose}`)}>Not sure? Ask an advisor<Icon name="arrow" size={15}/></a>
       </div>
-    </div>
+    </div>}
   </div>;
 }
 
@@ -119,7 +126,7 @@ export function VisaPage({ slug }: { slug?: string }) {
         <div className="side-card">
           <Kicker>Start with an assessment</Kicker>
           <h3>Speak to an advisor about the {visa.title.toLowerCase()}</h3>
-          <p>A 45-minute consultation, in person in Cape Town or by video, with a written summary of your next steps.</p>
+          <p>A 45-minute consultation for {rand(fees.consultation)}, in person in Cape Town or by video, with a written summary of your next steps.</p>
           <Button to={`/book?visa=${visa.slug}`}>Book a consultation</Button>
           <a className="link" href={href("/portal")}>Already a client? Open your portal<Icon name="arrow" size={15}/></a>
         </div>

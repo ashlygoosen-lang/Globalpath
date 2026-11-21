@@ -116,19 +116,20 @@ r.post('/consultations', optionalAuth, validate(bookingSchema), async (req, res)
   if (!slot) return res.status(422).json({ error: reason || 'That time is not offered.', fields: { time: reason || 'Choose another time.' } });
   if (!slot.available) return res.status(409).json({ error: 'That time was just booked. Choose another slot.', fields: { time: 'Choose another time.' } });
 
-  const row = db.insert('consultations', { ...data, reference: reference('C'), status: 'requested', userId: req.user?.id || null });
+  const fee = content.fees.consultation;
+  const row = db.insert('consultations', { ...data, fee, paid: false, reference: reference('C'), status: 'requested', userId: req.user?.id || null });
   const when = `${data.date} at ${data.time} (South Africa time)`;
   const modeLabel = { video: 'Video call', 'in-person': 'In person, Cape Town', phone: 'Phone call' }[data.mode];
   notifyTeam(`Consultation request ${row.reference}`, [
     ['Name', data.name], ['Email', data.email], ['Phone', data.phone || '—'], ['Country', data.country || '—'],
-    ['Service', data.service], ['When', when], ['Format', modeLabel], ['Notes', data.notes || '—'],
+    ['Service', data.service], ['When', when], ['Format', modeLabel], ['Fee', `R${fee}`], ['Notes', data.notes || '—'],
   ]);
   sendMail({
     to: data.email, subject: `Consultation requested for ${when}`, title: 'Your consultation request',
-    rows: [['Reference', row.reference], ['Service', data.service], ['When', when], ['Format', modeLabel]],
-    footer: 'We will confirm your appointment by email within one business day.',
+    rows: [['Reference', row.reference], ['Service', data.service], ['When', when], ['Format', modeLabel], ['Consultation fee', `R${fee}`]],
+    footer: `We will confirm your appointment and send payment details for the R${fee} consultation fee within one business day.`,
   });
-  res.status(201).json({ reference: row.reference, date: data.date, time: data.time, mode: data.mode });
+  res.status(201).json({ reference: row.reference, date: data.date, time: data.time, mode: data.mode, fee });
 });
 
 /* ---------- Newsletter ---------- */

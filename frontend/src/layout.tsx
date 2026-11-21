@@ -1,6 +1,6 @@
 import { FormEvent, ReactNode, useEffect, useRef, useState } from "react";
 import { Icon, Logo, Button, Kicker } from "./ui";
-import { services, serviceHref, CONTACT } from "./lib/content";
+import { services, serviceHref, CONTACT, fees, rand } from "./lib/content";
 import { href } from "./lib/router";
 import { api } from "./lib/api";
 
@@ -90,7 +90,7 @@ export function CTA() {
     <div className="wrap cta-inner">
       <div>
         <h2>Your next chapter begins with a conversation.</h2>
-        <p>Whether you plan to work, study, invest, retire or reunite with family in South Africa, a 45-minute consultation will set out your options and next steps in writing.</p>
+        <p>Whether you plan to work, study, invest, retire or reunite with family in South Africa, a 45-minute consultation ({rand(fees.consultation)}) will set out your options and next steps in writing.</p>
       </div>
       <div className="cta-actions">
         <Button to="/book">Book a consultation</Button>
@@ -127,7 +127,7 @@ export function Footer() {
         <Newsletter/>
       </div>
       <div className="footer-cols">
-        <div><h3>Company</h3><a href={href("/about")}>About us</a><a href={href("/corporate")}>Corporate immigration</a><a href={href("/fees")}>Fees</a><a href={href("/contact")}>Contact</a><a href={href("/book")}>Book a consultation</a></div>
+        <div><h3>Company</h3><a href={href("/about")}>About us</a><a href={href("/corporate")}>Corporate immigration</a><a href={href("/fees")}>Fees</a><a href={href("/asylum")}>Asylum eligibility check</a><a href={href("/contact")}>Contact</a><a href={href("/book")}>Book a consultation</a></div>
         <div><h3>Services</h3>{services.slice(0, 6).map(s => <a key={s.slug} href={href(serviceHref(s))}>{s.title}</a>)}</div>
         <div><h3>Resources</h3><a href={href("/resources")}>Insights</a><a href={href("/resources#faq")}>FAQs</a><a href={href("/services#directory")}>Visa directory</a><a href={href("/portal")}>Client portal</a></div>
         <div><h3>Visit or call</h3><address className="footer-address"><strong>{CONTACT.office}</strong><br/>{CONTACT.street}<br/>{CONTACT.city}</address><p><a href={CONTACT.mapUrl} target="_blank" rel="noopener">Get directions</a></p><p><a href={`tel:${CONTACT.phoneHref}`}>{CONTACT.phone}</a></p><p><a href={`mailto:${CONTACT.email}`}>{CONTACT.email}</a></p><p>{CONTACT.hours}</p>

@@ -26,6 +26,10 @@ export function FeesPage() {
     <PageHero kicker="Fees" title="One fixed fee. No surprises." text="Our professional fees are the same for every visa category. Government and VFS charges are listed separately, so you can see exactly what you are paying for."/>
 
     <section className="section wrap">
+      <div className="consult-strip">
+        <div><Icon name="calendar" size={24}/><span><strong>Consultation: {rand(fees.consultation)}</strong> for every service. 45 minutes with an advisor, in person in Cape Town or by video, with a written summary of your options.</span></div>
+        <Button to="/book" variant="dark">Book a consultation</Button>
+      </div>
       <div className="price-grid">
         <article className="price price-main" id="applications">
           <div className="price-head">
@@ -47,13 +51,23 @@ export function FeesPage() {
           <ul>{fees.appealIncludes.map(i => <li key={i}><Icon name="tick" size={16}/>{i}</li>)}</ul>
           <Button to="/book?service=Appeals%20%26%20Reviews" variant="dark">Get help with an appeal</Button>
         </article>
+        <article className="price" id="asylum">
+          <div className="price-head">
+            <Icon name="refuge" size={26}/>
+            <h2>Asylum application</h2>
+            <p>Only for people our assessment shows may qualify for refugee protection.</p>
+          </div>
+          <p className="price-amount"><strong>{rand(fees.asylum)}</strong><span>if you may qualify</span></p>
+          <ul>{fees.asylumIncludes.slice(0, 4).map(i => <li key={i}><Icon name="tick" size={16}/>{i}</li>)}</ul>
+          <Button to="/asylum" variant="quiet">Check eligibility first</Button>
+        </article>
         <aside className="price-side">
           <h3>Paid separately at submission</h3>
-          <div className="price-line"><span>VFS Global service fee</span><strong>{rand(fees.vfs)}</strong></div>
-          <p>Charged by VFS Global per applicant for lodging the application and capturing biometrics.</p>
-          <div className="price-line"><span>Department of Home Affairs fee</span><strong>R0–R2,870</strong></div>
-          <p>Depends on the visa category. Some categories are exempt. See the table below.</p>
-          <p className="small-print">Appeals usually carry no new VFS or DHA fee, but we confirm this for your case.</p>
+          <div className="ps-item"><div className="price-line"><span>VFS Global service fee</span><strong>{rand(fees.vfs)}</strong></div>
+          <p>Charged by VFS Global per applicant for lodging the application and capturing biometrics.</p></div>
+          <div className="ps-item"><div className="price-line"><span>Department of Home Affairs fee</span><strong>R0–R2,870</strong></div>
+          <p>Depends on the visa category. Some categories are exempt. See the table below.</p></div>
+          <p className="small-print">Appeals usually carry no new VFS or DHA fee, but we confirm this for your case. Home Affairs does not charge a fee to apply for asylum.</p>
         </aside>
       </div>
     </section>

@@ -7,7 +7,7 @@ export type Visa = {
   core: "temporary" | "medical" | "permanent" | "waiver"; requirements: Requirement[];
 };
 export type Service = { slug: string; icon: string; title: string; blurb: string; visa: string | null; href?: string };
-export type Fees = { currency: string; application: number; appeal: number; vfs: number; applicationIncludes: string[]; appealIncludes: string[] };
+export type Fees = { currency: string; application: number; appeal: number; vfs: number; consultation: number; asylum: number; applicationIncludes: string[]; appealIncludes: string[]; asylumIncludes: string[] };
 export type Purpose = { id: string; label: string; question: string };
 export type Article = { slug: string; tag: string; title: string; summary: string; minutes: number; featured?: boolean; body: { h: string; p: string }[] };
 

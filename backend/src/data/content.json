@@ -107,6 +107,14 @@
    "href": "/fees#appeals"
   },
   {
+   "slug": "asylum",
+   "icon": "refuge",
+   "title": "Asylum & Refugee Protection",
+   "blurb": "An honest eligibility check first, then help with your asylum application if you qualify.",
+   "visa": null,
+   "href": "/asylum"
+  },
+  {
    "slug": "compliance",
    "icon": "check",
    "title": "Immigration Compliance & Advisory",
@@ -772,7 +780,7 @@
   },
   {
    "q": "What happens during an initial consultation?",
-   "a": "We discuss your goals, history and circumstances, identify possible routes and outline practical next steps. You receive a written summary afterwards."
+   "a": "We discuss your goals, history and circumstances, identify possible routes and outline practical next steps. Consultations last 45 minutes, cost R500, and you receive a written summary afterwards."
   },
   {
    "q": "Do I need every document before you submit my application?",
@@ -788,7 +796,11 @@
   },
   {
    "q": "How are your professional fees structured?",
-   "a": "Our professional fee is a fixed R10,000 per application and R5,000 per appeal. Government (DHA) fees and the VFS service fee of R1,790 are separate and are paid at submission."
+   "a": "Consultations cost R500 for every service. Our professional fee is a fixed R10,000 per visa or permit application, R5,000 per appeal, and R5,000 for asylum assistance if our assessment shows you may qualify. Government (DHA) fees and the VFS service fee of R1,790 are separate and are paid at submission."
+  },
+  {
+   "q": "Can you help me apply for asylum?",
+   "a": "Yes, if you may qualify. Asylum is protection for people who fear persecution or have fled war or serious public disorder. It is not a route for work or study. Use our free asylum eligibility check first; if you may qualify, we help with your application for R5,000. Home Affairs does not charge a fee to apply for asylum."
   }
  ],
  "articles": [
@@ -920,6 +932,15 @@
    "Drafting of the written appeal or review submission",
    "Lodging within the prescribed time limit",
    "Follow-up until the appeal outcome"
+  ],
+  "consultation": 500,
+  "asylum": 5000,
+  "asylumIncludes": [
+   "Full eligibility assessment against the Refugees Act",
+   "Help preparing a clear, truthful written account of your claim",
+   "Evidence plan: identity documents, country information and supporting records",
+   "Preparation for your interview with the Refugee Status Determination Officer",
+   "Guidance on your asylum seeker permit and next steps after the decision"
   ]
  },
  "documentSets": {

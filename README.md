@@ -33,12 +33,13 @@ In development with no `.env`, an admin account is created automatically:
 | Visa detail (17 types: fees, timing, checklist) | `#/visa/:slug` | `GET /api/content/visas/:slug` |
 | Insights + article reader, FAQs | `#/resources`, `#/resources/:slug` | `GET /api/content/articles` |
 | Contact form | `#/contact` | `POST /api/enquiries` |
+| Asylum eligibility check and advice (answers stay in the browser) | `#/asylum` | — |
 | Consultation booking (live slots, no double-booking) | `#/book` | `GET /api/consultations/availability`, `POST /api/consultations` |
 | Newsletter signup (footer) | — | `POST /api/newsletter` |
 | Client portal: applicant details form (required first), official DHA document checklist uploads, locked submission until complete, eligibility check | `#/portal` | `/api/auth/*`, `/api/portal/applicant`, `/api/portal/*`, `/api/assessment` |
 | Staff admin: enquiries, consultations, clients, document review, stage updates | `#/admin` | `/api/admin/*` |
 
-Consultations run Mon–Fri, 09:00–15:00 SAST in 45-minute slots with at least 2 hours' notice, bookable up to 60 days ahead (configured in `backend/src/config.js`).
+Consultations cost R500 for every service and run Mon–Fri, 09:00–15:00 SAST in 45-minute slots with at least 2 hours' notice, bookable up to 60 days ahead (configured in `backend/src/config.js`).
 Uploads accept PDF, JPG, PNG and WebP files up to 10 MB, stored under `DATA_DIR/uploads`, and can only be viewed by the client who uploaded them or by staff.
 
 ## Deploy on Railway (one service)

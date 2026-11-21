@@ -46,7 +46,7 @@ export function Home() {
 
     <section className="proof wrap" aria-label="At a glance">
       <div><strong>{visas.length}</strong><span>visa and permit categories we advise on</span></div>
-      <div><strong>45 min</strong><span>first consultation, with a written summary</span></div>
+      <div><strong>{rand(fees.consultation)}</strong><span>45-minute consultation for any service, with a written summary</span></div>
       <div><strong>One advisor</strong><span>your single point of contact throughout</span></div>
       <div><strong>Worldwide</strong><span>consultations by video or in person in Cape Town</span></div>
     </section>
@@ -98,6 +98,7 @@ export function Home() {
       <div className="fee-band-prices">
         <a href={href("/fees#applications")}><span>Visa or permit application</span><strong>{rand(fees.application)}</strong><small>per application, assessment to outcome</small></a>
         <a href={href("/fees#appeals")}><span>Appeal or review</span><strong>{rand(fees.appeal)}</strong><small>per appeal after a rejection</small></a>
+        <a className="fee-band-consult" href={href("/book")}><span>Consultation for any service</span><strong>{rand(fees.consultation)}</strong><small>45 minutes, in person or by video</small></a>
       </div>
     </section>
 

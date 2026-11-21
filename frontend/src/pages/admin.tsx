@@ -90,12 +90,13 @@ function Consultations() {
     {error && <Alert>{error}</Alert>}
     {data && !data.length && <div className="empty"><p>No consultations booked yet.</p></div>}
     {data && data.length > 0 && <div className="table-wrap"><table className="admin-table">
-      <thead><tr><th>When (SAST)</th><th>Client</th><th>Service</th><th>Format</th><th>Status</th></tr></thead>
+      <thead><tr><th>When (SAST)</th><th>Client</th><th>Service</th><th>Format</th><th>Fee</th><th>Status</th></tr></thead>
       <tbody>{data.map(c => <tr key={c.id}>
         <td><strong>{formatDate(c.date, { weekday: "short", day: "numeric", month: "short" })}</strong><small>{c.time} · {c.reference}</small></td>
         <td><strong>{c.name}</strong><small>{c.email}{c.country ? ` · ${c.country}` : ""}</small></td>
         <td>{c.service}{c.notes && <small title={c.notes}>{c.notes.slice(0, 60)}{c.notes.length > 60 ? "…" : ""}</small>}</td>
         <td>{modeLabel[c.mode]}</td>
+        <td><label className="paid-toggle"><input type="checkbox" checked={!!c.paid} onChange={e => api(`/admin/consultations/${c.id}`, { method: "PATCH", body: { paid: e.target.checked } }).then(reload).catch((er: ApiError) => setError(er.message))}/>R{c.fee ?? 500}{c.paid ? " paid" : ""}</label></td>
         <td><StatusSelect value={c.status} options={["requested", "confirmed", "completed", "cancelled"]} onChange={v => update(c.id, v)}/></td>
       </tr>)}</tbody>
     </table></div>}

@@ -1,7 +1,7 @@
 import { FormEvent, useEffect, useMemo, useState } from "react";
 import { Icon, Button, Kicker, Input, Select, Textarea, Alert, formatDate } from "../ui";
 import { PageHero, CTA } from "../layout";
-import { services, visaBySlug, CONTACT } from "../lib/content";
+import { services, visaBySlug, CONTACT, fees, rand } from "../lib/content";
 import { api, ApiError } from "../lib/api";
 import { href } from "../lib/router";
 
@@ -166,14 +166,15 @@ export function Booking({ query }: { query: URLSearchParams }) {
       <div className="booking-intro">
         <h2>What to expect</h2>
         <ul className="expect">
+          <li><Icon name="receipt"/><span><strong>{rand(fees.consultation)} for any service</strong>The same consultation fee for every visa, permit, appeal or asylum question.</span></li>
           <li><Icon name="clock"/><span><strong>45 minutes with an advisor</strong>Time to understand your history, goals and constraints.</span></li>
           <li><Icon name="file"/><span><strong>A written summary</strong>Your options, likely category and next steps, sent after the call.</span></li>
           <li><Icon name="lock"/><span><strong>Fully confidential</strong>Your information is handled under POPIA.</span></li>
         </ul>
-        <p className="small-print">All times are South Africa Standard Time (UTC+2). We’ll confirm your appointment by email within one business day.</p>
+        <p className="small-print">All times are South Africa Standard Time (UTC+2). We’ll confirm your appointment and send payment details for the {rand(fees.consultation)} fee by email within one business day.</p>
       </div>
 
-      {done ? <Success title="Your consultation request is in." reference={done.reference} text={`${formatDate(form.date, { weekday: "long", day: "numeric", month: "long" })} at ${form.time} SAST, by ${mode.label.toLowerCase()}. We’ve emailed a confirmation to ${form.email}.`}>
+      {done ? <Success title="Your consultation request is in." reference={done.reference} text={`${formatDate(form.date, { weekday: "long", day: "numeric", month: "long" })} at ${form.time} SAST, by ${mode.label.toLowerCase()}. We’ve emailed a confirmation to ${form.email}, with payment details for the ${rand(fees.consultation)} consultation fee.`}>
         <div className="hero-actions"><Button to="/portal" variant="dark">Create a client portal account</Button><Button to="/" variant="quiet">Back to home</Button></div>
       </Success> :
       <form className="form-card" onSubmit={submit} noValidate>
@@ -228,6 +229,7 @@ export function Booking({ query }: { query: URLSearchParams }) {
             <div><dt>Service</dt><dd>{form.service}</dd></div>
             <div><dt>When</dt><dd>{formatDate(form.date, { weekday: "long", day: "numeric", month: "long", year: "numeric" })}, {form.time} SAST</dd></div>
             <div><dt>Format</dt><dd>{mode.label}</dd></div>
+            <div><dt>Fee</dt><dd>{rand(fees.consultation)}, payable before the consultation</dd></div>
             <div><dt>Name</dt><dd>{form.name}</dd></div>
             <div><dt>Email</dt><dd>{form.email}</dd></div>
             {form.phone && <div><dt>Phone</dt><dd>{form.phone}</dd></div>}

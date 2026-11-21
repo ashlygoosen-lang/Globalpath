@@ -4,6 +4,7 @@ import { Header, Footer } from "./layout";
 import { Home, About, ServicesPage, Corporate, Resources, ArticlePage, Legal, NotFound } from "./pages/marketing";
 import { VisaPage } from "./pages/visa";
 import { FeesPage } from "./pages/fees";
+import { AsylumPage } from "./pages/asylum";
 import { Contact, Booking } from "./pages/forms";
 import { Portal, useSession } from "./pages/portal";
 import { Admin } from "./pages/admin";
@@ -13,7 +14,7 @@ import { href } from "./lib/router";
 
 const TITLES: Record<string, string> = {
   "": "South African immigration consultancy",
-  about: "About us", fees: "Fees", services: "Immigration services", corporate: "Corporate immigration", resources: "Insights",
+  about: "About us", fees: "Fees", asylum: "Asylum eligibility check", services: "Immigration services", corporate: "Corporate immigration", resources: "Insights",
   contact: "Contact", book: "Book a consultation", portal: "Client portal", admin: "Admin", legal: "Legal",
 };
 
@@ -42,6 +43,7 @@ export default function App() {
     case "visa": page = <VisaPage slug={param}/>; break;
     case "corporate": page = <Corporate/>; break;
     case "fees": page = <FeesPage/>; break;
+    case "asylum": page = <AsylumPage/>; break;
     case "resources": page = param ? <ArticlePage slug={param}/> : <Resources/>; break;
     case "contact": page = <Contact/>; break;
     case "book": page = <Booking key={route.query.toString()} query={route.query}/>; break;
