@@ -1,7 +1,8 @@
 import { useMemo, useState } from "react";
 import { Icon, Button, Kicker } from "../ui";
 import { PageHero, CTA } from "../layout";
-import { purposes, visas, visaBySlug, commonDocuments, Visa } from "../lib/content";
+import { purposes, visas, visaBySlug, commonDocuments, Visa, fees, rand } from "../lib/content";
+import { CostBreakdown } from "./fees";
 import { href, navigate } from "../lib/router";
 
 /** The signature element: pick a life purpose, see the matching visa routes with official timing and fees. */
@@ -70,7 +71,8 @@ export function VisaPage({ slug }: { slug?: string }) {
       <div className="wrap facts">
         <div><Icon name="clock"/><span><small>Official target</small><strong>{visa.turnaround}</strong></span></div>
         <div><Icon name="file"/><span><small>Indicative DHA fee</small><strong>{visa.dhaFee}</strong></span></div>
-        <div><Icon name="briefcase"/><span><small>VFS service fee</small><strong>{visa.vfsFee}</strong></span></div>
+        <div><Icon name="receipt"/><span><small>VFS service fee</small><strong>{visa.vfsFee}</strong></span></div>
+        <div><Icon name="briefcase"/><span><small>GlobalPath fee</small><strong>{rand(fees.application)}</strong></span></div>
         <div className="facts-cta"><Button to={`/book?visa=${visa.slug}`}>Book a consultation</Button></div>
       </div>
     </div>
@@ -98,7 +100,8 @@ export function VisaPage({ slug }: { slug?: string }) {
         <ol className="steps">{steps.map((s, i) => <li key={s}><span>{i + 1}</span>{s}</li>)}</ol>
 
         <h2 id="faq">Questions about this visa</h2>
-        <details><summary>Do the displayed fees include GlobalPath professional fees?</summary><p>No. The figures shown are indicative DHA and standard VFS service charges for planning purposes. Optional VFS services and GlobalPath professional fees are separate and are confirmed in writing after assessment.</p></details>
+        <details><summary>What does the {visa.title.toLowerCase()} cost in total?</summary><p>Our professional fee is a fixed {rand(fees.application)} per application. On top of that you pay the DHA fee ({visa.dhaFee}) and the VFS service fee of {rand(fees.vfs)} when the application is submitted. Optional VFS services are extra.</p></details>
+        <details><summary>What happens if the application is rejected?</summary><p>You can usually appeal within a prescribed time limit. We prepare and lodge appeals for a fixed fee of {rand(fees.appeal)}. <a className="inline" href={href("/fees#appeals")}>How appeals work</a>.</p></details>
         <details><summary>Are the turnaround times guaranteed?</summary><p>No. They are official departmental performance targets for qualifying in-country submissions during the stated reporting cycle. Completeness, verification, operational conditions and individual circumstances may affect actual processing.</p></details>
         <details><summary>When are fees confirmed?</summary><p>Government and VFS tariffs can change. We confirm the applicable category, exemptions, current tariff and optional service charges immediately before submission.</p></details>
       </article>
@@ -110,6 +113,11 @@ export function VisaPage({ slug }: { slug?: string }) {
           <p>A 45-minute consultation, in person in Sandton or by video, with a written summary of your next steps.</p>
           <Button to={`/book?visa=${visa.slug}`}>Book a consultation</Button>
           <a className="link" href={href("/portal")}>Already a client? Open your portal<Icon name="arrow" size={15}/></a>
+        </div>
+        <div className="side-cost">
+          <h3>Estimated cost</h3>
+          <CostBreakdown slug={visa.slug} compact/>
+          <a className="link" href={href("/fees")}>All fees explained<Icon name="arrow" size={15}/></a>
         </div>
         {related.length > 0 && <div className="side-related">
           <h3>Related routes</h3>

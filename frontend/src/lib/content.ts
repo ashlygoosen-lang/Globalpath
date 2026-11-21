@@ -4,18 +4,34 @@ export type Visa = {
   slug: string; title: string; section: string; group: string; turnaround: string;
   dhaFee: string; vfsFee: string; intro: string; qualifies: string; documents: string[]; purposes: string[];
 };
-export type Service = { slug: string; icon: string; title: string; blurb: string; visa: string | null };
+export type Service = { slug: string; icon: string; title: string; blurb: string; visa: string | null; href?: string };
+export type Fees = { currency: string; application: number; appeal: number; vfs: number; applicationIncludes: string[]; appealIncludes: string[] };
 export type Purpose = { id: string; label: string; question: string };
 export type Article = { slug: string; tag: string; title: string; summary: string; minutes: number; featured?: boolean; body: { h: string; p: string }[] };
 
 export const content = raw as {
   purposes: Purpose[]; services: Service[]; visas: Visa[]; commonDocuments: string[];
-  faqs: { q: string; a: string }[]; articles: Article[];
+  faqs: { q: string; a: string }[]; articles: Article[]; fees: Fees;
 };
 
-export const { purposes, services, visas, commonDocuments, faqs, articles } = content;
+export const { purposes, services, visas, commonDocuments, faqs, articles, fees } = content;
 export const visaBySlug = (slug?: string) => visas.find(v => v.slug === slug);
-export const serviceHref = (s: Service) => (s.visa ? `/visa/${s.visa}` : "/corporate");
+export const serviceHref = (s: Service) => s.href || (s.visa ? `/visa/${s.visa}` : "/corporate");
+
+/** R10,000 style formatting. */
+export const rand = (n: number) => `R${n.toLocaleString("en-ZA").replace(/\u00a0|\s/g, ",")}`;
+
+/** Numeric DHA fee, or null when it must be confirmed at submission. "R0 where exempt" counts as 0. */
+export function dhaAmount(v: Visa): number | null {
+  const m = v.dhaFee.match(/R\s?([\d,]+)/);
+  return m ? Number(m[1].replace(/,/g, "")) : null;
+}
+
+/** Estimated cost of one application: government fee + VFS + GlobalPath professional fee. */
+export function costFor(v: Visa) {
+  const dha = dhaAmount(v);
+  return { dha, vfs: content.fees.vfs, professional: content.fees.application, total: (dha ?? 0) + content.fees.vfs + content.fees.application, dhaKnown: dha !== null };
+}
 
 export const CONTACT = {
   email: "hello@globalpath.co.za",

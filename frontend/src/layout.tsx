@@ -9,6 +9,7 @@ const NAV = [
   { to: "/about", label: "About" },
   { to: "/services", label: "Services", menu: true },
   { to: "/corporate", label: "Corporate" },
+  { to: "/fees", label: "Fees" },
   { to: "/resources", label: "Insights" },
   { to: "/contact", label: "Contact" },
 ];
@@ -126,7 +127,7 @@ export function Footer() {
         <Newsletter/>
       </div>
       <div className="footer-cols">
-        <div><h3>Company</h3><a href={href("/about")}>About us</a><a href={href("/corporate")}>Corporate immigration</a><a href={href("/contact")}>Contact</a><a href={href("/book")}>Book a consultation</a></div>
+        <div><h3>Company</h3><a href={href("/about")}>About us</a><a href={href("/corporate")}>Corporate immigration</a><a href={href("/fees")}>Fees</a><a href={href("/contact")}>Contact</a><a href={href("/book")}>Book a consultation</a></div>
         <div><h3>Services</h3>{services.slice(0, 6).map(s => <a key={s.slug} href={href(serviceHref(s))}>{s.title}</a>)}</div>
         <div><h3>Resources</h3><a href={href("/resources")}>Insights</a><a href={href("/resources#faq")}>FAQs</a><a href={href("/services#directory")}>Visa directory</a><a href={href("/portal")}>Client portal</a></div>
         <div><h3>Visit or call</h3><p>{CONTACT.address}</p><p><a href={`tel:${CONTACT.phoneHref}`}>{CONTACT.phone}</a></p><p><a href={`mailto:${CONTACT.email}`}>{CONTACT.email}</a></p><p>{CONTACT.hours}</p>

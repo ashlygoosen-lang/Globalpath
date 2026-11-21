@@ -99,6 +99,14 @@
    "visa": "visa-waiver-exemption"
   },
   {
+   "slug": "appeals",
+   "icon": "scale",
+   "title": "Appeals & Reviews",
+   "blurb": "Appeals and reviews when an application has been rejected, with a fresh evidence strategy for each reason given.",
+   "visa": null,
+   "href": "/fees#appeals"
+  },
+  {
    "slug": "compliance",
    "icon": "check",
    "title": "Immigration Compliance & Advisory",
@@ -114,7 +122,7 @@
    "group": "Temporary residence",
    "turnaround": "4 weeks",
    "dhaFee": "R1,520",
-   "vfsFee": "R1,550",
+   "vfsFee": "R1,790",
    "intro": "For foreign nationals with a qualifying offer of employment where the prescribed labour-market and employer requirements are met.",
    "qualifies": "Applicants with a compliant South African job offer and employer support who satisfy the general work visa requirements.",
    "documents": [
@@ -134,7 +142,7 @@
    "group": "Temporary residence",
    "turnaround": "4 weeks",
    "dhaFee": "R1,520",
-   "vfsFee": "R1,550",
+   "vfsFee": "R1,790",
    "intro": "For professionals whose occupation and credentials align with South Africa’s published critical skills framework.",
    "qualifies": "Applicants able to demonstrate a listed critical skill, relevant qualifications and any required professional-body registration.",
    "documents": [
@@ -154,7 +162,7 @@
    "group": "Temporary residence",
    "turnaround": "8 weeks",
    "dhaFee": "R1,520",
-   "vfsFee": "R1,550",
+   "vfsFee": "R1,790",
    "intro": "For qualifying foreign entrepreneurs establishing, investing in or operating a business in South Africa.",
    "qualifies": "Applicants meeting the prescribed investment, business viability and employment criteria, subject to any approved reduction or waiver.",
    "documents": [
@@ -174,7 +182,7 @@
    "group": "Temporary residence",
    "turnaround": "60 working days",
    "dhaFee": "R425",
-   "vfsFee": "R1,550",
+   "vfsFee": "R1,790",
    "intro": "For a temporary visit to South Africa for an approved purpose within the conditions of visitor status.",
    "qualifies": "Visitors who can show a genuine temporary purpose, sufficient funds, accommodation and an intention to depart.",
    "documents": [
@@ -194,7 +202,7 @@
    "group": "Temporary residence",
    "turnaround": "60 working days",
    "dhaFee": "R425",
-   "vfsFee": "R1,550",
+   "vfsFee": "R1,790",
    "intro": "For eligible visitors seeking authority to remain beyond the period initially granted.",
    "qualifies": "Current visitor-visa holders who apply before expiry and can demonstrate a lawful, credible reason for the requested extension.",
    "documents": [
@@ -214,7 +222,7 @@
    "group": "Temporary residence",
    "turnaround": "60 working days",
    "dhaFee": "R425",
-   "vfsFee": "R1,550",
+   "vfsFee": "R1,790",
    "intro": "For participants in qualifying cultural, economic or social exchange programmes.",
    "qualifies": "Applicants accepted into a recognised exchange programme and supported by the relevant programme or institution.",
    "documents": [
@@ -234,7 +242,7 @@
    "group": "Temporary residence",
    "turnaround": "60 working days",
    "dhaFee": "R425",
-   "vfsFee": "R1,550",
+   "vfsFee": "R1,790",
    "intro": "For international students accepted by a registered South African learning institution.",
    "qualifies": "Learners accepted for full-time study who can show funding, suitable accommodation and compliant medical cover.",
    "documents": [
@@ -254,7 +262,7 @@
    "group": "Temporary residence",
    "turnaround": "60 working days",
    "dhaFee": "R425",
-   "vfsFee": "R1,550",
+   "vfsFee": "R1,790",
    "intro": "For foreign nationals receiving planned medical treatment in South Africa.",
    "qualifies": "Patients with a confirmed treatment plan from a South African medical practitioner or institution and sufficient funding.",
    "documents": [
@@ -274,7 +282,7 @@
    "group": "Temporary residence",
    "turnaround": "60 working days",
    "dhaFee": "R425",
-   "vfsFee": "R1,550",
+   "vfsFee": "R1,790",
    "intro": "For eligible members of transport crews entering or remaining in South Africa for their duties.",
    "qualifies": "Crew members supported by a qualifying operator and able to demonstrate their role, route and intended period in South Africa.",
    "documents": [
@@ -295,7 +303,7 @@
    "group": "Temporary residence",
    "turnaround": "120 working days",
    "dhaFee": "R0 where exempt",
-   "vfsFee": "R1,550",
+   "vfsFee": "R1,790",
    "intro": "For the spouse or qualifying life partner of a South African citizen or permanent resident.",
    "qualifies": "Spouses and qualifying life partners able to prove a genuine relationship and the South African partner’s status.",
    "documents": [
@@ -315,7 +323,7 @@
    "group": "Temporary residence",
    "turnaround": "120 working days",
    "dhaFee": "R425",
-   "vfsFee": "R1,550",
+   "vfsFee": "R1,790",
    "intro": "For qualifying immediate family members of South African citizens or permanent residents.",
    "qualifies": "Applicants within the prescribed degree of kinship who have eligible South African family support.",
    "documents": [
@@ -335,7 +343,7 @@
    "group": "Temporary residence",
    "turnaround": "120 working days",
    "dhaFee": "R425",
-   "vfsFee": "R1,550",
+   "vfsFee": "R1,790",
    "intro": "For applicants who meet the prescribed lifetime income or net-worth threshold for retirement in South Africa.",
    "qualifies": "Applicants able to demonstrate the required pension, retirement income or qualifying financial resources.",
    "documents": [
@@ -355,7 +363,7 @@
    "group": "Temporary residence",
    "turnaround": "120 working days",
    "dhaFee": "R425",
-   "vfsFee": "R1,550",
+   "vfsFee": "R1,790",
    "intro": "For activities conducted in South Africa under an applicable international agreement.",
    "qualifies": "Applicants whose intended activities fall within a recognised treaty or international agreement involving South Africa.",
    "documents": [
@@ -375,7 +383,7 @@
    "group": "Permanent residence",
    "turnaround": "8 months",
    "dhaFee": "R2,870",
-   "vfsFee": "R1,550",
+   "vfsFee": "R1,790",
    "intro": "For qualifying workers seeking permanent residence through an eligible employment-based pathway.",
    "qualifies": "Applicants who meet the statutory work, residence and employment conditions for direct permanent residence.",
    "documents": [
@@ -396,7 +404,7 @@
    "group": "Permanent residence",
    "turnaround": "240 working days",
    "dhaFee": "R0 where exempt",
-   "vfsFee": "R1,550",
+   "vfsFee": "R1,790",
    "intro": "For qualifying spouses and dependants seeking permanent residence through a South African citizen or permanent resident.",
    "qualifies": "Applicants who meet the prescribed relationship, duration and dependency requirements.",
    "documents": [
@@ -417,7 +425,7 @@
    "group": "Waivers",
    "turnaround": "120 working days",
    "dhaFee": "Confirm at submission",
-   "vfsFee": "R1,550",
+   "vfsFee": "R1,790",
    "intro": "For applicants seeking relief from a prescribed visa requirement where a properly motivated case can be made.",
    "qualifies": "Applicants with exceptional circumstances and a well-supported legal and factual basis for the requested waiver or exemption.",
    "documents": [
@@ -437,7 +445,7 @@
    "group": "Waivers",
    "turnaround": "240 working days",
    "dhaFee": "Confirm at submission",
-   "vfsFee": "R1,550",
+   "vfsFee": "R1,790",
    "intro": "For permanent residence matters requiring formal relief from a prescribed requirement.",
    "qualifies": "Applicants able to establish a lawful basis and compelling circumstances for permanent-residence relief.",
    "documents": [
@@ -477,8 +485,12 @@
    "a": "Yes. Consultations can be held by video call, and documents can be shared securely through the client portal. Some applications must be submitted at a South African mission abroad; we prepare you for that submission."
   },
   {
+   "q": "What if my application is rejected?",
+   "a": "You can usually appeal within a prescribed time limit, so contact us as soon as you receive the outcome. We prepare and lodge appeals for a fixed fee of R5,000."
+  },
+  {
    "q": "How are your professional fees structured?",
-   "a": "Fees depend on the category and complexity of your matter. After the initial assessment we confirm a fixed professional fee in writing, separate from government and VFS charges."
+   "a": "Our professional fee is a fixed R10,000 per application and R5,000 per appeal. Government (DHA) fees and the VFS service fee of R1,790 are separate and are paid at submission."
   }
  ],
  "articles": [
@@ -591,5 +603,25 @@
     }
    ]
   }
- ]
+ ],
+ "fees": {
+  "currency": "ZAR",
+  "application": 10000,
+  "appeal": 5000,
+  "vfs": 1790,
+  "applicationIncludes": [
+   "Eligibility assessment and choice of visa category",
+   "Personalised document checklist and evidence strategy",
+   "Review of every document before submission",
+   "Completion of forms and the VFS submission booking",
+   "Follow-up with VFS and the Department of Home Affairs until the outcome"
+  ],
+  "appealIncludes": [
+   "Analysis of the rejection letter and the reasons given",
+   "Fresh evidence plan to address each reason",
+   "Drafting of the written appeal or review submission",
+   "Lodging within the prescribed time limit",
+   "Follow-up until the appeal outcome"
+  ]
+ }
 }

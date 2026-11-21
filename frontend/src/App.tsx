@@ -3,14 +3,17 @@ import { useRoute } from "./lib/router";
 import { Header, Footer } from "./layout";
 import { Home, About, ServicesPage, Corporate, Resources, ArticlePage, Legal, NotFound } from "./pages/marketing";
 import { VisaPage } from "./pages/visa";
+import { FeesPage } from "./pages/fees";
 import { Contact, Booking } from "./pages/forms";
 import { Portal, useSession } from "./pages/portal";
 import { Admin } from "./pages/admin";
-import { visaBySlug, articles } from "./lib/content";
+import { visaBySlug, articles, CONTACT } from "./lib/content";
+import { Icon } from "./ui";
+import { href } from "./lib/router";
 
 const TITLES: Record<string, string> = {
   "": "South African immigration consultancy",
-  about: "About us", services: "Immigration services", corporate: "Corporate immigration", resources: "Insights",
+  about: "About us", fees: "Fees", services: "Immigration services", corporate: "Corporate immigration", resources: "Insights",
   contact: "Contact", book: "Book a consultation", portal: "Client portal", admin: "Admin", legal: "Legal",
 };
 
@@ -38,6 +41,7 @@ export default function App() {
     case "service": // legacy route from the original prototype
     case "visa": page = <VisaPage slug={param}/>; break;
     case "corporate": page = <Corporate/>; break;
+    case "fees": page = <FeesPage/>; break;
     case "resources": page = param ? <ArticlePage slug={param}/> : <Resources/>; break;
     case "contact": page = <Contact/>; break;
     case "book": page = <Booking key={route.query.toString()} query={route.query}/>; break;
@@ -53,6 +57,7 @@ export default function App() {
     <Header path={route.path}/>
     <main id="main" ref={mainRef} tabIndex={-1}>{page}</main>
     {!appShell && <Footer/>}
+    {!appShell && section !== "book" && <nav className="mobile-bar" aria-label="Quick actions"><a className="mb-call" href={`tel:${CONTACT.phoneHref}`}><Icon name="phone" size={17}/>Call</a><a className="mb-book" href={href("/book")}>Book a consultation</a></nav>}
     {appShell && <p className="portal-foot wrap">© {new Date().getFullYear()} GlobalPath Immigration, a division of VINK Group (Pty) Ltd (Reg. 2018/079316/07). Your information is protected under POPIA.</p>}
   </>;
 }

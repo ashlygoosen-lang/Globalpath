@@ -3,7 +3,7 @@ import corporateImage from "../assets/globalpath-corporate.webp";
 import { Icon, Img, Button, Kicker } from "../ui";
 import { PageHero, CTA } from "../layout";
 import { PathwayFinder, VisaDirectory } from "./visa";
-import { services, serviceHref, articles, faqs, visas } from "../lib/content";
+import { services, serviceHref, articles, faqs, visas, fees, rand } from "../lib/content";
 import { href } from "../lib/router";
 
 const steps = [
@@ -18,7 +18,7 @@ const steps = [
 const strengths = [
   ["users", "Advice built around you", "Recommendations shaped by your circumstances, goals and timeline, not a generic checklist."],
   ["shield", "Grounded in current rules", "We work from the latest regulations, directives and published departmental targets."],
-  ["eye", "Clear about fees and risk", "Fixed professional fees in writing, and honest advice where a case has weaknesses."],
+  ["eye", "Clear about fees and risk", `A fixed ${rand(fees.application)} per application, and honest advice where a case has weaknesses.`],
   ["lock", "Confidential by default", "Personal records are handled under POPIA and shared only through your secure portal."],
 ];
 
@@ -88,6 +88,19 @@ export function Home() {
       </div>
     </section>
 
+    <section className="section wrap fee-band" aria-labelledby="fee-band-title">
+      <div className="fee-band-copy">
+        <Kicker>Fees</Kicker>
+        <h2 id="fee-band-title">Fixed fees, published upfront.</h2>
+        <p>The same professional fee for every visa category. Government and VFS charges are shown separately on every visa page, so you know the full cost before you commit.</p>
+        <a className="link" href={href("/fees")}>See fees and cost estimates<Icon name="arrow" size={15}/></a>
+      </div>
+      <div className="fee-band-prices">
+        <a href={href("/fees#applications")}><span>Visa or permit application</span><strong>{rand(fees.application)}</strong><small>per application, assessment to outcome</small></a>
+        <a href={href("/fees#appeals")}><span>Appeal or review</span><strong>{rand(fees.appeal)}</strong><small>per appeal after a rejection</small></a>
+      </div>
+    </section>
+
     <section className="section wrap corp">
       <div className="corp-copy">
         <Kicker>Corporate immigration</Kicker>
@@ -149,7 +162,7 @@ export function About() {
     <section className="section wrap values">
       <div><h3>Who we work with</h3><p>Skilled professionals and their families, international students, retirees, founders and investors, and employers relocating talent to South Africa.</p></div>
       <div><h3>Where we work</h3><p>From our Sandton office and by video with clients worldwide. Applications are lodged through VFS Global centres in South Africa or the relevant mission abroad.</p></div>
-      <div><h3>How we charge</h3><p>A fixed professional fee confirmed in writing after assessment, kept separate from government and VFS charges so you always know what you are paying for.</p></div>
+      <div><h3>How we charge</h3><p>A fixed {rand(fees.application)} per application and {rand(fees.appeal)} per appeal, kept separate from government and VFS charges so you always know what you are paying for. <a className="inline" href={href("/fees")}>See all fees</a>.</p></div>
     </section>
     <CTA/>
   </>;
