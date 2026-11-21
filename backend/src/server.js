@@ -10,6 +10,7 @@ import { fileURLToPath } from 'node:url';
 import { config } from './config.js';
 import { ensureAdmin } from './auth.js';
 import { syncAllChecklists } from './routes/portal.js';
+import { initDb, dbHealth, closeDb, dbInfo } from './db.js';
 import publicRoutes from './routes/public.js';
 import authRoutes from './routes/auth.js';
 import portalRoutes from './routes/portal.js';
@@ -37,7 +38,14 @@ export function createApp() {
   const formLimiter = rateLimit({ windowMs: 10 * 60e3, limit: 15, standardHeaders: true, legacyHeaders: false, message: { error: 'Too many submissions. Please wait a few minutes.' } });
   app.use(['/api/enquiries', '/api/consultations', '/api/newsletter'], (req, res, next) => (req.method === 'POST' ? formLimiter(req, res, next) : next()));
 
-  app.get('/api/health', (_req, res) => res.json({ status: 'ok', time: new Date().toISOString() }));
+  app.get('/api/health', async (_req, res) => {
+    try {
+      const database = await dbHealth();
+      res.status(database.ok ? 200 : 503).json({ status: database.ok ? 'ok' : 'degraded', database, time: new Date().toISOString() });
+    } catch (err) {
+      res.status(503).json({ status: 'error', database: { mode: dbInfo.mode, ok: false, error: 'Database unreachable' }, time: new Date().toISOString() });
+    }
+  });
   app.use('/api', publicRoutes);
   app.use('/api/auth', authRoutes);
   app.use('/api/portal', portalRoutes);
@@ -68,7 +76,15 @@ export function createApp() {
 }
 
 if (process.argv[1] && import.meta.url.endsWith(process.argv[1].split('/').pop())) {
+  await initDb();
   await ensureAdmin();
   syncAllChecklists();
-  createApp().listen(config.port, '0.0.0.0', () => console.log(`GlobalPath API listening on :${config.port}`));
+  const server = createApp().listen(config.port, '0.0.0.0', () => console.log(`GlobalPath API listening on :${config.port} (${dbInfo.mode})`));
+  const shutdown = signal => {
+    console.log(`[server] ${signal} received, finishing writes…`);
+    server.close(async () => { await closeDb().catch(() => {}); process.exit(0); });
+    setTimeout(() => process.exit(0), 10_000).unref();
+  };
+  process.on('SIGTERM', () => shutdown('SIGTERM'));
+  process.on('SIGINT', () => shutdown('SIGINT'));
 }

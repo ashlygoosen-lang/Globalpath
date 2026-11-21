@@ -49,6 +49,10 @@ The site and API share one domain, so no CORS or `VITE_API_URL` setup is needed.
 
 - Root directory: `/` (repo root). Build: `npm run build`. Start: `npm start`. Healthcheck: `/api/health`.
 - Volume mounted at `/data`, with `DATA_DIR=/data`, so data and uploads survive redeploys.
+- Database: add a PostgreSQL service and set `DATABASE_URL=${{Postgres.DATABASE_URL}}` on the app service.
+  On first start the app creates the `gp_records` table and imports any existing `db.json` data automatically.
+  Without `DATABASE_URL` it stores records in `DATA_DIR/db.json`. Uploaded files always stay on the volume.
+  `GET /api/health` reports which database is in use.
 - Variables: `NODE_ENV=production`, `JWT_SECRET`, `ADMIN_EMAIL`, `ADMIN_PASSWORD`, optional SMTP settings.
 
 To host the frontend separately later, deploy `frontend/` as a static site with `VITE_API_URL` set to the API URL,
