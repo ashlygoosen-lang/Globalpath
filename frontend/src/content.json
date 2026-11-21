@@ -1,0 +1,595 @@
+{
+ "purposes": [
+  {
+   "id": "work",
+   "label": "Work",
+   "question": "I have a job offer or a critical skill"
+  },
+  {
+   "id": "business",
+   "label": "Invest",
+   "question": "I want to start or buy into a business"
+  },
+  {
+   "id": "study",
+   "label": "Study",
+   "question": "I've been accepted to study or join an exchange"
+  },
+  {
+   "id": "family",
+   "label": "Join family",
+   "question": "My spouse, partner or relative is South African"
+  },
+  {
+   "id": "settle",
+   "label": "Settle",
+   "question": "I want permanent residence"
+  },
+  {
+   "id": "retire",
+   "label": "Retire or receive care",
+   "question": "I'm retiring or coming for medical treatment"
+  },
+  {
+   "id": "visit",
+   "label": "Visit",
+   "question": "I'm visiting, or need to extend my stay"
+  },
+  {
+   "id": "special",
+   "label": "Waivers",
+   "question": "I can't meet a requirement and need relief"
+  }
+ ],
+ "services": [
+  {
+   "slug": "temporary-residence",
+   "icon": "clock",
+   "title": "Temporary Residence Visas",
+   "blurb": "Structured support for visitors, volunteers and those seeking temporary residence in South Africa.",
+   "visa": "visitors-visa"
+  },
+  {
+   "slug": "work-visas",
+   "icon": "briefcase",
+   "title": "Work Visa Solutions",
+   "blurb": "Guidance across general, critical skills, intra-company transfer and corporate work visas.",
+   "visa": "critical-skills-work-visa"
+  },
+  {
+   "slug": "permanent-residence",
+   "icon": "home",
+   "title": "Permanent Residence",
+   "blurb": "A carefully managed route towards building your long-term future in South Africa.",
+   "visa": "permanent-residence-worker"
+  },
+  {
+   "slug": "business-investment",
+   "icon": "chart",
+   "title": "Business & Investment Immigration",
+   "blurb": "Strategic immigration support for founders, investors and international entrepreneurs.",
+   "visa": "business-visa"
+  },
+  {
+   "slug": "family",
+   "icon": "users",
+   "title": "Family & Relative Immigration",
+   "blurb": "Helping families navigate spousal, relative and life-partner immigration pathways.",
+   "visa": "spousal-life-partner-visa"
+  },
+  {
+   "slug": "study-exchange",
+   "icon": "book",
+   "title": "Study & Exchange Visas",
+   "blurb": "Clear application assistance for students, researchers and exchange participants.",
+   "visa": "study-visa"
+  },
+  {
+   "slug": "retirement-medical",
+   "icon": "heart",
+   "title": "Retirement & Medical Immigration",
+   "blurb": "Considered guidance for retirement, medical treatment and extended stays.",
+   "visa": "retired-person-visa"
+  },
+  {
+   "slug": "waivers",
+   "icon": "shield",
+   "title": "Immigration Waivers & Exemptions",
+   "blurb": "Professional support for complex waiver, exemption and good-cause applications.",
+   "visa": "visa-waiver-exemption"
+  },
+  {
+   "slug": "compliance",
+   "icon": "check",
+   "title": "Immigration Compliance & Advisory",
+   "blurb": "Proactive risk, compliance and immigration advisory for individuals and employers.",
+   "visa": null
+  }
+ ],
+ "visas": [
+  {
+   "slug": "general-work-visa",
+   "title": "General Work Visa",
+   "section": "Section 19(2), including TES",
+   "group": "Temporary residence",
+   "turnaround": "4 weeks",
+   "dhaFee": "R1,520",
+   "vfsFee": "R1,550",
+   "intro": "For foreign nationals with a qualifying offer of employment where the prescribed labour-market and employer requirements are met.",
+   "qualifies": "Applicants with a compliant South African job offer and employer support who satisfy the general work visa requirements.",
+   "documents": [
+    "Signed employment contract and employer undertaking",
+    "Department of Employment and Labour certification, where required",
+    "SAQA evaluation of foreign qualifications",
+    "Proof of relevant experience and professional registration"
+   ],
+   "purposes": [
+    "work"
+   ]
+  },
+  {
+   "slug": "critical-skills-work-visa",
+   "title": "Critical Skills Work Visa",
+   "section": "Section 19(4), including TES",
+   "group": "Temporary residence",
+   "turnaround": "4 weeks",
+   "dhaFee": "R1,520",
+   "vfsFee": "R1,550",
+   "intro": "For professionals whose occupation and credentials align with South Africa’s published critical skills framework.",
+   "qualifies": "Applicants able to demonstrate a listed critical skill, relevant qualifications and any required professional-body registration.",
+   "documents": [
+    "Proof that the occupation appears on the critical skills list",
+    "SAQA evaluation and qualification certificates",
+    "Professional body registration or confirmation",
+    "Employment evidence or proof of active job search, as applicable"
+   ],
+   "purposes": [
+    "work"
+   ]
+  },
+  {
+   "slug": "business-visa",
+   "title": "Business Visa",
+   "section": "Section 15",
+   "group": "Temporary residence",
+   "turnaround": "8 weeks",
+   "dhaFee": "R1,520",
+   "vfsFee": "R1,550",
+   "intro": "For qualifying foreign entrepreneurs establishing, investing in or operating a business in South Africa.",
+   "qualifies": "Applicants meeting the prescribed investment, business viability and employment criteria, subject to any approved reduction or waiver.",
+   "documents": [
+    "Department of Trade, Industry and Competition recommendation",
+    "Proof of prescribed available investment funds",
+    "Business plan and company registration records",
+    "Undertaking regarding South African citizen or permanent-resident employees"
+   ],
+   "purposes": [
+    "business"
+   ]
+  },
+  {
+   "slug": "visitors-visa",
+   "title": "Visitor’s Visa",
+   "section": "Section 11(1)",
+   "group": "Temporary residence",
+   "turnaround": "60 working days",
+   "dhaFee": "R425",
+   "vfsFee": "R1,550",
+   "intro": "For a temporary visit to South Africa for an approved purpose within the conditions of visitor status.",
+   "qualifies": "Visitors who can show a genuine temporary purpose, sufficient funds, accommodation and an intention to depart.",
+   "documents": [
+    "Proof of purpose and proposed itinerary",
+    "Proof of accommodation or host invitation",
+    "Recent bank statements or financial support",
+    "Return or onward travel arrangements"
+   ],
+   "purposes": [
+    "visit"
+   ]
+  },
+  {
+   "slug": "visitors-visa-extension",
+   "title": "Visitor’s Visa Extension",
+   "section": "Section 11(2)",
+   "group": "Temporary residence",
+   "turnaround": "60 working days",
+   "dhaFee": "R425",
+   "vfsFee": "R1,550",
+   "intro": "For eligible visitors seeking authority to remain beyond the period initially granted.",
+   "qualifies": "Current visitor-visa holders who apply before expiry and can demonstrate a lawful, credible reason for the requested extension.",
+   "documents": [
+    "Current visa and entry stamp",
+    "Written motivation for the extension",
+    "Proof of continued accommodation and funds",
+    "Travel booking or revised departure plan"
+   ],
+   "purposes": [
+    "visit"
+   ]
+  },
+  {
+   "slug": "exchange-visa",
+   "title": "Exchange Visa",
+   "section": "Section 22",
+   "group": "Temporary residence",
+   "turnaround": "60 working days",
+   "dhaFee": "R425",
+   "vfsFee": "R1,550",
+   "intro": "For participants in qualifying cultural, economic or social exchange programmes.",
+   "qualifies": "Applicants accepted into a recognised exchange programme and supported by the relevant programme or institution.",
+   "documents": [
+    "Official exchange programme acceptance",
+    "Undertakings from the host or sponsoring institution",
+    "Proof of accommodation and financial support",
+    "Medical and radiological reports, where prescribed"
+   ],
+   "purposes": [
+    "study"
+   ]
+  },
+  {
+   "slug": "study-visa",
+   "title": "Study Visa",
+   "section": "Section 13",
+   "group": "Temporary residence",
+   "turnaround": "60 working days",
+   "dhaFee": "R425",
+   "vfsFee": "R1,550",
+   "intro": "For international students accepted by a registered South African learning institution.",
+   "qualifies": "Learners accepted for full-time study who can show funding, suitable accommodation and compliant medical cover.",
+   "documents": [
+    "Acceptance letter from a registered institution",
+    "Proof of funds for tuition and living costs",
+    "South African medical cover or prescribed proof",
+    "Accommodation details and guardian consent for minors"
+   ],
+   "purposes": [
+    "study"
+   ]
+  },
+  {
+   "slug": "medical-treatment-visa",
+   "title": "Medical Treatment Visa",
+   "section": "Section 17",
+   "group": "Temporary residence",
+   "turnaround": "60 working days",
+   "dhaFee": "R425",
+   "vfsFee": "R1,550",
+   "intro": "For foreign nationals receiving planned medical treatment in South Africa.",
+   "qualifies": "Patients with a confirmed treatment plan from a South African medical practitioner or institution and sufficient funding.",
+   "documents": [
+    "Letter from the treating medical practitioner or institution",
+    "Treatment plan and estimated duration",
+    "Proof of funds for treatment and living costs",
+    "Details of an accompanying person, where relevant"
+   ],
+   "purposes": [
+    "retire"
+   ]
+  },
+  {
+   "slug": "crew-visa",
+   "title": "Crew Visa",
+   "section": "Section 17",
+   "group": "Temporary residence",
+   "turnaround": "60 working days",
+   "dhaFee": "R425",
+   "vfsFee": "R1,550",
+   "intro": "For eligible members of transport crews entering or remaining in South Africa for their duties.",
+   "qualifies": "Crew members supported by a qualifying operator and able to demonstrate their role, route and intended period in South Africa.",
+   "documents": [
+    "Employer or operator confirmation",
+    "Crew identification and employment records",
+    "Travel route and vessel or aircraft details",
+    "Proof of accommodation where required"
+   ],
+   "purposes": [
+    "visit",
+    "work"
+   ]
+  },
+  {
+   "slug": "spousal-life-partner-visa",
+   "title": "Spousal / Life Partner Visa",
+   "section": "Section 11(6)",
+   "group": "Temporary residence",
+   "turnaround": "120 working days",
+   "dhaFee": "R0 where exempt",
+   "vfsFee": "R1,550",
+   "intro": "For the spouse or qualifying life partner of a South African citizen or permanent resident.",
+   "qualifies": "Spouses and qualifying life partners able to prove a genuine relationship and the South African partner’s status.",
+   "documents": [
+    "Marriage certificate or evidence of a permanent life partnership",
+    "South African ID or permanent residence proof of partner",
+    "Notarial agreement and relationship evidence, where applicable",
+    "Proof of shared residence and financial support"
+   ],
+   "purposes": [
+    "family"
+   ]
+  },
+  {
+   "slug": "relatives-visa",
+   "title": "Relative’s Visa",
+   "section": "Section 18",
+   "group": "Temporary residence",
+   "turnaround": "120 working days",
+   "dhaFee": "R425",
+   "vfsFee": "R1,550",
+   "intro": "For qualifying immediate family members of South African citizens or permanent residents.",
+   "qualifies": "Applicants within the prescribed degree of kinship who have eligible South African family support.",
+   "documents": [
+    "Unabridged birth or marriage certificates proving relationship",
+    "South African ID or permanent residence proof of relative",
+    "Financial assurance from the sponsoring relative",
+    "Police clearances where prescribed"
+   ],
+   "purposes": [
+    "family"
+   ]
+  },
+  {
+   "slug": "retired-person-visa",
+   "title": "Retired Person Visa",
+   "section": "Section 20",
+   "group": "Temporary residence",
+   "turnaround": "120 working days",
+   "dhaFee": "R425",
+   "vfsFee": "R1,550",
+   "intro": "For applicants who meet the prescribed lifetime income or net-worth threshold for retirement in South Africa.",
+   "qualifies": "Applicants able to demonstrate the required pension, retirement income or qualifying financial resources.",
+   "documents": [
+    "Proof of pension or irrevocable annuity",
+    "Bank statements and evidence of qualifying net worth",
+    "Medical and radiological reports",
+    "Police clearance certificates from relevant countries"
+   ],
+   "purposes": [
+    "retire"
+   ]
+  },
+  {
+   "slug": "treaty-visa",
+   "title": "Treaty Visa",
+   "section": "Section 14",
+   "group": "Temporary residence",
+   "turnaround": "120 working days",
+   "dhaFee": "R425",
+   "vfsFee": "R1,550",
+   "intro": "For activities conducted in South Africa under an applicable international agreement.",
+   "qualifies": "Applicants whose intended activities fall within a recognised treaty or international agreement involving South Africa.",
+   "documents": [
+    "Confirmation of the applicable treaty or agreement",
+    "Official nomination or assignment letter",
+    "Details of intended activities and duration",
+    "Proof of accommodation and financial support"
+   ],
+   "purposes": [
+    "work"
+   ]
+  },
+  {
+   "slug": "permanent-residence-worker",
+   "title": "Permanent Residence — Worker",
+   "section": "Section 26(a)",
+   "group": "Permanent residence",
+   "turnaround": "8 months",
+   "dhaFee": "R2,870",
+   "vfsFee": "R1,550",
+   "intro": "For qualifying workers seeking permanent residence through an eligible employment-based pathway.",
+   "qualifies": "Applicants who meet the statutory work, residence and employment conditions for direct permanent residence.",
+   "documents": [
+    "Current work visa and complete passport history",
+    "Long-term employment contract and employer letter",
+    "Proof of qualifying period of lawful employment",
+    "SAQA evaluation, qualifications and professional registration"
+   ],
+   "purposes": [
+    "work",
+    "settle"
+   ]
+  },
+  {
+   "slug": "permanent-residence-spouse-dependant",
+   "title": "Permanent Residence — Spouse / Dependant",
+   "section": "Section 26(b), (c) or (d)",
+   "group": "Permanent residence",
+   "turnaround": "240 working days",
+   "dhaFee": "R0 where exempt",
+   "vfsFee": "R1,550",
+   "intro": "For qualifying spouses and dependants seeking permanent residence through a South African citizen or permanent resident.",
+   "qualifies": "Applicants who meet the prescribed relationship, duration and dependency requirements.",
+   "documents": [
+    "Civil-status certificates proving the relationship",
+    "South African ID or permanent residence proof of sponsor",
+    "Evidence of qualifying relationship duration",
+    "Financial support and dependency evidence, where applicable"
+   ],
+   "purposes": [
+    "family",
+    "settle"
+   ]
+  },
+  {
+   "slug": "visa-waiver-exemption",
+   "title": "Visa Waiver / Exemption",
+   "section": "Waivers and exemptions",
+   "group": "Waivers",
+   "turnaround": "120 working days",
+   "dhaFee": "Confirm at submission",
+   "vfsFee": "R1,550",
+   "intro": "For applicants seeking relief from a prescribed visa requirement where a properly motivated case can be made.",
+   "qualifies": "Applicants with exceptional circumstances and a well-supported legal and factual basis for the requested waiver or exemption.",
+   "documents": [
+    "Detailed legal and factual motivation",
+    "Evidence supporting exceptional circumstances",
+    "Copy of current or proposed visa application",
+    "Relevant employer, family or institutional supporting records"
+   ],
+   "purposes": [
+    "special"
+   ]
+  },
+  {
+   "slug": "permanent-residence-waiver-exemption",
+   "title": "Permanent Residence Waiver / Exemption",
+   "section": "Permit waivers and exemptions",
+   "group": "Waivers",
+   "turnaround": "240 working days",
+   "dhaFee": "Confirm at submission",
+   "vfsFee": "R1,550",
+   "intro": "For permanent residence matters requiring formal relief from a prescribed requirement.",
+   "qualifies": "Applicants able to establish a lawful basis and compelling circumstances for permanent-residence relief.",
+   "documents": [
+    "Comprehensive waiver or exemption motivation",
+    "Permanent residence application context and status records",
+    "Evidence of hardship or exceptional circumstances",
+    "Supporting affidavits and relevant official correspondence"
+   ],
+   "purposes": [
+    "special",
+    "settle"
+   ]
+  }
+ ],
+ "commonDocuments": [
+  "Valid passport with sufficient blank pages",
+  "Completed prescribed application form",
+  "Recent compliant photographs",
+  "Proof of current lawful status and residential address",
+  "Police clearances, medical and radiological reports where prescribed"
+ ],
+ "faqs": [
+  {
+   "q": "When should I start my immigration application?",
+   "a": "Starting early creates time to assess your options and prepare supporting evidence without unnecessary pressure. For most categories we suggest beginning three to six months before you need to travel or before your current status expires."
+  },
+  {
+   "q": "Can GlobalPath guarantee that my visa will be approved?",
+   "a": "No professional consultant can guarantee a government decision. We offer careful guidance and application support based on current requirements, and we tell you plainly where a case has weaknesses."
+  },
+  {
+   "q": "What happens during an initial consultation?",
+   "a": "We discuss your goals, history and circumstances, identify possible routes and outline practical next steps. You receive a written summary afterwards."
+  },
+  {
+   "q": "Do you work with clients outside South Africa?",
+   "a": "Yes. Consultations can be held by video call, and documents can be shared securely through the client portal. Some applications must be submitted at a South African mission abroad; we prepare you for that submission."
+  },
+  {
+   "q": "How are your professional fees structured?",
+   "a": "Fees depend on the category and complexity of your matter. After the initial assessment we confirm a fixed professional fee in writing, separate from government and VFS charges."
+  }
+ ],
+ "articles": [
+  {
+   "slug": "preparing-your-application",
+   "tag": "Guide",
+   "title": "Preparing for a South African immigration application",
+   "summary": "A practical guide to building an organised evidence file, planning realistic timelines and avoiding common application issues.",
+   "minutes": 7,
+   "featured": true,
+   "body": [
+    {
+     "h": "Start with the right category",
+     "p": "Most delays begin before an application is lodged, when an applicant chooses a category that does not fit their circumstances. Write down why you are coming, for how long, and who is supporting your stay. Those three answers narrow the options considerably, and they are the first things an adjudicator will look for in your file."
+    },
+    {
+     "h": "Build your evidence file early",
+     "p": "Some documents take weeks to obtain: police clearance certificates from every country you have lived in for a year or more, SAQA evaluations of foreign qualifications, and medical and radiological reports. Request these first. Keep a single checklist and record the date each item was issued, because several documents are only accepted if they are recent."
+    },
+    {
+     "h": "Translations and certification",
+     "p": "Documents not in English generally need a sworn translation. Copies usually need to be certified. Check the specific requirement for each document before you submit, rather than certifying everything by default."
+    },
+    {
+     "h": "Plan around official timeframes",
+     "p": "The Department of Home Affairs publishes target processing times for each category. Treat these as targets rather than promises, and leave a margin before travel dates, contract start dates or the expiry of your current visa."
+    },
+    {
+     "h": "Keep copies of everything",
+     "p": "Retain a complete copy of the submitted application, your VFS receipt and any correspondence. If you need to follow up, appeal or renew, that record is the starting point."
+    }
+   ]
+  },
+  {
+   "slug": "work-visa-categories",
+   "tag": "Work visas",
+   "title": "Understanding South Africa’s key work visa categories",
+   "summary": "How the general work, critical skills and intra-company transfer routes differ, and which evidence each one relies on.",
+   "minutes": 6,
+   "body": [
+    {
+     "h": "General work visa",
+     "p": "The general work visa is tied to a specific job offer. The employer usually needs to show that the position could not reasonably be filled locally, and the applicant needs qualifications and experience that match the role."
+    },
+    {
+     "h": "Critical skills work visa",
+     "p": "The critical skills route is designed for occupations on the published critical skills list. The emphasis shifts from the employer to the applicant: qualifications, professional registration and experience in the listed occupation carry most of the weight."
+    },
+    {
+     "h": "Intra-company transfer",
+     "p": "Multinational groups can transfer existing employees to a South African branch or affiliate for a limited period. The applicant must already be employed by the group, and the assignment has a defined duration."
+    },
+    {
+     "h": "Choosing between them",
+     "p": "Many professionals could qualify under more than one route. The right choice depends on your occupation, how long you plan to stay, whether you may change employers, and whether you intend to apply for permanent residence later."
+    }
+   ]
+  },
+  {
+   "slug": "employer-considerations",
+   "tag": "Compliance",
+   "title": "Five immigration considerations for international employers",
+   "summary": "What HR and mobility teams should put in place before relocating foreign talent to South Africa.",
+   "minutes": 8,
+   "body": [
+    {
+     "h": "Map roles to categories before you recruit",
+     "p": "Knowing in advance which visa category a role is likely to fall under helps you set realistic start dates and avoid offers that cannot be supported."
+    },
+    {
+     "h": "Keep right-to-work records current",
+     "p": "Employers are expected to employ only foreign nationals with valid status that permits the work being done. Maintain copies of each employee's visa and diarise expiry dates well ahead of time."
+    },
+    {
+     "h": "Plan for dependants",
+     "p": "Spouses and children often need their own applications. Coordinating these with the principal application avoids families arriving on different timelines."
+    },
+    {
+     "h": "Budget for timelines, not just fees",
+     "p": "Government fees are modest compared with the cost of a delayed start. Build processing margins into project plans and relocation budgets."
+    },
+    {
+     "h": "Review your programme annually",
+     "p": "Regulations, critical skills lists and administrative practice change. An annual review of your mobility programme keeps policies and records aligned with current requirements."
+    }
+   ]
+  },
+  {
+   "slug": "family-applications",
+   "tag": "Family",
+   "title": "Planning a family-based immigration application",
+   "summary": "Spousal, life-partner and relative routes: the relationship evidence that matters and how to present it.",
+   "minutes": 5,
+   "body": [
+    {
+     "h": "Proving the relationship",
+     "p": "Family routes depend on showing that the relationship is genuine and continuing. Marriage or birth certificates are the foundation; for life partnerships, evidence of a shared household and financial interdependence carries significant weight."
+    },
+    {
+     "h": "The South African sponsor",
+     "p": "The South African citizen or permanent resident usually provides undertakings and proof of their own status. Their documents need to be as complete as the applicant's."
+    },
+    {
+     "h": "Children and consent",
+     "p": "Applications involving minors typically require unabridged birth certificates and, where a parent is not travelling, formal consent. Start these early, especially where the other parent lives abroad."
+    },
+    {
+     "h": "Looking ahead to permanent residence",
+     "p": "Some family-based temporary visas can lead to permanent residence after a qualifying period. Keeping consistent records from the start makes that later application far simpler."
+    }
+   ]
+  }
+ ]
+}

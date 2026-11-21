@@ -1,0 +1,4 @@
+# Site images are small and must be real files for Railway builds (no LFS).
+*.webp -filter -diff -merge binary
+*.png -filter -diff -merge binary
+*.jpg -filter -diff -merge binary

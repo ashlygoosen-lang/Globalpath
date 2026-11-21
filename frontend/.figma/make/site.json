@@ -1,0 +1,11 @@
+{
+  "description": "Explore South African visa, residency, and business immigration services, assess your options, book consultations, and manage applications with expert guidance.",
+  "robots": {
+    "index": true
+  },
+  "accessibility": {
+    "addBypassLinks": false,
+    "ignoreReducedMotion": false
+  },
+  "title": "GlobalPath Immigration | South African visa and residency advisors"
+}
