@@ -1,0 +1,12 @@
+{
+  "name": "GlobalPath Immigration",
+  "short_name": "GlobalPath",
+  "icons": [
+    { "src": "/favicon.svg", "type": "image/svg+xml", "sizes": "any" },
+    { "src": "/apple-touch-icon.png", "type": "image/png", "sizes": "180x180" },
+    { "src": "/icon-512.png", "type": "image/png", "sizes": "512x512" }
+  ],
+  "theme_color": "#0f2236",
+  "background_color": "#0f2236",
+  "display": "browser"
+}
