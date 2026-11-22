@@ -1,8 +1,10 @@
+import { Fragment } from "react";
 import { FormEvent, ReactNode, useEffect, useRef, useState } from "react";
 import { Icon, Logo, Button, Kicker } from "./ui";
 import { services, serviceHref, CONTACT, fees, rand } from "./lib/content";
 import { href } from "./lib/router";
 import { api } from "./lib/api";
+import { words } from "./motion";
 
 const NAV = [
   { to: "/", label: "Home" },
@@ -48,8 +50,8 @@ export function Header({ path }: { path: string }) {
       <div className="wrap header-inner">
         <Logo/>
         <nav className={`main-nav ${open ? "is-open" : ""}`} aria-label="Main">
-          {NAV.map(item => item.menu
-            ? <div key={item.to} className="nav-menu" ref={menuRef}>
+          {NAV.map((item, n) => item.menu
+            ? <div key={item.to} className="nav-menu" ref={menuRef} style={{ ["--n" as string]: n }}>
                 <button className={isActive(item.to) ? "is-active" : ""} aria-expanded={menu} aria-controls="services-menu" onClick={() => setMenu(!menu)}>
                   {item.label}<Icon name="down" size={14}/>
                 </button>
@@ -59,11 +61,11 @@ export function Header({ path }: { path: string }) {
                     <p>Temporary and permanent residence, business immigration and complex matters.</p>
                     <a className="link" href={href("/services")}>All services and visa types<Icon name="arrow" size={15}/></a>
                   </div>
-                  <ul>{services.map(s => <li key={s.slug}><a href={href(serviceHref(s))}><Icon name={s.icon} size={18}/><span>{s.title}</span></a></li>)}</ul>
+                  <ul>{services.map((s, n) => <li key={s.slug} style={{ ["--n" as string]: n }}><a href={href(serviceHref(s))}><Icon name={s.icon} size={18}/><span>{s.title}</span></a></li>)}</ul>
                 </div>}
               </div>
-            : <a key={item.to} href={href(item.to)} className={isActive(item.to) ? "is-active" : ""} aria-current={isActive(item.to) ? "page" : undefined}>{item.label}</a>)}
-          <a className="nav-mobile-only" href={href("/portal")}>Client portal</a>
+            : <a key={item.to} style={{ ["--n" as string]: n }} href={href(item.to)} className={isActive(item.to) ? "is-active" : ""} aria-current={isActive(item.to) ? "page" : undefined}>{item.label}</a>)}
+          <a className="nav-mobile-only" style={{ ["--n" as string]: 7 }} href={href("/portal")}>Client portal</a>
           <Button to="/book" className="nav-mobile-only">Book a consultation</Button>
         </nav>
         <Button to="/book" className="header-cta">Book a consultation</Button>
@@ -78,8 +80,8 @@ export function PageHero({ kicker, title, text, children }: { kicker: string; ti
     <svg className="contour" viewBox="0 0 600 400" aria-hidden="true">{Array.from({ length: 9 }, (_, i) => <path key={i} d={`M-20 ${330 - i * 32} C 140 ${260 - i * 30}, 300 ${380 - i * 34}, 620 ${250 - i * 30}`}/>)}</svg>
     <div className="wrap page-hero-inner">
       <Kicker>{kicker}</Kicker>
-      <h1>{title}</h1>
-      <p>{text}</p>
+      <h1 className="split">{words(title).map(({ w, i, last }) => <Fragment key={i}><span className="w" style={{ ["--w" as string]: i }}><span>{w}</span></span>{!last && " "}</Fragment>)}</h1>
+      <p className="page-hero-text">{text}</p>
       {children}
     </div>
   </section>;

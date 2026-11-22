@@ -1,3 +1,4 @@
+import { Fragment } from "react";
 import heroImage from "../assets/globalpath-hero.webp";
 import corporateImage from "../assets/globalpath-corporate.webp";
 import { Icon, Img, Button, Kicker } from "../ui";
@@ -5,6 +6,7 @@ import { PageHero, CTA } from "../layout";
 import { PathwayFinder, VisaDirectory } from "./visa";
 import { services, serviceHref, articles, faqs, visas, fees, rand } from "../lib/content";
 import { href } from "../lib/router";
+import { words } from "../motion";
 
 const steps = [
   ["Initial consultation", "We listen to your goals and circumstances."],
@@ -25,12 +27,13 @@ const strengths = [
 export function Home() {
   return <>
     <section className="hero">
-      <Img src={heroImage} alt="A GlobalPath advisor overlooking a city skyline at sunset" className="hero-image"/>
+      <div className="hero-media"><Img src={heroImage} alt="A GlobalPath advisor overlooking a city skyline at sunset" className="hero-image" eager/></div>
       <div className="hero-shade"/>
+      <div className="hero-light" aria-hidden="true"/>
       <div className="wrap hero-inner">
         <div className="hero-copy">
           <p className="hero-kicker">Immigration consultancy in Cape Town</p>
-          <h1>Your global future starts with the right guidance.</h1>
+          <h1 className="split"><SplitWords text="Your global future starts with the right guidance."/></h1>
           <p className="hero-sub">Professional immigration support for individuals, families, entrepreneurs and employers building a future in South Africa.</p>
           <div className="hero-actions">
             <Button to="/book">Book a consultation</Button>
@@ -121,6 +124,10 @@ export function Home() {
     </section>
     <CTA/>
   </>;
+}
+
+export function SplitWords({ text }: { text: string }) {
+  return <>{words(text).map(({ w, i, last }) => <Fragment key={i}><span className="w" style={{ ["--w" as string]: i }}><span>{w}</span></span>{!last && " "}</Fragment>)}</>;
 }
 
 export function ServiceIndex() {

@@ -43,10 +43,10 @@ export function Icon({ name, size = 20, className }: { name: string; size?: numb
   return <svg aria-hidden="true" className={className} width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">{iconPaths[name]}</svg>;
 }
 
-export function Img({ src, alt, className }: { src: string; alt: string; className?: string }) {
+export function Img({ src, alt, className, eager }: { src: string; alt: string; className?: string; eager?: boolean }) {
   const [failed, setFailed] = useState(false);
   if (failed) return <div role="img" aria-label={alt} className={`image-fallback ${className || ""}`}><Icon name="globe" size={48}/></div>;
-  return <img src={src} alt={alt} className={className} loading="lazy" decoding="async" onError={() => setFailed(true)} />;
+  return <img src={src} alt={alt} className={className} loading={eager ? "eager" : "lazy"} decoding="async" {...(eager ? { fetchPriority: "high" as const } : {})} onError={() => setFailed(true)} />;
 }
 
 type BtnProps = { children: ReactNode; to?: string; onClick?: () => void; variant?: "primary" | "ghost" | "dark" | "quiet"; type?: "button" | "submit"; disabled?: boolean; busy?: boolean; className?: string };
